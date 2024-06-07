@@ -5,21 +5,30 @@ import {
 } from '@react-navigation/native-stack';
 import React from 'react';
 import { MainScreen } from '../screens/MainScreen';
+import { SettingsScreen } from '../screens/SettingsScreen';
+import { FavoriteScreen } from '../screens/FavoriteScreen';
 
 type ScreenParms = {
 	Main: undefined;
+	Favorite: undefined;
+	Settings: undefined;
 };
 
-const Stack = createNativeStackNavigator<ScreenParms>();
+export const Stack = createNativeStackNavigator<ScreenParms>();
 
-export const RootNavigation: React.FC = () => {
+export const RootNavigation: React.FC<{
+	initialRouteName: keyof ScreenParms;
+}> = props => {
 	return (
 		<Stack.Navigator
+			initialRouteName={props.initialRouteName}
 			screenOptions={{
 				headerShown: false,
 				presentation: 'containedModal',
 			}}>
 			<Stack.Screen name="Main" component={MainScreen} />
+			<Stack.Screen name="Favorite" component={FavoriteScreen} />
+			<Stack.Screen name="Settings" component={SettingsScreen} />
 		</Stack.Navigator>
 	);
 };

@@ -10,6 +10,7 @@ import {
 	getCoordsFromKeyword,
 } from '../utils/KakaoUtils';
 import { CafeDTO } from '../utils/Interfaces';
+import { SearchBarHeader } from '../components/header/SearchBarHeader';
 
 export const MainScreen: React.FC = () => {
 	const navigation = useRootNavigation<'Main'>();
@@ -79,12 +80,17 @@ export const MainScreen: React.FC = () => {
 		);
 	}, []);
 
+	const onPressSearchBarHeader = useCallback(() => {
+		navigation.push('SearchScreen');
+	}, []);
+
 	useEffect(() => {
 		getMyLocation();
 	}, [getMyLocation]);
 
 	return (
 		<View style={{ flex: 1 }}>
+			<SearchBarHeader onPressSearchBarHeader={onPressSearchBarHeader} />
 			<MapView
 				style={{ flex: 1 }}
 				region={{
