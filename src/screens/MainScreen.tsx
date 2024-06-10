@@ -41,7 +41,7 @@ export const MainScreen: React.FC = () => {
 
 	const getMyLocation = useCallback(() => {
 		Geolocation.getCurrentPosition(position => {
-			print(position);
+			console.log(position);
 			onChangeLocation({
 				latitude: position.coords.latitude,
 				longitude: position.coords.longitude,
@@ -75,9 +75,9 @@ export const MainScreen: React.FC = () => {
 
 	const onMapReady = useCallback(async () => {
 		setIsMapReady(true);
-		getCafeList(currentRegion.latitude, currentRegion.longitude).then(
-			setCafeList,
-		);
+		// getCafeList(currentRegion.latitude, currentRegion.longitude).then(
+		// 	setCafeList,
+		// );
 	}, []);
 
 	const onPressSearchBarHeader = useCallback(() => {
@@ -112,6 +112,6 @@ export const MainScreen: React.FC = () => {
 					/>
 				)}
 			</MapView>
-		</View>
+		</View >
 	);
 };
