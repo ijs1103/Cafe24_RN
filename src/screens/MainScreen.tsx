@@ -1,7 +1,7 @@
 import Geolocation from '@react-native-community/geolocation';
-import React, { useCallback, useEffect, useState } from 'react';
-import { View } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
+import { Pressable, View } from 'react-native';
+import MapView, { Marker, Region } from 'react-native-maps';
 import { useRootNavigation } from '../navigation/RootNavigation';
 import {
 	getCafeList,
@@ -11,13 +11,19 @@ import {
 } from '../utils/KakaoUtils';
 import { CafeDTO } from '../utils/Interfaces';
 import { SearchBarHeader } from '../components/header/SearchBarHeader';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { Typography } from '../components/Typography';
+import { Spacer } from '../components/Spacer';
 
 export const MainScreen: React.FC = () => {
 	const navigation = useRootNavigation<'Main'>();
 
+	const mapViewRef = useRef<MapView>(null);
 	const [query, setQuery] = useState<string>('');
 	const [isMapReady, setIsMapReady] = useState<boolean>(false);
 	const [cafeList, setCafeList] = useState<[CafeDTO] | null>(null);
+	const [currentAddress, setCurrentAddress] = useState<string | null>(null);
+	const [locationFetched, setLocationFetched] = useState<boolean>(false);
 
 	const [currentRegion, setCurrentRegion] = useState<{
 		latitude: number;
@@ -27,25 +33,22 @@ export const MainScreen: React.FC = () => {
 		longitude: 126.922255,
 	});
 
-	const [currentAddress, setCurrentAddress] = useState<string | null>(null);
-
 	const onChangeLocation = useCallback<
-		(item: { latitude: number; longitude: number }) => Promise<void>
-	>(async item => {
+		(item: { latitude: number; longitude: number }) => void
+	>(item => {
 		setCurrentRegion({
 			latitude: item.latitude,
 			longitude: item.longitude,
 		});
-		getAddressFromCoords(item.latitude, item.longitude).then(setCurrentAddress);
 	}, []);
 
-	const getMyLocation = useCallback(() => {
+	const getMyLocation = useCallback(async () => {
 		Geolocation.getCurrentPosition(position => {
-			console.log(position);
 			onChangeLocation({
 				latitude: position.coords.latitude,
 				longitude: position.coords.longitude,
 			});
+			setLocationFetched(true);
 		});
 	}, [onChangeLocation]);
 
@@ -73,25 +76,42 @@ export const MainScreen: React.FC = () => {
 		});
 	}, [query]);
 
-	const onMapReady = useCallback(async () => {
+	const onMapReady = useCallback(() => {
 		setIsMapReady(true);
-		// getCafeList(currentRegion.latitude, currentRegion.longitude).then(
-		// 	setCafeList,
-		// );
-	}, []);
+		getMyLocation();
+	}, [getMyLocation]);
 
 	const onPressSearchBarHeader = useCallback(() => {
 		navigation.push('SearchScreen');
 	}, []);
 
+	const onRegionChangeComplete = useCallback((region: Region) => {
+		getCafeList(region.latitude, region.longitude).then(setCafeList)
+	}, []);
+
+	const onPressMyLocationButton = useCallback(
+		() => {
+			mapViewRef.current?.animateToRegion({
+				latitude: currentRegion.latitude,
+				longitude: currentRegion.longitude,
+				latitudeDelta: 0.015,
+				longitudeDelta: 0.0121,
+			})
+		}, [currentRegion]);
+
 	useEffect(() => {
-		getMyLocation();
-	}, [getMyLocation]);
+		if (locationFetched) {
+			getCafeList(currentRegion.latitude, currentRegion.longitude).then(
+				setCafeList,
+			);
+		}
+	}, [locationFetched, currentRegion]);
 
 	return (
 		<View style={{ flex: 1 }}>
 			<SearchBarHeader onPressSearchBarHeader={onPressSearchBarHeader} />
 			<MapView
+				ref={mapViewRef}
 				style={{ flex: 1 }}
 				region={{
 					latitude: currentRegion.latitude,
@@ -100,9 +120,13 @@ export const MainScreen: React.FC = () => {
 					longitudeDelta: 0.0121,
 				}}
 				onMapReady={onMapReady}
-				onLongPress={event => {
-					onChangeLocation(event.nativeEvent.coordinate);
-				}}>
+				onRegionChangeComplete={region => {
+					onRegionChangeComplete(region)
+				}}
+				moveOnMarkerPress={false}
+				toolbarEnabled={false}
+				rotateEnabled={false}
+			>
 				{isMapReady && (
 					<Marker
 						coordinate={{
@@ -111,7 +135,25 @@ export const MainScreen: React.FC = () => {
 						}}
 					/>
 				)}
+
+				{isMapReady && cafeList?.map(item => {
+					return (<Marker
+						key={item.id}
+						coordinate={{
+							latitude: parseFloat(item.y),
+							longitude: parseFloat(item.x),
+						}}
+						image={require('../../assets/cafe_marker.png')}
+					/>)
+				})}
 			</MapView>
+			<Pressable onPress={onPressMyLocationButton} style={{ position: 'absolute', bottom: 30, right: 30, backgroundColor: 'white', width: 60, height: 60, borderRadius: 30, elevation: 10 }}>
+				<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+					<Icon name={'man'} size={26} color={'saddlebrown'} />
+					<Spacer space={2} />
+					<Typography fontSize={12}>내 위치</Typography>
+				</View>
+			</Pressable>
 		</View >
 	);
 };

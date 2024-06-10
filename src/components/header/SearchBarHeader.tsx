@@ -3,6 +3,7 @@ import { View, TouchableOpacity } from 'react-native';
 import { Typography } from '../Typography';
 import { Spacer } from '../Spacer';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { HEIGHT } from '../../utils/Constants';
 
 export const SearchBarHeader: React.FC<{
 	onPressSearchBarHeader: () => void;
