@@ -3,11 +3,10 @@ import { View, TouchableOpacity } from 'react-native';
 import { Typography } from '../Typography';
 import { Spacer } from '../Spacer';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { HEIGHT } from '../../utils/Constants';
 
 export const SearchBarHeader: React.FC<{
-	onPressSearchBarHeader: () => void;
-}> = props => {
+	onPress: () => void;
+}> = ({ onPress }) => {
 	return (
 		<View
 			style={{
@@ -27,7 +26,7 @@ export const SearchBarHeader: React.FC<{
 					borderRadius: 10,
 					paddingHorizontal: 20,
 				}}
-				onPress={props.onPressSearchBarHeader}>
+				onPress={onPress}>
 				<Icon name="search" size={20} color={'black'} />
 				<Spacer horizontal space={10} />
 				<Typography fontSize={16}>내 주변 카페를 검색해보세요.</Typography>

@@ -1,6 +1,6 @@
 import Geolocation from '@react-native-community/geolocation';
 import React, { useCallback, useEffect, useState, useRef } from 'react';
-import { Pressable, View } from 'react-native';
+import { Button, Alert, Pressable, View, Touchable, TouchableOpacity } from 'react-native';
 import MapView, { Marker, Region } from 'react-native-maps';
 import { useRootNavigation } from '../navigation/RootNavigation';
 import {
@@ -12,18 +12,34 @@ import {
 import { CafeDTO } from '../utils/Interfaces';
 import { SearchBarHeader } from '../components/header/SearchBarHeader';
 import Icon from 'react-native-vector-icons/Ionicons';
+import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Typography } from '../components/Typography';
 import { Spacer } from '../components/Spacer';
+import { TrueSheet } from "@lodev09/react-native-true-sheet"
+import { MyLocationButton } from '../components/MyLocationButton';
+import Clipboard from '@react-native-clipboard/clipboard';
+import { Division } from '../components/Division';
 
 export const MainScreen: React.FC = () => {
 	const navigation = useRootNavigation<'Main'>();
 
+	const sheet = useRef<TrueSheet>(null);
 	const mapViewRef = useRef<MapView>(null);
 	const [query, setQuery] = useState<string>('');
 	const [isMapReady, setIsMapReady] = useState<boolean>(false);
 	const [cafeList, setCafeList] = useState<[CafeDTO] | null>(null);
 	const [currentAddress, setCurrentAddress] = useState<string | null>(null);
 	const [locationFetched, setLocationFetched] = useState<boolean>(false);
+
+	const present = async () => {
+		await sheet.current?.present()
+		console.log('horray! sheet has been presented 💩')
+	}
+
+	const dismiss = async () => {
+		await sheet.current?.dismiss()
+		console.log('Bye bye 👋')
+	}
 
 	const [currentRegion, setCurrentRegion] = useState<{
 		latitude: number;
@@ -99,6 +115,28 @@ export const MainScreen: React.FC = () => {
 			})
 		}, [currentRegion]);
 
+	const copyToClipboard = (text: string) => {
+		//Clipboard.setString(text);
+		Alert.alert("복사 완료", "텍스트가 클립보드에 복사되었습니다.");
+	};
+
+	const onPressCall = useCallback(() => {
+		//TODO: 전화통화 
+	}, []);
+
+	const onPressWebSite = useCallback(() => {
+		//TODO: 웹페이지 
+	}, []);
+
+	const onPressShare = useCallback(() => {
+		//TODO: dynamic links 
+
+	}, []);
+
+	const onPressGetDirections = useCallback(() => {
+		//TODO: 길찾기 react-native-maps-directions
+	}, []);
+
 	useEffect(() => {
 		if (locationFetched) {
 			getCafeList(currentRegion.latitude, currentRegion.longitude).then(
@@ -109,7 +147,7 @@ export const MainScreen: React.FC = () => {
 
 	return (
 		<View style={{ flex: 1 }}>
-			<SearchBarHeader onPressSearchBarHeader={onPressSearchBarHeader} />
+			<SearchBarHeader onPress={onPressSearchBarHeader} />
 			<MapView
 				ref={mapViewRef}
 				style={{ flex: 1 }}
@@ -126,6 +164,7 @@ export const MainScreen: React.FC = () => {
 				moveOnMarkerPress={false}
 				toolbarEnabled={false}
 				rotateEnabled={false}
+				minZoomLevel={15}
 			>
 				{isMapReady && (
 					<Marker
@@ -147,13 +186,70 @@ export const MainScreen: React.FC = () => {
 					/>)
 				})}
 			</MapView>
-			<Pressable onPress={onPressMyLocationButton} style={{ position: 'absolute', bottom: 30, right: 30, backgroundColor: 'white', width: 60, height: 60, borderRadius: 30, elevation: 10 }}>
-				<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-					<Icon name={'man'} size={26} color={'saddlebrown'} />
-					<Spacer space={2} />
-					<Typography fontSize={12}>내 위치</Typography>
-				</View>
-			</Pressable>
+			<MyLocationButton onPress={onPressMyLocationButton} />
+
+			<View>
+				<Button onPress={present} title="Present" />
+				<TrueSheet
+					ref={sheet}
+					style={{
+						elevation: 10
+					}}
+					sizes={['auto', 'large']}
+					dimmed={false}
+					cornerRadius={16}
+					dismissible={false}
+				>
+					<View style={{ backgroundColor: 'white' }}>
+						<View style={{ paddingHorizontal: 14, paddingVertical: 16 }}>
+							<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+								<Typography fontSize={18} fontWeight='800' color='rebeccapurple' numberOfLines={1}>요거프레소 봉천우성점</Typography>
+								<Icon name='heart' size={30} color='crimson' />
+							</View>
+							<Spacer space={20} />
+							<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+								<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+									<Icon name='star-sharp' size={16} color='gold' />
+									<Typography fontSize={16} color='dimgray' fontWeight='600'>4.25</Typography>
+								</View>
+								<Spacer horizontal={true} space={4} />
+								<Typography fontSize={16} color='darkgray'>•</Typography>
+								<Spacer horizontal={true} space={4} />
+								<Typography fontSize={16} color='dimgray' fontWeight='600'>리뷰 100개</Typography>
+							</View>
+							<Spacer space={10} />
+							<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+								<Typography fontSize={16} fontWeight='900'>515m</Typography>
+								<Spacer horizontal={true} space={4} />
+								<Typography fontSize={16} color='darkgray'>•</Typography>
+								<Spacer horizontal={true} space={4} />
+								<Pressable style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => copyToClipboard('서울 관악구 관악로 28길 13')}>
+									<Typography fontSize={16} color='dimgray' fontWeight='600'>서울 관악구 관악로 28길 13</Typography>
+									<Spacer horizontal={true} space={4} />
+									<Icon name='copy-sharp' size={14} color='yellowgreen' />
+								</Pressable>
+							</View>
+						</View>
+						<Division />
+						<View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 14, paddingVertical: 16 }}>
+							<View style={{ flexDirection: 'row', alignItems: 'center', gap: 26 }}>
+								<TouchableOpacity onPress={onPressCall}>
+									<Icon name='call' color={'gray'} size={24} />
+								</TouchableOpacity>
+								<TouchableOpacity onPress={onPressWebSite}>
+									<MCIcon name='web' color={'gray'} size={24} />
+								</TouchableOpacity>
+								<TouchableOpacity onPress={onPressShare}>
+									<Icon name='share-social' color={'gray'} size={24} />
+								</TouchableOpacity>
+							</View>
+							<TouchableOpacity style={{ backgroundColor: 'rebeccapurple', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 18, alignItems: 'center' }} onPress={onPressGetDirections}>
+								<Typography color='mintcream' fontSize={14}>길찾기</Typography>
+							</TouchableOpacity>
+						</View>
+					</View>
+				</TrueSheet>
+			</View>
 		</View >
 	);
 };
