@@ -2,7 +2,11 @@ import React, { useRef, forwardRef, useImperativeHandle } from 'react';
 import { Animated, View, Text, Easing } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-export const ToastMessage = forwardRef((props, ref) => {
+export interface ToastMessageRef {
+	showToastMessage: () => void;
+}
+
+const ToastMessage = forwardRef<ToastMessageRef, { message: string; }>((props, ref) => {
 	const translateYAnimation = useRef(new Animated.Value(100)).current;
 
 	const showToastMessage = () => {
@@ -53,9 +57,10 @@ export const ToastMessage = forwardRef((props, ref) => {
 			>
 				<Icon name="checkmark-circle" color="white" size={24} />
 				<Text style={{ color: 'white', fontSize: 15, marginLeft: 10 }}>
-					오류가 발견됐습니다!
+					{props.message}
 				</Text>
 			</View>
 		</Animated.View>
 	);
 });
+export default ToastMessage;
