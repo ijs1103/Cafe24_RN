@@ -6,6 +6,7 @@ import MapViewDirections from 'react-native-maps-directions';
 import { Header } from '../components/header/Header';
 import { useRootNavigation, useRootRoute } from '../navigation/RootNavigation';
 import { DELTA } from '../utils/Constants';
+import { REACT_APP_GOOGLE_MAP_API_KEY } from '@env';
 
 export const DirectionsScreen: React.FC = () => {
 	const navigation = useRootNavigation<'Directions'>();
@@ -13,10 +14,11 @@ export const DirectionsScreen: React.FC = () => {
 
 	const goBackHandler = () => {
 		navigation.goBack();
+		console.log(REACT_APP_GOOGLE_MAP_API_KEY);
 	};
 
 	const onError = () => {
-		Alert.alert('서버 에러', '길찾기를 표시할 수 없습니다.', [ { text: '확인', onPress: goBackHandler } ])
+		Alert.alert('서버 에러', '길찾기를 표시할 수 없습니다.', [{ text: '확인', onPress: goBackHandler }])
 	};
 
 	return (
