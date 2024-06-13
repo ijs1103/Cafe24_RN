@@ -2,7 +2,7 @@ import Geolocation from '@react-native-community/geolocation';
 import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { Button, Alert, Pressable, View, Touchable, TouchableOpacity } from 'react-native';
 import MapView, { Marker, MarkerPressEvent, Region } from 'react-native-maps';
-import { useRootNavigation } from '../navigation/RootNavigation';
+import { useMainStackNavigation } from '../navigation/RootNavigation';
 import { getCafeList } from '../utils/KakaoUtils';
 import { CafeDTO } from '../utils/Interfaces';
 import { SearchBarHeader } from '../components/header/SearchBarHeader';
@@ -18,7 +18,7 @@ import { WebView } from 'react-native-webview';
 import { DELTA } from '../utils/Constants';
 
 export const MainScreen: React.FC = () => {
-	const navigation = useRootNavigation<'Main'>();
+	const navigation = useMainStackNavigation<'Main'>();
 
 	const toastMessageRef = useRef<ToastMessageRef>(null);
 	const bottomSheetRef = useRef<TrueSheet>(null);

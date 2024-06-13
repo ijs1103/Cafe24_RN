@@ -1,9 +1,9 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { RootNavigation } from '../../navigation/RootNavigation';
-import { TabIcon } from './TabIcon';
-import { FavoriteScreen } from '../../screens/FavoriteScreen';
-import { MainScreen } from '../../screens/MainScreen';
-import { SettingsScreen } from '../../screens/SettingsScreen';
+import { MainStackScreen, FavoriteStackScreen, SettingsStackScreen } from './RootNavigation';
+import { TabIcon } from '../components/TabIcon';
+import { FavoriteScreen } from '../screens/FavoriteScreen';
+import { MainScreen } from '../screens/MainScreen';
+import { SettingsScreen } from '../screens/SettingsScreen';
 
 const Tabs = createBottomTabNavigator();
 
@@ -26,7 +26,7 @@ export const TabBar: React.FC = () => {
 			}}>
 			<Tabs.Screen
 				name="MainTab"
-				component={MainScreen}
+				component={MainStackScreen}
 				options={{
 					tabBarIcon: ({ focused, color }) => (
 						<TabIcon name="map" color={color} isFocused={focused} />
@@ -36,7 +36,7 @@ export const TabBar: React.FC = () => {
 			/>
 			<Tabs.Screen
 				name="FavoriteTab"
-				component={FavoriteScreen}
+				component={FavoriteStackScreen}
 				options={{
 					tabBarIcon: ({ focused, color }) => (
 						<TabIcon name="star" color={color} isFocused={focused} />
@@ -46,7 +46,7 @@ export const TabBar: React.FC = () => {
 			/>
 			<Tabs.Screen
 				name="SettingsTab"
-				component={SettingsScreen}
+				component={SettingsStackScreen}
 				options={{
 					tabBarIcon: ({ focused, color }) => (
 						<TabIcon name="settings" color={color} isFocused={focused} />

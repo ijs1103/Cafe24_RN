@@ -4,17 +4,16 @@ import { Alert, View } from 'react-native';
 import MapView from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import { Header } from '../components/header/Header';
-import { useRootNavigation, useRootRoute } from '../navigation/RootNavigation';
+import { useMainStackNavigation, useMainStackRoute } from '../navigation/RootNavigation';
 import { DELTA } from '../utils/Constants';
 import { REACT_APP_GOOGLE_MAP_API_KEY } from '@env';
 
 export const DirectionsScreen: React.FC = () => {
-	const navigation = useRootNavigation<'Directions'>();
-	const routes = useRootRoute<'Directions'>();
+	const navigation = useMainStackNavigation<'Directions'>();
+	const routes = useMainStackRoute<'Directions'>();
 
 	const goBackHandler = () => {
 		navigation.goBack();
-		console.log(REACT_APP_GOOGLE_MAP_API_KEY);
 	};
 
 	const onError = () => {
@@ -32,7 +31,7 @@ export const DirectionsScreen: React.FC = () => {
 				<MapViewDirections
 					origin={routes.params.originLatLng}
 					destination={routes.params.destinationLatLng}
-					apikey={'AIzaSyAwjM0OQjavCzXF1Qqz8vC41K-4s-EzHNY'}
+					apikey={REACT_APP_GOOGLE_MAP_API_KEY}
 					onError={onError}
 				/>
 			</MapView>

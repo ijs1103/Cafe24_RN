@@ -2,9 +2,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar, useColorScheme } from 'react-native';
-import { RootNavigation, Stack } from './src/navigation/RootNavigation';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
-import { TabBar } from './src/components/tabbar/TabBar';
+import { TabBar } from './src/navigation/TabBar';
 
 const App = () => {
 	const isDarkMode = useColorScheme() === 'dark';
@@ -17,8 +16,7 @@ const App = () => {
 					backgroundColor={isDarkMode ? Colors.darker : Colors.lighter}
 				/>
 				<NavigationContainer>
-					{/* <TabBar /> */}
-					<RootNavigation initialRouteName='Main' />
+					<TabBar />
 				</NavigationContainer>
 			</SafeAreaView>
 		</SafeAreaProvider>
