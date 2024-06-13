@@ -1,5 +1,5 @@
 import React, { useCallback, forwardRef } from "react";
-import { View, Pressable, TouchableOpacity, Alert, Linking } from "react-native";
+import { View, Pressable, TouchableOpacity, Alert, Linking, Share } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TrueSheet } from "@lodev09/react-native-true-sheet";
@@ -30,14 +30,22 @@ export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, toas
 		Linking.openURL(`tel:${cafe?.phone}`)
 	}, [cafe]);
 
-	const onPressWebSite = useCallback(() => {
-
-	}, []);
-
-	const onPressShare = useCallback(() => {
-		//TODO: dynamic links 
-
-	}, []);
+	const onPressShare = useCallback(async () => {
+		if (!cafe?.place_url) {
+			Alert.alert('웹페이지가 존재하지 않습니다');
+			return;
+		}
+		try {
+			const result = await Share.share({
+				message: cafe.place_url,
+			});
+			if (result.action !== Share.sharedAction) {
+				Alert.alert('알 수 없는 이유로 공유하기 실패');
+			}
+		} catch (error: any) {
+			Alert.alert(error.message);
+		}
+	}, [cafe]);
 
 	const onPressGetDirections = useCallback(() => {
 		//TODO: 길찾기 react-native-maps-directions
