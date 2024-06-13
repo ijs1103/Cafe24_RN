@@ -15,6 +15,7 @@ import ToastMessage, { ToastMessageRef } from '../components/ToastMessage';
 import { BottomSheet } from '../components/BottomSheet';
 import { TrueSheet } from "@lodev09/react-native-true-sheet";
 import { WebView } from 'react-native-webview';
+import { DELTA } from '../utils/Constants';
 
 export const MainScreen: React.FC = () => {
 	const navigation = useRootNavigation<'Main'>();
@@ -74,8 +75,8 @@ export const MainScreen: React.FC = () => {
 			mapViewRef.current?.animateToRegion({
 				latitude: currentRegion.latitude,
 				longitude: currentRegion.longitude,
-				latitudeDelta: 0.015,
-				longitudeDelta: 0.0121,
+				latitudeDelta: DELTA.LATITUDE,
+				longitudeDelta: DELTA.LONGITUDE,
 			})
 		}, [currentRegion]);
 
@@ -100,6 +101,11 @@ export const MainScreen: React.FC = () => {
 
 	const webViewHandler = useCallback(() => {
 		navigation.navigate('WebView', { uri: selectedCafe?.place_url });
+	}, [selectedCafe]);
+
+	const directionsHandler = useCallback(() => {
+		if (!selectedCafe) { return; }
+		navigation.navigate('Directions', { originLatLng: currentRegion, destinationLatLng: { latitude: parseFloat(selectedCafe.y), longitude: parseFloat(selectedCafe.x) } });
 	}, [selectedCafe]);
 
 	useEffect(() => {
@@ -159,7 +165,7 @@ export const MainScreen: React.FC = () => {
 				})}
 			</MapView>
 			<MyLocationButton onPress={onPressMyLocationButton} />
-			<BottomSheet ref={bottomSheetRef} cafe={selectedCafe} toastMessageHandler={emptyPhoneNumberMessageHandler} webViewHandler={webViewHandler} />
+			<BottomSheet ref={bottomSheetRef} cafe={selectedCafe} toastMessageHandler={emptyPhoneNumberMessageHandler} webViewHandler={webViewHandler} directionsHandler={directionsHandler} />
 			<ToastMessage ref={toastMessageRef} />
 		</View >
 	);

@@ -15,28 +15,7 @@ export const MyWebView: React.FC = () => {
 
 	return (
 		<View style={{ flex: 1 }}>
-			<View
-				style={{
-					flexDirection: 'row',
-					height: 56,
-					borderBottomColor: 'gray',
-					borderBottomWidth: 1,
-					alignItems: 'center',
-				}}>
-				<Spacer horizontal={true} space={12} />
-				<View
-					style={{
-						flex: 1,
-						flexDirection: 'row',
-						justifyContent: 'space-between',
-					}}>
-					<Spacer horizontal={true} space={1} />
-					<TouchableOpacity onPress={onPressCloseButton}>
-						<Icon name='close' size={32} color={'black'} />
-					</TouchableOpacity>
-				</View>
-				<Spacer horizontal={true} space={12} />
-			</View>
+			
 			<WebView source={{ uri: routes.params.uri ?? 'https://reactnative.dev/' }} />
 		</View>
 	);

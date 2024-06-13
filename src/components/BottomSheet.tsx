@@ -13,9 +13,10 @@ interface BottomSheetProps {
 	cafe: CafeDTO | null;
 	toastMessageHandler: () => void;
 	webViewHandler: () => void;
+	directionsHandler: () => void;
 }
 
-export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, toastMessageHandler, webViewHandler }, ref) => {
+export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, toastMessageHandler, webViewHandler, directionsHandler }, ref) => {
 
 	const copyToClipboard = useCallback((text?: string) => {
 		if (!text) { return };
@@ -46,10 +47,6 @@ export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, toas
 			Alert.alert(error.message);
 		}
 	}, [cafe]);
-
-	const onPressGetDirections = useCallback(() => {
-		//TODO: 길찾기 react-native-maps-directions
-	}, []);
 
 	return (
 		<TrueSheet
@@ -105,7 +102,7 @@ export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, toas
 							<Icon name='share-social' color={'gray'} size={24} />
 						</TouchableOpacity>
 					</View>
-					<TouchableOpacity style={{ backgroundColor: 'rebeccapurple', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 18, alignItems: 'center' }} onPress={onPressGetDirections}>
+					<TouchableOpacity style={{ backgroundColor: 'rebeccapurple', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 18, alignItems: 'center' }} onPress={directionsHandler}>
 						<Typography color='mintcream' fontSize={14}>길찾기</Typography>
 					</TouchableOpacity>
 				</View>
