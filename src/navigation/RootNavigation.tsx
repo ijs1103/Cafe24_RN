@@ -7,11 +7,14 @@ import React from 'react';
 import { MainScreen } from '../screens/MainScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
 import { FavoriteScreen } from '../screens/FavoriteScreen';
+import { MyWebView } from '../components/MyWebView';
+import { WebView } from 'react-native-webview';
 
 type ScreenParms = {
 	Main: undefined;
 	Favorite: undefined;
 	Settings: undefined;
+	WebView: { uri: string | undefined };
 };
 
 export const Stack = createNativeStackNavigator<ScreenParms>();
@@ -29,6 +32,7 @@ export const RootNavigation: React.FC<{
 			<Stack.Screen name="Main" component={MainScreen} />
 			<Stack.Screen name="Favorite" component={FavoriteScreen} />
 			<Stack.Screen name="Settings" component={SettingsScreen} />
+			<Stack.Screen name="WebView" component={MyWebView} />
 		</Stack.Navigator>
 	);
 };

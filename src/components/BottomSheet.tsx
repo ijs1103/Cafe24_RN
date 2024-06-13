@@ -1,5 +1,5 @@
 import React, { useCallback, forwardRef } from "react";
-import { View, Pressable, TouchableOpacity, Alert } from "react-native";
+import { View, Pressable, TouchableOpacity, Alert, Linking } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TrueSheet } from "@lodev09/react-native-true-sheet";
@@ -7,20 +7,31 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import { Typography } from './Typography';
 import { Spacer } from './Spacer';
 import { Division } from './Division';
+import { CafeDTO } from '../utils/Interfaces';
 
-export const BottomSheet = forwardRef<TrueSheet>((props, ref) => {
+interface BottomSheetProps {
+	cafe: CafeDTO | null;
+	toastMessageHandler: () => void;
+	webViewHandler: () => void;
+}
 
-	const copyToClipboard = useCallback((text: string) => {
-		//Clipboard.setString(text);
-		Alert.alert("복사 완료", "텍스트가 클립보드에 복사되었습니다.");
+export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, toastMessageHandler, webViewHandler }, ref) => {
+
+	const copyToClipboard = useCallback((text?: string) => {
+		if (!text) { return };
+		Clipboard.setString(text);
 	}, []);
 
 	const onPressCall = useCallback(() => {
-		//TODO: 전화통화 
-	}, []);
+		if (!cafe?.phone) {
+			toastMessageHandler();
+			return;
+		}
+		Linking.openURL(`tel:${cafe?.phone}`)
+	}, [cafe]);
 
 	const onPressWebSite = useCallback(() => {
-		//TODO: 웹페이지 
+
 	}, []);
 
 	const onPressShare = useCallback(() => {
@@ -46,7 +57,7 @@ export const BottomSheet = forwardRef<TrueSheet>((props, ref) => {
 			<View style={{ backgroundColor: 'white' }}>
 				<View style={{ paddingHorizontal: 14, paddingVertical: 16 }}>
 					<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-						<Typography fontSize={18} fontWeight='800' color='rebeccapurple' numberOfLines={1}>요거프레소 봉천우성점</Typography>
+						<Typography fontSize={18} fontWeight='800' color='rebeccapurple' numberOfLines={1}>{cafe?.place_name ?? '알 수 없음'}</Typography>
 						<Icon name='heart' size={30} color='crimson' />
 					</View>
 					<Spacer space={20} />
@@ -62,12 +73,12 @@ export const BottomSheet = forwardRef<TrueSheet>((props, ref) => {
 					</View>
 					<Spacer space={10} />
 					<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-						<Typography fontSize={16} fontWeight='900'>515m</Typography>
+						<Typography fontSize={16} fontWeight='800'>{cafe?.distance ? `${cafe.distance}m` : '알 수 없음'}</Typography>
 						<Spacer horizontal={true} space={4} />
 						<Typography fontSize={16} color='darkgray'>•</Typography>
 						<Spacer horizontal={true} space={4} />
-						<Pressable style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => copyToClipboard('서울 관악구 관악로 28길 13')}>
-							<Typography fontSize={16} color='dimgray' fontWeight='600'>서울 관악구 관악로 28길 13</Typography>
+						<Pressable style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => copyToClipboard(cafe?.address_name)}>
+							<Typography fontSize={16} color='dimgray' fontWeight='600'>{cafe?.address_name ?? '알 수 없음'}</Typography>
 							<Spacer horizontal={true} space={4} />
 							<Icon name='copy-sharp' size={14} color='yellowgreen' />
 						</Pressable>
@@ -79,7 +90,7 @@ export const BottomSheet = forwardRef<TrueSheet>((props, ref) => {
 						<TouchableOpacity onPress={onPressCall}>
 							<Icon name='call' color={'gray'} size={24} />
 						</TouchableOpacity>
-						<TouchableOpacity onPress={onPressWebSite}>
+						<TouchableOpacity onPress={webViewHandler}>
 							<MCIcon name='web' color={'gray'} size={24} />
 						</TouchableOpacity>
 						<TouchableOpacity onPress={onPressShare}>

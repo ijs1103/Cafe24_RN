@@ -8,7 +8,7 @@ export const getCafeList = (
   longitude: number,
 ): Promise<[CafeDTO] | null> => {
   return fetch(
-    `${url.searchCategory}?category_group_code=CE7&radius=700&x=${longitude}&y=${latitude}`,
+    `${url.searchCategory}?category_group_code=CE7&radius=500&x=${longitude}&y=${latitude}`,
     {
       method: 'GET',
       headers: {

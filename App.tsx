@@ -17,7 +17,8 @@ const App = () => {
 					backgroundColor={isDarkMode ? Colors.darker : Colors.lighter}
 				/>
 				<NavigationContainer>
-					<TabBar />
+					{/* <TabBar /> */}
+					<RootNavigation initialRouteName='Main' />
 				</NavigationContainer>
 			</SafeAreaView>
 		</SafeAreaProvider>

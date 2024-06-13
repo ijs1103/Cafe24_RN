@@ -3,12 +3,7 @@ import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { Button, Alert, Pressable, View, Touchable, TouchableOpacity } from 'react-native';
 import MapView, { Marker, MarkerPressEvent, Region } from 'react-native-maps';
 import { useRootNavigation } from '../navigation/RootNavigation';
-import {
-	getCafeList,
-	getAddressFromCoords,
-	getCoordsFromAddress,
-	getCoordsFromKeyword,
-} from '../utils/KakaoUtils';
+import { getCafeList } from '../utils/KakaoUtils';
 import { CafeDTO } from '../utils/Interfaces';
 import { SearchBarHeader } from '../components/header/SearchBarHeader';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -19,6 +14,7 @@ import { Division } from '../components/Division';
 import ToastMessage, { ToastMessageRef } from '../components/ToastMessage';
 import { BottomSheet } from '../components/BottomSheet';
 import { TrueSheet } from "@lodev09/react-native-true-sheet";
+import { WebView } from 'react-native-webview';
 
 export const MainScreen: React.FC = () => {
 	const navigation = useRootNavigation<'Main'>();
@@ -38,6 +34,8 @@ export const MainScreen: React.FC = () => {
 		latitude: 37.526126,
 		longitude: 126.922255,
 	});
+	const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
+	const [selectedCafe, setSelectedCafe] = useState<CafeDTO | null>(null);
 
 	const onChangeLocation = useCallback<
 		(item: { latitude: number; longitude: number }) => void
@@ -57,30 +55,6 @@ export const MainScreen: React.FC = () => {
 			setLocationFetched(true);
 		});
 	}, [onChangeLocation]);
-
-	const onFindAddress = useCallback<() => Promise<void>>(async () => {
-		const keywordResult = await getCoordsFromKeyword(query);
-
-		if (keywordResult !== null) {
-			setCurrentAddress(keywordResult.address);
-			setCurrentRegion({
-				latitude: parseFloat(keywordResult.latitude.toString()),
-				longitude: parseFloat(keywordResult.longitude.toString()),
-			});
-			return;
-		}
-		const addressResult = await getCoordsFromAddress(query);
-		if (addressResult === null) {
-			console.error('주소값을 찾지 못햇습니다.');
-			return;
-		}
-
-		setCurrentAddress(addressResult.address);
-		setCurrentRegion({
-			latitude: parseFloat(addressResult.latitude.toString()),
-			longitude: parseFloat(addressResult.longitude.toString()),
-		});
-	}, [query]);
 
 	const onMapReady = useCallback(() => {
 		setIsMapReady(true);
@@ -113,15 +87,20 @@ export const MainScreen: React.FC = () => {
 		await bottomSheetRef.current?.dismiss()
 	}, []);
 
-	const onPressMarker = useCallback<(event: MarkerPressEvent) => void>(({ nativeEvent: { coordinate } }) => {
+	const onPressMarker = useCallback<(cafe: CafeDTO) => void>(cafe => {
+		setSelectedCafe(cafe);
 		presentTrueSheet();
 	}, []);
 
-	const showToastMessage = () => {
+	const emptyPhoneNumberMessageHandler = useCallback(() => {
 		if (toastMessageRef.current) {
-			toastMessageRef.current.showToastMessage();
+			toastMessageRef.current.showToastMessage('전화번호가 제공되지 않습니다.');
 		}
-	}
+	}, []);
+
+	const webViewHandler = useCallback(() => {
+		navigation.navigate('WebView', { uri: selectedCafe?.place_url });
+	}, [selectedCafe]);
 
 	useEffect(() => {
 		if (locationFetched) {
@@ -130,6 +109,10 @@ export const MainScreen: React.FC = () => {
 			);
 		}
 	}, [locationFetched, currentRegion]);
+
+	useEffect(() => {
+		console.log('selectedCafe', selectedCafe);
+	}, [selectedCafe]);
 
 	return (
 		<View style={{ flex: 1 }}>
@@ -150,7 +133,7 @@ export const MainScreen: React.FC = () => {
 				moveOnMarkerPress={false}
 				toolbarEnabled={false}
 				rotateEnabled={false}
-				minZoomLevel={15}
+				minZoomLevel={16}
 			>
 				{isMapReady && (
 					<Marker
@@ -165,19 +148,19 @@ export const MainScreen: React.FC = () => {
 					return (
 						<Marker
 							key={item.id}
-							onPress={onPressMarker}
+							onPress={() => onPressMarker(item)}
 							coordinate={{
 								latitude: parseFloat(item.y),
 								longitude: parseFloat(item.x),
 							}}
-							image={require('../../assets/cafe_marker.png')}
+							image={(selectedCafe?.id === item.id) ? require('../../assets/selected_cafe_marker.png') : require('../../assets/cafe_marker.png')}
 						/>
 					)
 				})}
 			</MapView>
 			<MyLocationButton onPress={onPressMyLocationButton} />
-			<BottomSheet ref={bottomSheetRef} />
-			<ToastMessage ref={toastMessageRef} message='알람 메시지' />
+			<BottomSheet ref={bottomSheetRef} cafe={selectedCafe} toastMessageHandler={emptyPhoneNumberMessageHandler} webViewHandler={webViewHandler} />
+			<ToastMessage ref={toastMessageRef} />
 		</View >
 	);
 };

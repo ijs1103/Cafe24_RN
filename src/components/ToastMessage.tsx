@@ -1,15 +1,17 @@
-import React, { useRef, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import { Animated, View, Text, Easing } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export interface ToastMessageRef {
-	showToastMessage: () => void;
+	showToastMessage: (text: string) => void;
 }
 
-const ToastMessage = forwardRef<ToastMessageRef, { message: string; }>((props, ref) => {
-	const translateYAnimation = useRef(new Animated.Value(100)).current;
+const ToastMessage = forwardRef<ToastMessageRef>((props, ref) => {
+	const translateYAnimation = useRef(new Animated.Value(-200)).current;
+	const [message, setMessage] = useState<string>('');
 
-	const showToastMessage = () => {
+	const showToastMessage = (text: string) => {
+		setMessage(text);
 		Animated.sequence([
 			Animated.timing(translateYAnimation, {
 				toValue: 0,
@@ -19,7 +21,7 @@ const ToastMessage = forwardRef<ToastMessageRef, { message: string; }>((props, r
 			}),
 			Animated.delay(2000),
 			Animated.timing(translateYAnimation, {
-				toValue: 100,
+				toValue: -200,
 				duration: 500,
 				easing: Easing.in(Easing.circle),
 				useNativeDriver: true,
@@ -35,7 +37,7 @@ const ToastMessage = forwardRef<ToastMessageRef, { message: string; }>((props, r
 		<Animated.View
 			style={{
 				position: 'absolute',
-				bottom: 0,
+				top: 0,
 				width: '100%',
 				transform: [
 					{
@@ -57,7 +59,7 @@ const ToastMessage = forwardRef<ToastMessageRef, { message: string; }>((props, r
 			>
 				<Icon name="checkmark-circle" color="white" size={24} />
 				<Text style={{ color: 'white', fontSize: 15, marginLeft: 10 }}>
-					{props.message}
+					{message}
 				</Text>
 			</View>
 		</Animated.View>
