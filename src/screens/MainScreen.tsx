@@ -23,10 +23,8 @@ export const MainScreen: React.FC = () => {
 	const toastMessageRef = useRef<ToastMessageRef>(null);
 	const bottomSheetRef = useRef<TrueSheet>(null);
 	const mapViewRef = useRef<MapView>(null);
-	const [query, setQuery] = useState<string>('');
 	const [isMapReady, setIsMapReady] = useState<boolean>(false);
 	const [cafeList, setCafeList] = useState<[CafeDTO] | null>(null);
-	const [currentAddress, setCurrentAddress] = useState<string | null>(null);
 	const [locationFetched, setLocationFetched] = useState<boolean>(false);
 	const [currentRegion, setCurrentRegion] = useState<{
 		latitude: number;
@@ -35,7 +33,6 @@ export const MainScreen: React.FC = () => {
 		latitude: 37.526126,
 		longitude: 126.922255,
 	});
-	const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
 	const [selectedCafe, setSelectedCafe] = useState<CafeDTO | null>(null);
 
 	const onChangeLocation = useCallback<
@@ -66,6 +63,10 @@ export const MainScreen: React.FC = () => {
 		navigation.push('SearchScreen');
 	}, []);
 
+	const onMarkerDeselect = useCallback(() => {
+		setSelectedCafe(null);
+	}, []);
+
 	const onRegionChangeComplete = useCallback((region: Region) => {
 		getCafeList(region.latitude, region.longitude).then(setCafeList)
 	}, []);
@@ -82,11 +83,11 @@ export const MainScreen: React.FC = () => {
 
 	const presentTrueSheet = useCallback(async () => {
 		await bottomSheetRef.current?.present()
-	}, []);
+	}, [bottomSheetRef]);
 
 	const dismissTrueSheet = useCallback(async () => {
 		await bottomSheetRef.current?.dismiss()
-	}, []);
+	}, [bottomSheetRef]);
 
 	const onPressMarker = useCallback<(cafe: CafeDTO) => void>(cafe => {
 		setSelectedCafe(cafe);
@@ -117,8 +118,10 @@ export const MainScreen: React.FC = () => {
 	}, [locationFetched, currentRegion]);
 
 	useEffect(() => {
-		console.log('selectedCafe', selectedCafe);
-	}, [selectedCafe]);
+		if (selectedCafe === null) {
+			dismissTrueSheet();
+		}
+	}, [selectedCafe, dismissTrueSheet]);
 
 	return (
 		<View style={{ flex: 1 }}>
@@ -136,6 +139,7 @@ export const MainScreen: React.FC = () => {
 				onRegionChangeComplete={region => {
 					onRegionChangeComplete(region)
 				}}
+				onLongPress={onMarkerDeselect}
 				moveOnMarkerPress={false}
 				toolbarEnabled={false}
 				rotateEnabled={false}
