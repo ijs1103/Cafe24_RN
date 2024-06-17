@@ -4,7 +4,7 @@ import { Button, Alert, Pressable, View, Touchable, TouchableOpacity } from 'rea
 import MapView, { Marker, MarkerPressEvent, Region } from 'react-native-maps';
 import { useMainStackNavigation } from '../navigation/RootNavigation';
 import { getCafeList } from '../utils/KakaoUtils';
-import { CafeDTO } from '../utils/Interfaces';
+import { CafeDTO } from '../utils/Types';
 import { SearchBarHeader } from '../components/header/SearchBarHeader';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Typography } from '../components/Typography';
@@ -60,7 +60,7 @@ export const MainScreen: React.FC = () => {
 	}, [getMyLocation]);
 
 	const onPressSearchBarHeader = useCallback(() => {
-		navigation.push('SearchScreen');
+		navigation.navigate('Search');
 	}, []);
 
 	const onMarkerDeselect = useCallback(() => {
@@ -163,7 +163,7 @@ export const MainScreen: React.FC = () => {
 								latitude: parseFloat(item.y),
 								longitude: parseFloat(item.x),
 							}}
-							image={(selectedCafe?.id === item.id) ? require('../../assets/selected_cafe_marker.png') : require('../../assets/cafe_marker.png')}
+							image={(selectedCafe?.id === item.id) ? require('../../assets/marker/selected_cafe_marker.png') : require('../../assets/marker/cafe_marker.png')}
 						/>
 					)
 				})}

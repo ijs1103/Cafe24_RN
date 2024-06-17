@@ -1,5 +1,5 @@
 import {url} from './Constants';
-import {CafeDTO} from './Interfaces';
+import {CafeDTO} from './Types';
 
 const KAKAO_API_KEY = '7c001ccd521c63467930d592b893cdc6';
 

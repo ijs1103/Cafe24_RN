@@ -7,7 +7,8 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import { Typography } from './Typography';
 import { Spacer } from './Spacer';
 import { Division } from './Division';
-import { CafeDTO } from '../utils/Interfaces';
+import { CafeDTO } from '../utils/Types';
+import { RatingsAndReviews } from "./RatingsAndReviews";
 
 interface BottomSheetProps {
 	cafe: CafeDTO | null;
@@ -66,16 +67,7 @@ export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, toas
 						<Icon name='heart' size={30} color='crimson' />
 					</View>
 					<Spacer space={20} />
-					<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-						<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-							<Icon name='star-sharp' size={16} color='gold' />
-							<Typography fontSize={16} color='dimgray' fontWeight='600'>4.25</Typography>
-						</View>
-						<Spacer horizontal={true} space={4} />
-						<Typography fontSize={16} color='darkgray'>•</Typography>
-						<Spacer horizontal={true} space={4} />
-						<Typography fontSize={16} color='dimgray' fontWeight='600'>리뷰 100개</Typography>
-					</View>
+					<RatingsAndReviews ratings={4.25} reviewsCount={100} />
 					<Spacer space={10} />
 					<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 						<Typography fontSize={16} fontWeight='800'>{cafe?.distance ? `${cafe.distance}m` : '알 수 없음'}</Typography>

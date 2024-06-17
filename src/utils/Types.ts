@@ -1,3 +1,5 @@
+import { FRANCHISE_CAFE_LIST } from "./Constants";
+
 export interface CafeDTO {
   place_name: string;
   distance: string;
@@ -11,4 +13,6 @@ export interface CafeDTO {
   category_group_name: string;
   x: string;
   y: string;
-}
+};
+
+export type FRANCHISE_CAFE = typeof FRANCHISE_CAFE_LIST[number];

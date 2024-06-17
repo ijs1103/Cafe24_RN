@@ -11,11 +11,13 @@ import { WebViewScreen } from '../screens/WebViewScreen';
 import { WebView } from 'react-native-webview';
 import { LatLng } from 'react-native-maps';
 import { DirectionsScreen } from '../screens/DirectionsScreen';
+import { SearchScreen } from '../screens/SearchScreen';
 
 type MainStackParams = {
 	Main: undefined;
 	WebView: { uri: string | undefined };
 	Directions: { originLatLng: LatLng, destinationLatLng: LatLng };
+	Search: undefined;
 };
 
 export const MainStack = createNativeStackNavigator<MainStackParams>();
@@ -30,6 +32,7 @@ export const MainStackScreen: React.FC = () => {
 			<MainStack.Screen name="Main" component={MainScreen} />
 			<MainStack.Screen name="WebView" component={WebViewScreen} />
 			<MainStack.Screen name="Directions" component={DirectionsScreen} />
+			<MainStack.Screen name="Search" component={SearchScreen} />
 		</MainStack.Navigator>
 	);
 };

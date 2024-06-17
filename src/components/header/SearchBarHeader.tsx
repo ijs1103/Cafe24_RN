@@ -11,10 +11,12 @@ export const SearchBarHeader: React.FC<{
 		<View
 			style={{
 				display: 'flex',
-				backgroundColor: 'whitesmoke',
+				backgroundColor: '#11111100',
 				height: 60,
 				justifyContent: 'center',
 				alignItems: 'center',
+				borderBottomWidth: 0.3,
+				borderBottomColor: '#888',
 			}}>
 			<TouchableOpacity
 				style={{
