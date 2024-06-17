@@ -4,6 +4,7 @@ import { TabIcon } from '../components/TabIcon';
 import { FavoriteScreen } from '../screens/FavoriteScreen';
 import { MainScreen } from '../screens/MainScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 const Tabs = createBottomTabNavigator();
 
@@ -22,17 +23,24 @@ export const TabBar: React.FC = () => {
 					shadowOpacity: 0.25,
 					shadowRadius: 3.84,
 					elevation: 5,
-				},
+				}
 			}}>
 			<Tabs.Screen
 				name="MainTab"
 				component={MainStackScreen}
-				options={{
+				options={({ route }) => ({
 					tabBarIcon: ({ focused, color }) => (
 						<TabIcon name="map" color={color} isFocused={focused} />
 					),
 					tabBarLabel: '지도',
-				}}
+					tabBarStyle: ((route) => {
+						const routeName = getFocusedRouteNameFromRoute(route) ?? ""
+						if (['WebView', 'Search'].includes(routeName)) {
+							return { display: "none" }
+						}
+						return
+					})(route),
+				})}
 			/>
 			<Tabs.Screen
 				name="FavoriteTab"
