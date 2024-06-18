@@ -16,6 +16,7 @@ import { getCafeListFromKeyword } from '../utils/KakaoUtils';
 import { CurretRegionContext } from '../../App';
 import { SearchFilterButton } from '../components/SearchFilterButton';
 import { SearchFilterModal } from '../components/SearchFilterModal';
+import { FranchiseCafeButton } from '../components/FranchiseCafeButton';
 
 export const SearchScreen: React.FC = () => {
 	const navigation = useMainStackNavigation<'Search'>();
@@ -94,33 +95,7 @@ export const SearchScreen: React.FC = () => {
 					<View>
 						<ScrollView showsHorizontalScrollIndicator={false} horizontal={true} style={{ flexDirection: 'row' }}>
 							{FRANCHISE_CAFE_LIST.map((value, index) => {
-								return (
-									<TouchableOpacity key={index} onPress={() => onPressFranchise(value)}>
-										<View
-											style={{
-												paddingVertical: 8,
-												paddingHorizontal: 12,
-												borderWidth: 0.5,
-												backgroundColor:
-													selectedFranchise === value ? 'saddlebrown' : 'floralwhite',
-												borderColor: '#ffffff30',
-												marginVertical: 16,
-												marginHorizontal: 6,
-												borderRadius: 8,
-												elevation: 4
-											}}
-										>
-											<Text
-												style={{
-													color: selectedFranchise === value ? 'white' : 'saddlebrown',
-													fontWeight: '600'
-												}}
-											>
-												{value}
-											</Text>
-										</View>
-									</TouchableOpacity>
-								);
+								return <FranchiseCafeButton key={index} onPress={() => onPressFranchise(value)} isSelected={selectedFranchise === value} cafe={value} />
 							})}
 						</ScrollView>
 					</View>
