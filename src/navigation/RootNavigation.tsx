@@ -12,9 +12,10 @@ import { WebView } from 'react-native-webview';
 import { LatLng } from 'react-native-maps';
 import { DirectionsScreen } from '../screens/DirectionsScreen';
 import { SearchScreen } from '../screens/SearchScreen';
+import { CafeDTO } from '../utils/Types';
 
 type MainStackParams = {
-	Main: undefined;
+	Main: { cafe: CafeDTO } | undefined;
 	WebView: { uri: string | undefined };
 	Directions: { originLatLng: LatLng, destinationLatLng: LatLng };
 	Search: undefined;

@@ -2,7 +2,7 @@ import {URL} from './Constants';
 import {CafeDTO} from './Types';
 import { KAKAO_API_KEY } from '@env';
 
-export const getCafeList = (
+export const getCafeListFromLatLng = (
   latitude: number,
   longitude: number,
 ): Promise<[CafeDTO] | null> => {
@@ -24,13 +24,13 @@ export const getCafeList = (
     });
 };
 
-export const getCafesFromKeyword = (
+export const getCafeListFromKeyword = (
   keyword: string,
   latitude: number,
   longitude: number,
 ): Promise<[CafeDTO] | null> => {
   return fetch(
-    `${URL.SEARCH_KEYWORD}?category_group_code=CE7&radius=500&x=${longitude}&y=${latitude}&query=${keyword}`,
+    `${URL.SEARCH_KEYWORD}?category_group_code=CE7&radius=2000&x=${longitude}&y=${latitude}&query=${keyword}`,
     {
       method: 'GET',
       headers: {

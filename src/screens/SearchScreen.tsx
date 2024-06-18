@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useContext } from 'react';
 import { useMainStackNavigation } from "../navigation/RootNavigation";
 import { ScrollView, Text, TextInput, Touchable, TouchableOpacity, View, Animated, FlatList } from 'react-native';
 import { Header } from '../components/header/Header';
@@ -12,146 +12,36 @@ import { LogoBackground } from '../components/LogoBackground';
 import { SearchResultItem } from '../components/ListItem/SearchResultItem';
 import { Division } from '../components/Division';
 import { ListEmptyComponent } from '../components/ListEmptyComponent';
-import { getCafesFromKeyword } from '../utils/KakaoUtils';
+import { getCafeListFromKeyword } from '../utils/KakaoUtils';
+import { CurretRegionContext } from '../../App';
 
 export const SearchScreen: React.FC = () => {
 	const navigation = useMainStackNavigation<'Search'>();
 
+	const { currentRegion } = useContext(CurretRegionContext);
 	const headerBgAnim = useRef(new Animated.Value(0)).current;
 	const [selectedFranchise, setSelectedFranchise] = useState<FRANCHISE_CAFE | null>(null);
 	const [keyword, setKeyword] = useState<string | null>(null);
+	const [cafeList, setCafeList] = useState<[CafeDTO] | null>(null);
 
-	const goBackHandler = () => {
+	const goBackHandler = useCallback(() => {
 		navigation.goBack()
-	};
+	}, [navigation]);
 
-	const onPressFranchise = (cafe: FRANCHISE_CAFE) => {
+	const onPressFranchise = useCallback(async (cafe: FRANCHISE_CAFE) => {
 		const data = (selectedFranchise === cafe) ? null : cafe
 		setKeyword(data)
 		setSelectedFranchise(data)
-		if (data) { 
-			getCafesFromKeyword(data, data.) 
+		if (data) {
+			await getCafeListFromKeyword(data, currentRegion.latitude, currentRegion.longitude).then(setCafeList)
+		} else {
+			setCafeList(null)
 		}
-	};
+	}, [selectedFranchise, currentRegion]);
 
-	const datas: [CafeDTO] = [
-		{
-			place_name: '서울대입구 스타벅스',
-			distance: '300',
-			place_url: 'https://wwww.naver.com',
-			category_name: '카페',
-			address_name: '서울시 관악구 30길 12',
-			road_address_name: '',
-			id: '01',
-			phone: '02-824-1288',
-			category_group_code: '',
-			category_group_name: '',
-			x: '126.322',
-			y: '53.22',
-		},
-		{
-			place_name: '서울대입구 스타벅스',
-			distance: '300',
-			place_url: 'https://wwww.naver.com',
-			category_name: '카페',
-			address_name: '서울시 관악구 30길 12',
-			road_address_name: '',
-			id: '02',
-			phone: '02-824-1288',
-			category_group_code: '',
-			category_group_name: '',
-			x: '126.322',
-			y: '53.22',
-		},
-		{
-			place_name: '서울대입구 스타벅스',
-			distance: '300',
-			place_url: 'https://wwww.naver.com',
-			category_name: '카페',
-			address_name: '서울시 관악구 30길 12',
-			road_address_name: '',
-			id: '03',
-			phone: '02-824-1288',
-			category_group_code: '',
-			category_group_name: '',
-			x: '126.322',
-			y: '53.22',
-		},
-		{
-			place_name: '서울대입구 스타벅스',
-			distance: '300',
-			place_url: 'https://wwww.naver.com',
-			category_name: '카페',
-			address_name: '서울시 관악구 30길 12',
-			road_address_name: '',
-			id: '06',
-			phone: '02-824-1288',
-			category_group_code: '',
-			category_group_name: '',
-			x: '126.322',
-			y: '53.22',
-		},
-		{
-			place_name: '서울대입구 스타벅스',
-			distance: '300',
-			place_url: 'https://wwww.naver.com',
-			category_name: '카페',
-			address_name: '서울시 관악구 30길 12',
-			road_address_name: '',
-			id: '04',
-			phone: '02-824-1288',
-			category_group_code: '',
-			category_group_name: '',
-			x: '126.322',
-			y: '53.22',
-		},
-		{
-			place_name: '서울대입구 스타벅스',
-			distance: '300',
-			place_url: 'https://wwww.naver.com',
-			category_name: '카페',
-			address_name: '서울시 관악구 30길 12',
-			road_address_name: '',
-			id: '05',
-			phone: '02-824-1288',
-			category_group_code: '',
-			category_group_name: '',
-			x: '126.322',
-			y: '53.22',
-		},
-		{
-			place_name: '서울대입구 스타벅스',
-			distance: '300',
-			place_url: 'https://wwww.naver.com',
-			category_name: '카페',
-			address_name: '서울시 관악구 30길 12',
-			road_address_name: '',
-			id: '07',
-			phone: '02-824-1288',
-			category_group_code: '',
-			category_group_name: '',
-			x: '126.322',
-			y: '53.22',
-		},
-		{
-			place_name: '서울대입구 스타벅스',
-			distance: '300',
-			place_url: 'https://wwww.naver.com',
-			category_name: '카페',
-			address_name: '서울시 관악구 30길 12',
-			road_address_name: '',
-			id: '08',
-			phone: '02-824-1288',
-			category_group_code: '',
-			category_group_name: '',
-			x: '126.322',
-			y: '53.22',
-		},
-	]
-
-	const itemPressHandler = useCallback(() => {
-
-	}, []);
+	const itemPressHandler = useCallback((cafe: CafeDTO) => {
+		navigation.navigate('Main', { cafe })
+	}, [navigation]);
 
 	return (
 		<KeyboardAvoidingLayout>
@@ -209,7 +99,7 @@ export const SearchScreen: React.FC = () => {
 					<Typography color='dimgray' fontSize={16} fontWeight='bold'>검색 결과</Typography>
 					<View style={{ flex: 1, position: 'relative', paddingVertical: 12 }}>
 						<LogoBackground selectedCafe={selectedFranchise} headerBgAnim={headerBgAnim} />
-						<FlatList data={datas} renderItem={({ item }) => <SearchResultItem cafeId={item.id} cafeName={item.place_name} cafeAddress={item.address_name} ratings={4.25} reviewsCount={100} onPress={itemPressHandler} />} keyExtractor={item => item.id} ListEmptyComponent={<ListEmptyComponent />} ItemSeparatorComponent={() => <Division separatorStyle />} contentContainerStyle={{ flexGrow: 1 }} />
+						<FlatList data={cafeList} renderItem={({ item }) => <SearchResultItem cafeId={item.id} cafeName={item.place_name} cafeAddress={item.address_name} ratings={4.25} reviewsCount={100} onPress={() => itemPressHandler(item)} />} keyExtractor={item => item.id} ListEmptyComponent={<ListEmptyComponent />} ItemSeparatorComponent={() => <Division separatorStyle />} contentContainerStyle={{ flexGrow: 1 }} />
 					</View>
 				</View>
 			</View >

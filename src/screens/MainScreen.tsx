@@ -1,9 +1,9 @@
 import Geolocation from '@react-native-community/geolocation';
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import React, { useCallback, useEffect, useState, useRef, useContext } from 'react';
 import { Button, Alert, Pressable, View, Touchable, TouchableOpacity } from 'react-native';
-import MapView, { Marker, MarkerPressEvent, Region } from 'react-native-maps';
-import { useMainStackNavigation } from '../navigation/RootNavigation';
-import { getCafeList } from '../utils/KakaoUtils';
+import MapView, { Marker, MarkerPressEvent, Region, LatLng } from 'react-native-maps';
+import { useMainStackNavigation, useMainStackRoute } from '../navigation/RootNavigation';
+import { getCafeListFromLatLng } from '../utils/KakaoUtils';
 import { CafeDTO } from '../utils/Types';
 import { SearchBarHeader } from '../components/header/SearchBarHeader';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -16,23 +16,19 @@ import { BottomSheet } from '../components/BottomSheet';
 import { TrueSheet } from "@lodev09/react-native-true-sheet";
 import { WebView } from 'react-native-webview';
 import { DELTA } from '../utils/Constants';
+import { CurretRegionContext } from '../../App';
 
 export const MainScreen: React.FC = () => {
 	const navigation = useMainStackNavigation<'Main'>();
+	const routes = useMainStackRoute<'Main'>();
 
+	const { currentRegion, setCurrentRegion } = useContext(CurretRegionContext);
 	const toastMessageRef = useRef<ToastMessageRef>(null);
 	const bottomSheetRef = useRef<TrueSheet>(null);
 	const mapViewRef = useRef<MapView>(null);
 	const [isMapReady, setIsMapReady] = useState<boolean>(false);
 	const [cafeList, setCafeList] = useState<[CafeDTO] | null>(null);
 	const [locationFetched, setLocationFetched] = useState<boolean>(false);
-	const [currentRegion, setCurrentRegion] = useState<{
-		latitude: number;
-		longitude: number;
-	}>({
-		latitude: 37.526126,
-		longitude: 126.922255,
-	});
 	const [selectedCafe, setSelectedCafe] = useState<CafeDTO | null>(null);
 
 	const onChangeLocation = useCallback<
@@ -61,14 +57,14 @@ export const MainScreen: React.FC = () => {
 
 	const onPressSearchBarHeader = useCallback(() => {
 		navigation.navigate('Search');
-	}, []);
+	}, [navigation]);
 
 	const onMarkerDeselect = useCallback(() => {
 		setSelectedCafe(null);
 	}, []);
 
 	const onRegionChangeComplete = useCallback((region: Region) => {
-		getCafeList(region.latitude, region.longitude).then(setCafeList)
+		getCafeListFromLatLng(region.latitude, region.longitude).then(setCafeList)
 	}, []);
 
 	const onPressMyLocationButton = useCallback(
@@ -79,7 +75,7 @@ export const MainScreen: React.FC = () => {
 				latitudeDelta: DELTA.LATITUDE,
 				longitudeDelta: DELTA.LONGITUDE,
 			})
-		}, [currentRegion]);
+		}, [mapViewRef, currentRegion]);
 
 	const presentTrueSheet = useCallback(async () => {
 		await bottomSheetRef.current?.present()
@@ -102,16 +98,16 @@ export const MainScreen: React.FC = () => {
 
 	const webViewHandler = useCallback(() => {
 		navigation.navigate('WebView', { uri: selectedCafe?.place_url });
-	}, [selectedCafe]);
+	}, [navigation, selectedCafe]);
 
 	const directionsHandler = useCallback(() => {
 		if (!selectedCafe) { return; }
 		navigation.navigate('Directions', { originLatLng: currentRegion, destinationLatLng: { latitude: parseFloat(selectedCafe.y), longitude: parseFloat(selectedCafe.x) } });
-	}, [selectedCafe]);
+	}, [navigation, selectedCafe]);
 
 	useEffect(() => {
 		if (locationFetched) {
-			getCafeList(currentRegion.latitude, currentRegion.longitude).then(
+			getCafeListFromLatLng(currentRegion.latitude, currentRegion.longitude).then(
 				setCafeList,
 			);
 		}
@@ -122,6 +118,19 @@ export const MainScreen: React.FC = () => {
 			dismissTrueSheet();
 		}
 	}, [selectedCafe, dismissTrueSheet]);
+
+	useEffect(() => {
+		if (routes.params) {
+			mapViewRef.current?.animateToRegion({
+				latitude: parseFloat(routes.params.cafe.y),
+				longitude: parseFloat(routes.params.cafe.x),
+				latitudeDelta: DELTA.LATITUDE,
+				longitudeDelta: DELTA.LONGITUDE,
+			})
+			setSelectedCafe(routes.params.cafe);
+			presentTrueSheet();
+		}
+	}, [mapViewRef, routes.params]);
 
 	return (
 		<View style={{ flex: 1 }}>
