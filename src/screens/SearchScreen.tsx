@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Spacer } from '../components/Spacer';
 import { Typography } from '../components/Typography';
 import { FRANCHISE_CAFE_LIST } from '../utils/Constants';
-import { FRANCHISE_CAFE, CafeDTO } from '../utils/Types';
+import { FRANCHISE_CAFE, CafeDTO, FILTER_TYPE } from '../utils/Types';
 import { KeyboardAvoidingLayout } from '../components/KeyboardAvoidingLayout';
 import { LogoBackground } from '../components/LogoBackground';
 import { SearchResultItem } from '../components/ListItem/SearchResultItem';
@@ -14,6 +14,8 @@ import { Division } from '../components/Division';
 import { ListEmptyComponent } from '../components/ListEmptyComponent';
 import { getCafeListFromKeyword } from '../utils/KakaoUtils';
 import { CurretRegionContext } from '../../App';
+import { SearchFilterButton } from '../components/SearchFilterButton';
+import { SearchFilterModal } from '../components/SearchFilterModal';
 
 export const SearchScreen: React.FC = () => {
 	const navigation = useMainStackNavigation<'Search'>();
@@ -23,6 +25,8 @@ export const SearchScreen: React.FC = () => {
 	const [selectedFranchise, setSelectedFranchise] = useState<FRANCHISE_CAFE | null>(null);
 	const [keyword, setKeyword] = useState<string | null>(null);
 	const [cafeList, setCafeList] = useState<[CafeDTO] | null>(null);
+	const [isSearchFilterActive, setIsSearchFilterActive] = useState(false);
+	const [selectedFilter, setSelectedFilter] = useState<FILTER_TYPE>('거리 가까운순');
 
 	const goBackHandler = useCallback(() => {
 		navigation.goBack()
@@ -43,6 +47,30 @@ export const SearchScreen: React.FC = () => {
 		navigation.navigate('Main', { cafe })
 	}, [navigation]);
 
+	const onSubmitEditing = useCallback(async (text: string) => {
+		await getCafeListFromKeyword(text, currentRegion.latitude, currentRegion.longitude).then(setCafeList)
+	}, [currentRegion]);
+
+	const toggleModal = useCallback(() => {
+		setIsSearchFilterActive(prev => !prev)
+	}, []);
+
+	const filterPressHandler = useCallback((filter: FILTER_TYPE) => {
+		setSelectedFilter(filter)
+		if (cafeList) {
+			var sortedCafeList: [CafeDTO]
+			switch (filter) {
+				case '거리 가까운순':
+					sortedCafeList = cafeList.sort((a, b) => { return parseFloat(a.distance) - parseFloat(b.distance) })
+				case '리뷰 많은순':
+				case '별점 높은순':
+					sortedCafeList = cafeList
+			}
+			setCafeList(sortedCafeList)
+		}
+		toggleModal()
+	}, [cafeList]);
+
 	return (
 		<KeyboardAvoidingLayout>
 			<View style={{ flex: 1, backgroundColor: 'antiquewhite' }}>
@@ -59,7 +87,7 @@ export const SearchScreen: React.FC = () => {
 						}}>
 						<Icon name="search" size={20} color={'black'} />
 						<Spacer horizontal space={10} />
-						<TextInput value={keyword ?? ''} onChangeText={text => setKeyword(text)} placeholder='내 주변 카페를 검색해보세요.' placeholderTextColor={'darkgray'} style={{ flex: 1, color: 'black', fontSize: 16, fontWeight: '700' }} />
+						<TextInput value={keyword ?? ''} onSubmitEditing={({ nativeEvent: { text } }) => onSubmitEditing(text)} onChangeText={text => setKeyword(text)} placeholder='내 주변 카페를 검색해보세요.' placeholderTextColor={'darkgray'} style={{ flex: 1, color: 'black', fontSize: 16, fontWeight: '700' }} />
 					</View>
 					<Spacer space={20} />
 					<Typography color='dimgray' fontSize={16} fontWeight='bold'>인기 검색어</Typography>
@@ -96,14 +124,17 @@ export const SearchScreen: React.FC = () => {
 							})}
 						</ScrollView>
 					</View>
-					<Typography color='dimgray' fontSize={16} fontWeight='bold'>검색 결과</Typography>
+					<View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+						<Typography color='dimgray' fontSize={16} fontWeight='bold'>검색 결과</Typography>
+						{cafeList && <SearchFilterButton isActive={isSearchFilterActive} selectedFilter={selectedFilter} SearchFilterButtonPressHandler={() => setIsSearchFilterActive(prev => !prev)} />}
+					</View>
 					<View style={{ flex: 1, position: 'relative', paddingVertical: 12 }}>
 						<LogoBackground selectedCafe={selectedFranchise} headerBgAnim={headerBgAnim} />
-						<FlatList data={cafeList} renderItem={({ item }) => <SearchResultItem cafeId={item.id} cafeName={item.place_name} cafeAddress={item.address_name} ratings={4.25} reviewsCount={100} onPress={() => itemPressHandler(item)} />} keyExtractor={item => item.id} ListEmptyComponent={<ListEmptyComponent />} ItemSeparatorComponent={() => <Division separatorStyle />} contentContainerStyle={{ flexGrow: 1 }} />
+						<FlatList data={cafeList} renderItem={({ item }) => <SearchResultItem cafeId={item.id} cafeName={item.place_name} cafeAddress={item.address_name} ratings={4.25} reviewsCount={100} distance={item.distance} onPress={() => itemPressHandler(item)} />} keyExtractor={item => item.id} ListEmptyComponent={<ListEmptyComponent />} ItemSeparatorComponent={() => <Division separatorStyle />} contentContainerStyle={{ flexGrow: 1 }} />
 					</View>
 				</View>
+				<SearchFilterModal isModalVisible={isSearchFilterActive} selectedFilter={selectedFilter} toggleModal={toggleModal} filterPressHandler={filterPressHandler} />
 			</View >
 		</KeyboardAvoidingLayout>
-
 	);
 }

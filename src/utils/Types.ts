@@ -1,4 +1,4 @@
-import { FRANCHISE_CAFE_LIST } from "./Constants";
+import { FRANCHISE_CAFE_LIST, FILTER_TYPE_LIST } from "./Constants";
 
 export interface CafeDTO {
   place_name: string;
@@ -16,3 +16,5 @@ export interface CafeDTO {
 };
 
 export type FRANCHISE_CAFE = typeof FRANCHISE_CAFE_LIST[number];
+
+export type FILTER_TYPE = typeof FILTER_TYPE_LIST[number];

@@ -13,6 +13,7 @@ import { LatLng } from 'react-native-maps';
 import { DirectionsScreen } from '../screens/DirectionsScreen';
 import { SearchScreen } from '../screens/SearchScreen';
 import { CafeDTO } from '../utils/Types';
+import { SearchFilterModal } from '../components/SearchFilterModal';
 
 type MainStackParams = {
 	Main: { cafe: CafeDTO } | undefined;

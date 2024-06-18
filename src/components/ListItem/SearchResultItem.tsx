@@ -11,12 +11,16 @@ interface SearchResultItemProps {
 	ratings: number;
 	reviewsCount: number;
 	onPress: () => void;
+	distance: string;
 }
 
-export const SearchResultItem: React.FC<SearchResultItemProps> = ({ cafeId, cafeName, cafeAddress, ratings, reviewsCount, onPress }) => {
+export const SearchResultItem: React.FC<SearchResultItemProps> = ({ cafeId, cafeName, cafeAddress, ratings, reviewsCount, onPress, distance }) => {
 	return (
 		<TouchableOpacity key={cafeId} onPress={onPress} style={{ flex: 1, paddingVertical: 12 }}>
-			<Typography fontWeight='800' fontSize={16} color='#111'>{cafeName}</Typography>
+			<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+				<Typography fontWeight='800' fontSize={16} color='#111'>{cafeName}</Typography>
+				<Typography fontWeight='900' fontSize={12} color='saddlebrown'>{distance}m</Typography>
+			</View>
 			<Spacer space={6} />
 			<Typography fontWeight='600' fontSize={14} color='#333'>{cafeAddress}</Typography>
 			<Spacer space={4} />

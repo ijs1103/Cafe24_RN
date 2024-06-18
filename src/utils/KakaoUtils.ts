@@ -43,6 +43,7 @@ export const getCafeListFromKeyword = (
       if (result.meta.total_count === 0 || result.documents.length === 0) {
         return null;
       }
-      return result.documents;
+
+      return result.documents.sort((a: CafeDTO, b: CafeDTO) => { return parseFloat(a.distance) - parseFloat(b.distance) })
     });
 };
