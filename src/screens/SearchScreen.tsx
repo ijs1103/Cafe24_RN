@@ -12,6 +12,7 @@ import { LogoBackground } from '../components/LogoBackground';
 import { SearchResultItem } from '../components/ListItem/SearchResultItem';
 import { Division } from '../components/Division';
 import { ListEmptyComponent } from '../components/ListEmptyComponent';
+import { getCafesFromKeyword } from '../utils/KakaoUtils';
 
 export const SearchScreen: React.FC = () => {
 	const navigation = useMainStackNavigation<'Search'>();
@@ -28,7 +29,9 @@ export const SearchScreen: React.FC = () => {
 		const data = (selectedFranchise === cafe) ? null : cafe
 		setKeyword(data)
 		setSelectedFranchise(data)
-		//TODO: 키워드로 Fecth
+		if (data) { 
+			getCafesFromKeyword(data, data.) 
+		}
 	};
 
 	const datas: [CafeDTO] = [
