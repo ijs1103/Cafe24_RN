@@ -17,6 +17,7 @@ import { CurretRegionContext } from '../../App';
 import { SearchFilterButton } from '../components/SearchFilterButton';
 import { SearchFilterModal } from '../components/SearchFilterModal';
 import { FranchiseCafeButton } from '../components/FranchiseCafeButton';
+import { LoadingView } from '../components/LoadingView';
 
 export const SearchScreen: React.FC = () => {
 	const navigation = useMainStackNavigation<'Search'>();
@@ -28,6 +29,7 @@ export const SearchScreen: React.FC = () => {
 	const [cafeList, setCafeList] = useState<CafeDTO[] | null>(null);
 	const [isSearchFilterActive, setIsSearchFilterActive] = useState(false);
 	const [selectedFilter, setSelectedFilter] = useState<FILTER_TYPE>('거리 가까운순');
+	const [isLoading, setIsLoading] = useState(false);
 
 	const goBackHandler = useCallback(() => {
 		navigation.goBack()
@@ -38,7 +40,9 @@ export const SearchScreen: React.FC = () => {
 		setKeyword(data)
 		setSelectedFranchise(data)
 		if (data) {
+			setIsLoading(true)
 			await getCafeListFromKeyword(data, currentRegion.latitude, currentRegion.longitude).then(setCafeList)
+			setIsLoading(false)
 		} else {
 			setCafeList(null)
 		}
@@ -49,7 +53,9 @@ export const SearchScreen: React.FC = () => {
 	}, [navigation]);
 
 	const onSubmitEditing = useCallback(async (text: string) => {
+		setIsLoading(true)
 		await getCafeListFromKeyword(text, currentRegion.latitude, currentRegion.longitude).then(setCafeList)
+		setIsLoading(false)
 	}, [currentRegion]);
 
 	const toggleModal = useCallback(() => {
@@ -110,7 +116,8 @@ export const SearchScreen: React.FC = () => {
 					</View>
 					<View style={{ flex: 1, position: 'relative', paddingVertical: 12 }}>
 						<LogoBackground selectedCafe={selectedFranchise} headerBgAnim={headerBgAnim} />
-						<FlatList data={cafeList} renderItem={({ item }) => <SearchResultItem cafeId={item.id} cafeName={item.place_name} cafeAddress={item.address_name} ratings={4.25} reviewsCount={100} distance={item.distance} onPress={() => itemPressHandler(item)} />} keyExtractor={item => item.id} ListEmptyComponent={<ListEmptyComponent />} ItemSeparatorComponent={() => <Division separatorStyle />} contentContainerStyle={{ flexGrow: 1 }} />
+						{isLoading ? <LoadingView /> : <FlatList data={cafeList} renderItem={({ item }) => <SearchResultItem cafeId={item.id} cafeName={item.place_name} cafeAddress={item.address_name} ratings={4.25} reviewsCount={100} distance={item.distance} onPress={() => itemPressHandler(item)} />} keyExtractor={item => item.id} ListEmptyComponent={<ListEmptyComponent />} ItemSeparatorComponent={() => <Division separatorStyle />} contentContainerStyle={{ flexGrow: 1 }} />
+						}
 					</View>
 				</View>
 				<SearchFilterModal isModalVisible={isSearchFilterActive} selectedFilter={selectedFilter} toggleModal={toggleModal} filterPressHandler={filterPressHandler} />
