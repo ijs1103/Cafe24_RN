@@ -60,7 +60,6 @@ export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, toas
 			sizes={['auto', 'large']}
 			dimmed={false}
 			cornerRadius={16}
-			dismissible={false}
 		>
 			<View style={{ backgroundColor: 'white' }}>
 				<View style={{ paddingHorizontal: 14, paddingVertical: 16 }}>

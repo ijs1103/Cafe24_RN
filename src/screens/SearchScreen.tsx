@@ -72,6 +72,11 @@ export const SearchScreen: React.FC = () => {
 		toggleModal()
 	}, [cafeList]);
 
+	const textInputFocusHandler = useCallback(() => {
+		setKeyword('')
+		setSelectedFranchise(null)
+	}, []);
+
 	return (
 		<KeyboardAvoidingLayout>
 			<View style={{ flex: 1, backgroundColor: 'antiquewhite' }}>
@@ -88,7 +93,7 @@ export const SearchScreen: React.FC = () => {
 						}}>
 						<Icon name="search" size={20} color={'black'} />
 						<Spacer horizontal space={10} />
-						<TextInput value={keyword ?? ''} onSubmitEditing={({ nativeEvent: { text } }) => onSubmitEditing(text)} onChangeText={text => setKeyword(text)} placeholder='내 주변 카페를 검색해보세요.' placeholderTextColor={'darkgray'} style={{ flex: 1, color: 'black', fontSize: 16, fontWeight: '700' }} />
+						<TextInput value={keyword ?? ''} onSubmitEditing={({ nativeEvent: { text } }) => onSubmitEditing(text)} onChangeText={text => setKeyword(text)} placeholder='내 주변 카페를 검색해보세요.' placeholderTextColor={'darkgray'} style={{ flex: 1, color: 'black', fontSize: 16, fontWeight: '700' }} onFocus={textInputFocusHandler} autoFocus />
 					</View>
 					<Spacer space={20} />
 					<Typography color='dimgray' fontSize={16} fontWeight='bold'>인기 검색어</Typography>

@@ -26,14 +26,14 @@ export const LogoBackground: React.FC<{ selectedCafe: FRANCHISE_CAFE | null; hea
 			}}
 		>
 			{selectedCafe && <>
-				{selectedCafe === '카페베네' && <Cafebene width={'100%'} height={300} opacity={0.3} />}
-				{selectedCafe === '이디야' && <Ediya width={'100%'} height={300} opacity={0.3} />}
-				{selectedCafe === '할리스' && <Hollys width={'100%'} height={300} opacity={0.3} />}
-				{selectedCafe === '탐앤탐스' && <Tomntoms width={'100%'} height={300} opacity={0.3} />}
-				{selectedCafe === '투썸플레이스' && <Twosomeplace width={'100%'} height={300} opacity={0.3} />}
-				{selectedCafe === '스타벅스' && <Starbucks width={'100%'} height={300} opacity={0.3} />}
-				{selectedCafe === '메가커피' && <Mega width={'100%'} height={300} opacity={0.3} />}
-				{selectedCafe === '빽다방' && <Paik width={'100%'} height={300} opacity={0.3} />}
+				{selectedCafe === '카페베네' && <Cafebene width={'100%'} height={300} opacity={0.15} />}
+				{selectedCafe === '이디야' && <Ediya width={'100%'} height={300} opacity={0.15} />}
+				{selectedCafe === '할리스' && <Hollys width={'100%'} height={300} opacity={0.15} />}
+				{selectedCafe === '탐앤탐스' && <Tomntoms width={'100%'} height={300} opacity={0.15} />}
+				{selectedCafe === '투썸플레이스' && <Twosomeplace width={'100%'} height={300} opacity={0.15} />}
+				{selectedCafe === '스타벅스' && <Starbucks width={'100%'} height={300} opacity={0.15} />}
+				{selectedCafe === '메가커피' && <Mega width={'100%'} height={300} opacity={0.15} />}
+				{selectedCafe === '빽다방' && <Paik width={'100%'} height={300} opacity={0.15} />}
 				<LinearGradient
 					start={{ x: 0.5, y: 0.1 }}
 					end={{ x: 0.5, y: 1 }}
