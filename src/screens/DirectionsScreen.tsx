@@ -17,6 +17,7 @@ export const DirectionsScreen: React.FC = () => {
 	};
 
 	const onError = () => {
+		console.log(routes.params)
 		Alert.alert('서버 에러', '길찾기를 표시할 수 없습니다.', [{ text: '확인', onPress: goBackHandler }])
 	};
 

@@ -25,14 +25,14 @@ const addToLikedCafeList = async (cafe: CafeDTO) => {
   }
 };
 
-const getLikedCafeList = async (): Promise<CafeDTO[]> => {
+const getLikedCafeList = async (): Promise<CafeDTO[] | null> => {
   try {
     const cafeList = await storage.getAllDataForKey(LIKED_CAFE_LIST);
     console.log('CafeList loaded successfully', cafeList);
     return cafeList;
   } catch (error) {
     console.error('Failed to load cafeList', error);
-    return [];
+    return null;
   }
 };
 

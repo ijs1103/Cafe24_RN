@@ -25,7 +25,7 @@ export const SearchScreen: React.FC = () => {
 	const headerBgAnim = useRef(new Animated.Value(0)).current;
 	const [selectedFranchise, setSelectedFranchise] = useState<FRANCHISE_CAFE | null>(null);
 	const [keyword, setKeyword] = useState<string | null>(null);
-	const [cafeList, setCafeList] = useState<[CafeDTO] | null>(null);
+	const [cafeList, setCafeList] = useState<CafeDTO[] | null>(null);
 	const [isSearchFilterActive, setIsSearchFilterActive] = useState(false);
 	const [selectedFilter, setSelectedFilter] = useState<FILTER_TYPE>('거리 가까운순');
 
@@ -59,7 +59,7 @@ export const SearchScreen: React.FC = () => {
 	const filterPressHandler = useCallback((filter: FILTER_TYPE) => {
 		setSelectedFilter(filter)
 		if (cafeList) {
-			var sortedCafeList: [CafeDTO]
+			var sortedCafeList: CafeDTO[]
 			switch (filter) {
 				case '거리 가까운순':
 					sortedCafeList = cafeList.sort((a, b) => { return parseFloat(a.distance) - parseFloat(b.distance) })

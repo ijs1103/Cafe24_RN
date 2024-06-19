@@ -5,7 +5,7 @@ import { KAKAO_API_KEY } from '@env';
 export const getCafeListFromLatLng = (
   latitude: number,
   longitude: number,
-): Promise<[CafeDTO] | null> => {
+): Promise<CafeDTO[] | null> => {
   return fetch(
     `${URL.SEARCH_CATEGORY}?category_group_code=CE7&radius=500&x=${longitude}&y=${latitude}`,
     {
@@ -28,7 +28,7 @@ export const getCafeListFromKeyword = (
   keyword: string,
   latitude: number,
   longitude: number,
-): Promise<[CafeDTO] | null> => {
+): Promise<CafeDTO[] | null> => {
   return fetch(
     `${URL.SEARCH_KEYWORD}?category_group_code=CE7&radius=2000&x=${longitude}&y=${latitude}&query=${keyword}`,
     {

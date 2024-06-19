@@ -28,7 +28,7 @@ export const MainScreen: React.FC = () => {
 	const bottomSheetRef = useRef<TrueSheet>(null);
 	const mapViewRef = useRef<MapView>(null);
 	const [isMapReady, setIsMapReady] = useState<boolean>(false);
-	const [cafeList, setCafeList] = useState<[CafeDTO] | null>(null);
+	const [cafeList, setCafeList] = useState<CafeDTO[] | null>(null);
 	const [locationFetched, setLocationFetched] = useState<boolean>(false);
 	const [selectedCafe, setSelectedCafe] = useState<CafeDTO | null>(null);
 	const [isLiked, setIsLiked] = useState<boolean>(false);

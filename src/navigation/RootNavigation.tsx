@@ -56,7 +56,8 @@ export const FavoriteStackScreen: React.FC = () => {
 		<FavoriteStack.Navigator
 			initialRouteName={'Favorite'}
 			screenOptions={{
-				headerShown: false,
+				title: '즐겨찾기',
+				headerTitleStyle: { fontFamily: 'Roboto', fontSize: 24, fontWeight: '700', color: 'saddlebrown' }
 			}}>
 			<FavoriteStack.Screen name="Favorite" component={FavoriteScreen} />
 		</FavoriteStack.Navigator>
