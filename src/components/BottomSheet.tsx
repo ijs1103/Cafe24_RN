@@ -15,9 +15,11 @@ interface BottomSheetProps {
 	toastMessageHandler: () => void;
 	webViewHandler: () => void;
 	directionsHandler: () => void;
+	isLiked: boolean;
+	likeHandler: () => void;
 }
 
-export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, toastMessageHandler, webViewHandler, directionsHandler }, ref) => {
+export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, toastMessageHandler, webViewHandler, directionsHandler, isLiked, likeHandler }, ref) => {
 
 	const copyToClipboard = useCallback((text?: string) => {
 		if (!text) { return };
@@ -64,7 +66,9 @@ export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, toas
 				<View style={{ paddingHorizontal: 14, paddingVertical: 16 }}>
 					<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
 						<Typography fontSize={18} fontWeight='800' color='rebeccapurple' numberOfLines={1}>{cafe?.place_name ?? '알 수 없음'}</Typography>
-						<Icon name='heart' size={30} color='crimson' />
+						<TouchableOpacity onPress={likeHandler}>
+							<Icon name={isLiked ? 'heart' : 'heart-outline'} size={30} color='crimson' />
+						</TouchableOpacity>
 					</View>
 					<Spacer space={20} />
 					<RatingsAndReviews ratings={4.25} reviewsCount={100} />

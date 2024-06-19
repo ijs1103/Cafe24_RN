@@ -17,6 +17,7 @@ import { TrueSheet } from "@lodev09/react-native-true-sheet";
 import { WebView } from 'react-native-webview';
 import { DELTA } from '../utils/Constants';
 import { CurretRegionContext } from '../../App';
+import { deleteFromLikedCafeList, isLikedCafe, addToLikedCafeList } from '../utils/Storage';
 
 export const MainScreen: React.FC = () => {
 	const navigation = useMainStackNavigation<'Main'>();
@@ -30,6 +31,7 @@ export const MainScreen: React.FC = () => {
 	const [cafeList, setCafeList] = useState<[CafeDTO] | null>(null);
 	const [locationFetched, setLocationFetched] = useState<boolean>(false);
 	const [selectedCafe, setSelectedCafe] = useState<CafeDTO | null>(null);
+	const [isLiked, setIsLiked] = useState<boolean>(false);
 
 	const onChangeLocation = useCallback<
 		(item: { latitude: number; longitude: number }) => void
@@ -90,11 +92,9 @@ export const MainScreen: React.FC = () => {
 		presentTrueSheet();
 	}, []);
 
-	const emptyPhoneNumberMessageHandler = useCallback(() => {
-		if (toastMessageRef.current) {
-			toastMessageRef.current.showToastMessage('전화번호가 제공되지 않습니다.');
-		}
-	}, []);
+	const messageHandler = useCallback((text: string) => {
+		toastMessageRef.current?.showToastMessage(text);
+	}, [toastMessageRef]);
 
 	const webViewHandler = useCallback(() => {
 		navigation.navigate('WebView', { uri: selectedCafe?.place_url });
@@ -104,6 +104,17 @@ export const MainScreen: React.FC = () => {
 		if (!selectedCafe) { return; }
 		navigation.navigate('Directions', { originLatLng: currentRegion, destinationLatLng: { latitude: parseFloat(selectedCafe.y), longitude: parseFloat(selectedCafe.x) } });
 	}, [navigation, selectedCafe]);
+
+	const likeHandler = useCallback(() => {
+		if (!selectedCafe) { return }
+		if (isLiked) {
+			deleteFromLikedCafeList(selectedCafe.id)
+		} else {
+			addToLikedCafeList(selectedCafe)
+		}
+		messageHandler(isLiked ? '즐겨찾기에서 삭제 되었습니다.' : '즐겨찾기에 추가 되었습니다.')
+		setIsLiked(prev => !prev)
+	}, [isLiked, selectedCafe]);
 
 	useEffect(() => {
 		if (locationFetched) {
@@ -131,6 +142,16 @@ export const MainScreen: React.FC = () => {
 			presentTrueSheet();
 		}
 	}, [mapViewRef, routes.params]);
+
+	useEffect(() => {
+		const checkIsLiked = async () => {
+			if (selectedCafe) {
+				const liked = await isLikedCafe(selectedCafe.id);
+				setIsLiked(liked);
+			}
+		};
+		checkIsLiked();
+	}, [selectedCafe]);
 
 	return (
 		<View style={{ flex: 1 }}>
@@ -178,7 +199,7 @@ export const MainScreen: React.FC = () => {
 				})}
 			</MapView>
 			<MyLocationButton onPress={onPressMyLocationButton} />
-			<BottomSheet ref={bottomSheetRef} cafe={selectedCafe} toastMessageHandler={emptyPhoneNumberMessageHandler} webViewHandler={webViewHandler} directionsHandler={directionsHandler} />
+			<BottomSheet ref={bottomSheetRef} cafe={selectedCafe} toastMessageHandler={() => messageHandler('전화번호가 제공되지 않습니다.')} webViewHandler={webViewHandler} directionsHandler={directionsHandler} isLiked={isLiked} likeHandler={likeHandler} />
 			<ToastMessage ref={toastMessageRef} />
 		</View >
 	);

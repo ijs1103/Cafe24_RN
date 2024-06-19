@@ -12,7 +12,7 @@ const storage = new Storage({
 
 const LIKED_CAFE_LIST = 'likedCafeList'
 
-const saveCafe = async (cafe: CafeDTO) => {
+const addToLikedCafeList = async (cafe: CafeDTO) => {
 	try {
     await storage.save({
       key: LIKED_CAFE_LIST,
@@ -25,7 +25,7 @@ const saveCafe = async (cafe: CafeDTO) => {
   }
 };
 
-const getCafeList = async (): Promise<CafeDTO[]> => {
+const getLikedCafeList = async (): Promise<CafeDTO[]> => {
   try {
     const cafeList = await storage.getAllDataForKey(LIKED_CAFE_LIST);
     console.log('CafeList loaded successfully', cafeList);
@@ -36,7 +36,7 @@ const getCafeList = async (): Promise<CafeDTO[]> => {
   }
 };
 
-const deleteCafe = async (cafeId: string) => {
+const deleteFromLikedCafeList = async (cafeId: string) => {
   try {
     await storage.remove({
       key: LIKED_CAFE_LIST,
@@ -48,4 +48,16 @@ const deleteCafe = async (cafeId: string) => {
   }
 };
 
-export { saveCafe, getCafeList, deleteCafe }
+const isLikedCafe = async (cafeId: string): Promise<boolean> => {
+	try {
+		const result = await storage.load({ 
+			key: LIKED_CAFE_LIST,
+			id: cafeId
+		})
+		return Boolean(result);
+	} catch (error) {
+		return false;
+	}
+};
+
+export { addToLikedCafeList, getLikedCafeList, deleteFromLikedCafeList, isLikedCafe }
