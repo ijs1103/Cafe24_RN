@@ -19,7 +19,6 @@ const addToLikedCafeList = async (cafe: CafeDTO) => {
       id: cafe.id,
       data: cafe,
     });
-    console.log('Cafe saved successfully');
   } catch (error) {
     console.error('Failed to save cafe', error);
   }
@@ -28,7 +27,6 @@ const addToLikedCafeList = async (cafe: CafeDTO) => {
 const getLikedCafeList = async (): Promise<CafeDTO[] | null> => {
   try {
     const cafeList = await storage.getAllDataForKey(LIKED_CAFE_LIST);
-    console.log('CafeList loaded successfully', cafeList);
     return cafeList;
   } catch (error) {
     console.error('Failed to load cafeList', error);
@@ -42,7 +40,6 @@ const deleteFromLikedCafeList = async (cafeId: string) => {
       key: LIKED_CAFE_LIST,
       id: cafeId,
 		});
-    console.log('Cafe deleted successfully');
   } catch (error) {
     console.error('Failed to delete cafeList', error);
   }

@@ -1,4 +1,5 @@
 import { Alert, FlatList, Text, View } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { useMainStackNavigation } from '../navigation/RootNavigation';
 import { Division } from '../components/Division';
 import { ListEmptyComponent } from '../components/ListEmptyComponent';
@@ -40,9 +41,11 @@ export const FavoriteScreen: React.FC = () => {
 			},)
 	}, []);
 
-	useEffect(() => {
-		getLikedCafeList().then(setCafeList);
-	}, []);
+	useFocusEffect(
+		useCallback(() => {
+			getLikedCafeList().then(setCafeList);
+		}, [])
+	);
 
 	return (
 		<View style={{ flex: 1, backgroundColor: '#fff' }}>
