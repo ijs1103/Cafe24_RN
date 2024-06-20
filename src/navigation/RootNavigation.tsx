@@ -5,7 +5,7 @@ import {
 } from '@react-navigation/native-stack';
 import React from 'react';
 import { MainScreen } from '../screens/MainScreen';
-import { SettingsScreen } from '../screens/SettingsScreen';
+import { MyScreen } from '../screens/MyScreen/MyScreen';
 import { FavoriteScreen } from '../screens/FavoriteScreen';
 import { WebViewScreen } from '../screens/WebViewScreen';
 import { WebView } from 'react-native-webview';
@@ -83,7 +83,7 @@ export const SettingsStackScreen: React.FC = () => {
 			screenOptions={{
 				headerShown: false,
 			}}>
-			<SettingsStack.Screen name="Settings" component={SettingsScreen} />
+			<SettingsStack.Screen name="Settings" component={MyScreen} />
 		</SettingsStack.Navigator>
 	);
 };

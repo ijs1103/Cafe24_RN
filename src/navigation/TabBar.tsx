@@ -3,7 +3,7 @@ import { MainStackScreen, FavoriteStackScreen, SettingsStackScreen } from './Roo
 import { TabIcon } from '../components/TabIcon';
 import { FavoriteScreen } from '../screens/FavoriteScreen';
 import { MainScreen } from '../screens/MainScreen';
-import { SettingsScreen } from '../screens/SettingsScreen';
+import { MyScreen } from '../screens/MyScreen/MyScreen';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 const Tabs = createBottomTabNavigator();
@@ -53,13 +53,13 @@ export const TabBar: React.FC = () => {
 				}}
 			/>
 			<Tabs.Screen
-				name="SettingsTab"
-				component={SettingsStackScreen}
+				name="MyTab"
+				component={MyScreen}
 				options={{
 					tabBarIcon: ({ focused, color }) => (
-						<TabIcon name="settings" color={color} isFocused={focused} />
+						<TabIcon name="person" color={color} isFocused={focused} />
 					),
-					tabBarLabel: '설정',
+					tabBarLabel: 'MY',
 				}}
 			/>
 		</Tabs.Navigator>

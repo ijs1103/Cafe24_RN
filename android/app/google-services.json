@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "77445850180",
+    "firebase_url": "https://cafe24-12cc9-default-rtdb.firebaseio.com",
+    "project_id": "cafe24-12cc9",
+    "storage_bucket": "cafe24-12cc9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:77445850180:android:b66bddd040f8f0f28ec811",
+        "android_client_info": {
+          "package_name": "com.cafe24"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "77445850180-1g80clbcobv5j7b96d4ifl9bomvrcbg9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnho-_xWG-LXsdP33QuNt3SpIUxNXz9Yg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "77445850180-1g80clbcobv5j7b96d4ifl9bomvrcbg9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
