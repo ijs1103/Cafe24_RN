@@ -12,6 +12,16 @@ const FRANCHISE_CAFE_LIST = ['스타벅스', '이디야', '할리스', '메가�
 
 const FILTER_TYPE_LIST = ['거리 가까운순', '별점 높은순', '리뷰 많은순'] as const;
 
+const COLLECTIONS = {
+  USERS: 'users',
+  REVIEWS: 'reviews'
+} as const;
+
+const SIGNUP = {
+  EMAIL_PASSWORD: 'EMAIL_PASSWORD',
+  GOOGLE: 'GOOGLE'
+} as const;
+
 export {
-  URL, DELTA, FRANCHISE_CAFE_LIST, FILTER_TYPE_LIST
+  URL, DELTA, FRANCHISE_CAFE_LIST, FILTER_TYPE_LIST, COLLECTIONS, SIGNUP
 };

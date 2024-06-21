@@ -5,11 +5,7 @@ import { StatusBar, useColorScheme } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { TabBar } from './src/navigation/TabBar';
 import { LatLng } from 'react-native-maps';
-
-// export const CurretRegionContext = createContext<LatLng>({
-// 	latitude: 37.526126,
-// 	longitude: 126.922255,
-// });
+import AuthProvider from './src/auth/AuthProvider';
 
 interface RegionContextType {
 	currentRegion: LatLng;
@@ -35,11 +31,13 @@ const App = () => {
 					barStyle={isDarkMode ? 'light-content' : 'dark-content'}
 					backgroundColor={isDarkMode ? Colors.darker : Colors.lighter}
 				/>
-				<CurretRegionContext.Provider value={{ currentRegion, setCurrentRegion }}>
-					<NavigationContainer>
-						<TabBar />
-					</NavigationContainer>
-				</CurretRegionContext.Provider>
+				<AuthProvider>
+					<CurretRegionContext.Provider value={{ currentRegion, setCurrentRegion }}>
+						<NavigationContainer>
+							<TabBar />
+						</NavigationContainer>
+					</CurretRegionContext.Provider>
+				</AuthProvider>
 			</SafeAreaView>
 		</SafeAreaProvider>
 	);

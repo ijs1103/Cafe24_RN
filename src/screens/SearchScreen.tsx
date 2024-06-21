@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Spacer } from '../components/Spacer';
 import { Typography } from '../components/Typography';
 import { FRANCHISE_CAFE_LIST } from '../utils/Constants';
-import { FRANCHISE_CAFE, CafeDTO, FILTER_TYPE } from '../utils/Types';
+import { FRANCHISE_CAFE_TYPE, CafeDTO, FILTER_TYPE } from '../utils/Types';
 import { KeyboardAvoidingLayout } from '../components/KeyboardAvoidingLayout';
 import { LogoBackground } from '../components/LogoBackground';
 import { SearchResultItem } from '../components/ListItem/SearchResultItem';
@@ -24,7 +24,7 @@ export const SearchScreen: React.FC = () => {
 
 	const { currentRegion } = useContext(CurretRegionContext);
 	const headerBgAnim = useRef(new Animated.Value(0)).current;
-	const [selectedFranchise, setSelectedFranchise] = useState<FRANCHISE_CAFE | null>(null);
+	const [selectedFranchise, setSelectedFranchise] = useState<FRANCHISE_CAFE_TYPE | null>(null);
 	const [keyword, setKeyword] = useState<string | null>(null);
 	const [cafeList, setCafeList] = useState<CafeDTO[] | null>(null);
 	const [isSearchFilterActive, setIsSearchFilterActive] = useState(false);
@@ -35,7 +35,7 @@ export const SearchScreen: React.FC = () => {
 		navigation.goBack()
 	}, [navigation]);
 
-	const onPressFranchise = useCallback(async (cafe: FRANCHISE_CAFE) => {
+	const onPressFranchise = useCallback(async (cafe: FRANCHISE_CAFE_TYPE) => {
 		const data = (selectedFranchise === cafe) ? null : cafe
 		setKeyword(data)
 		setSelectedFranchise(data)

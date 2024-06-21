@@ -1,10 +1,10 @@
 import { TouchableOpacity, View, Text } from "react-native";
-import { FRANCHISE_CAFE } from "../utils/Types";
+import { FRANCHISE_CAFE_TYPE } from "../utils/Types";
 
 interface FranchiseCafeButtonProps {
 	onPress: () => void;
 	isSelected: boolean;
-	cafe: FRANCHISE_CAFE;
+	cafe: FRANCHISE_CAFE_TYPE;
 }
 
 export const FranchiseCafeButton: React.FC<FranchiseCafeButtonProps> = ({ onPress, isSelected, cafe }) => {

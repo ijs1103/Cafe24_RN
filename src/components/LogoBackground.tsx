@@ -9,9 +9,9 @@ import Twosomeplace from '../../assets/cafe_logo/twosomeplace.svg';
 import Starbucks from '../../assets/cafe_logo/starbucks.svg';
 import Mega from '../../assets/cafe_logo/mega.svg';
 import Paik from '../../assets/cafe_logo/paik.svg';
-import { FRANCHISE_CAFE } from '../utils/Types';
+import { FRANCHISE_CAFE_TYPE } from '../utils/Types';
 
-export const LogoBackground: React.FC<{ selectedCafe: FRANCHISE_CAFE | null; headerBgAnim: Animated.Value; }> = ({ selectedCafe, headerBgAnim }) => {
+export const LogoBackground: React.FC<{ selectedCafe: FRANCHISE_CAFE_TYPE | null; headerBgAnim: Animated.Value; }> = ({ selectedCafe, headerBgAnim }) => {
 	return (
 		<Animated.View
 			style={{
