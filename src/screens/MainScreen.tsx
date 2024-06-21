@@ -16,14 +16,14 @@ import { BottomSheet } from '../components/BottomSheet';
 import { TrueSheet } from "@lodev09/react-native-true-sheet";
 import { WebView } from 'react-native-webview';
 import { DELTA } from '../utils/Constants';
-import { CurretRegionContext } from '../../App';
 import { deleteFromLikedCafeList, isLikedCafe, addToLikedCafeList } from '../utils/Storage';
+import { useGlobalStateValue, useGlobalStateActions } from '../globalState/GlobalStateProvider';
 
 export const MainScreen: React.FC = () => {
 	const navigation = useMainStackNavigation<'Main'>();
 	const routes = useMainStackRoute<'Main'>();
-
-	const { currentRegion, setCurrentRegion } = useContext(CurretRegionContext);
+	const { currentRegion } = useGlobalStateValue();
+	const { setCurrentRegion } = useGlobalStateActions();
 	const toastMessageRef = useRef<ToastMessageRef>(null);
 	const bottomSheetRef = useRef<TrueSheet>(null);
 	const mapViewRef = useRef<MapView>(null);

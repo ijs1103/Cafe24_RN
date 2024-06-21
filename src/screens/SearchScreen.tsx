@@ -13,16 +13,15 @@ import { SearchResultItem } from '../components/ListItem/SearchResultItem';
 import { Division } from '../components/Division';
 import { ListEmptyComponent } from '../components/ListEmptyComponent';
 import { getCafeListFromKeyword } from '../utils/KakaoUtils';
-import { CurretRegionContext } from '../../App';
 import { SearchFilterButton } from '../components/SearchFilterButton';
 import { SearchFilterModal } from '../components/SearchFilterModal';
 import { FranchiseCafeButton } from '../components/FranchiseCafeButton';
 import { LoadingView } from '../components/LoadingView';
+import { useGlobalStateValue } from '../globalState/GlobalStateProvider';
 
 export const SearchScreen: React.FC = () => {
 	const navigation = useMainStackNavigation<'Search'>();
-
-	const { currentRegion } = useContext(CurretRegionContext);
+	const { currentRegion } = useGlobalStateValue();
 	const headerBgAnim = useRef(new Animated.Value(0)).current;
 	const [selectedFranchise, setSelectedFranchise] = useState<FRANCHISE_CAFE_TYPE | null>(null);
 	const [keyword, setKeyword] = useState<string | null>(null);

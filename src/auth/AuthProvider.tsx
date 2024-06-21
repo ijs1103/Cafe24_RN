@@ -9,7 +9,7 @@ import { COLLECTIONS, SIGNUP } from '../utils/Constants';
 import { AuthContext } from './AuthContext';
 import { GOOGLE_WEB_CLIENT_ID } from '@env';
 
-const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	const [initialized, setInitialized] = useState(false);
 	const [user, setUser] = useState<User | null>(null);
 	const [processingSignup, setProcessingSignup] = useState(false);
