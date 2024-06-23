@@ -1,10 +1,10 @@
 import { View, Button } from 'react-native';
 import { AuthView } from './AuthView';
 import { useContext } from 'react';
-import { AuthContext } from '../../auth/AuthContext';
+import { useAuth } from '../../providers/AuthProvider';
 
 export const MyScreen: React.FC = () => {
-	const { user, signOut } = useContext(AuthContext);
+	const { user, signOut } = useAuth();
 
 	return (
 		<View style={{ flex: 1 }}>

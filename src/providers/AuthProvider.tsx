@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createContext, useContext } from 'react';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
@@ -6,8 +6,31 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { User, SIGNUP_TYPE } from '../utils/Types';
 import { COLLECTIONS, SIGNUP } from '../utils/Constants';
-import { AuthContext } from './AuthContext';
 import { GOOGLE_WEB_CLIENT_ID } from '@env';
+
+interface AuthContextProps {
+	initialized: boolean;
+	user: User | null;
+	signup: (type: SIGNUP_TYPE, email?: string, password?: string, name?: string) => Promise<void>;
+	processingSignup: boolean;
+	signin: (email: string, password: string) => Promise<void>;
+	processingSignin: boolean;
+	updateProfileImage: (filepath: string) => Promise<void>;
+	googleSignin: () => Promise<void>;
+	signOut: () => Promise<void>;
+}
+
+const AuthContext = createContext<AuthContextProps>({
+	initialized: false,
+	user: null,
+	signup: async () => { },
+	processingSignup: false,
+	signin: async () => { },
+	processingSignin: false,
+	updateProfileImage: async () => { },
+	googleSignin: async () => { },
+	signOut: async () => { },
+});
 
 const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	const [initialized, setInitialized] = useState(false);
@@ -140,4 +163,9 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-export default AuthProvider;
+const useAuth = () => {
+	const context = useContext(AuthContext);
+	return context;
+};
+
+export { AuthProvider, useAuth };

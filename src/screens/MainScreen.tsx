@@ -11,20 +11,20 @@ import { Typography } from '../components/Typography';
 import { Spacer } from '../components/Spacer';
 import { MyLocationButton } from '../components/MyLocationButton';
 import { Division } from '../components/Division';
-import ToastMessage, { ToastMessageRef } from '../components/ToastMessage';
 import { BottomSheet } from '../components/BottomSheet';
 import { TrueSheet } from "@lodev09/react-native-true-sheet";
 import { WebView } from 'react-native-webview';
 import { DELTA } from '../utils/Constants';
 import { deleteFromLikedCafeList, isLikedCafe, addToLikedCafeList } from '../utils/Storage';
-import { useGlobalStateValue, useGlobalStateActions } from '../globalState/GlobalStateProvider';
+import { useGlobalStateValue, useGlobalStateActions } from '../providers/GlobalStateProvider';
+import { useToastMessage } from '../providers/ToastMessageProvider';
 
 export const MainScreen: React.FC = () => {
 	const navigation = useMainStackNavigation<'Main'>();
 	const routes = useMainStackRoute<'Main'>();
 	const { currentRegion } = useGlobalStateValue();
 	const { setCurrentRegion } = useGlobalStateActions();
-	const toastMessageRef = useRef<ToastMessageRef>(null);
+	const { showToastMessage } = useToastMessage();
 	const bottomSheetRef = useRef<TrueSheet>(null);
 	const mapViewRef = useRef<MapView>(null);
 	const [isMapReady, setIsMapReady] = useState<boolean>(false);
@@ -92,10 +92,6 @@ export const MainScreen: React.FC = () => {
 		presentTrueSheet();
 	}, []);
 
-	const messageHandler = useCallback((text: string) => {
-		toastMessageRef.current?.showToastMessage(text);
-	}, [toastMessageRef]);
-
 	const webViewHandler = useCallback(() => {
 		navigation.navigate('WebView', { uri: selectedCafe?.place_url });
 	}, [navigation, selectedCafe]);
@@ -112,7 +108,7 @@ export const MainScreen: React.FC = () => {
 		} else {
 			addToLikedCafeList(selectedCafe)
 		}
-		messageHandler(isLiked ? '즐겨찾기에서 삭제 되었습니다.' : '즐겨찾기에 추가 되었습니다.')
+		showToastMessage(isLiked ? '즐겨찾기에서 삭제 되었습니다.' : '즐겨찾기에 추가 되었습니다.')
 		setIsLiked(prev => !prev)
 	}, [isLiked, selectedCafe]);
 
@@ -199,8 +195,7 @@ export const MainScreen: React.FC = () => {
 				})}
 			</MapView>
 			<MyLocationButton onPress={onPressMyLocationButton} />
-			<BottomSheet ref={bottomSheetRef} cafe={selectedCafe} toastMessageHandler={() => messageHandler('전화번호가 제공되지 않습니다.')} webViewHandler={webViewHandler} directionsHandler={directionsHandler} isLiked={isLiked} likeHandler={likeHandler} />
-			<ToastMessage ref={toastMessageRef} />
+			<BottomSheet ref={bottomSheetRef} cafe={selectedCafe} webViewHandler={webViewHandler} directionsHandler={directionsHandler} isLiked={isLiked} likeHandler={likeHandler} />
 		</View >
 	);
 };

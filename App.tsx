@@ -4,8 +4,9 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar, useColorScheme } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { TabBar } from './src/navigation/TabBar';
-import AuthProvider from './src/auth/AuthProvider';
-import { GlobalStateProvider } from './src/globalState/GlobalStateProvider';
+import { AuthProvider } from './src/providers/AuthProvider';
+import { GlobalStateProvider } from './src/providers/GlobalStateProvider';
+import { ToastMessageProvider } from './src/providers/ToastMessageProvider';
 
 const App = () => {
 	const isDarkMode = useColorScheme() === 'dark';
@@ -19,9 +20,11 @@ const App = () => {
 				/>
 				<AuthProvider>
 					<GlobalStateProvider>
-						<NavigationContainer>
-							<TabBar />
-						</NavigationContainer>
+						<ToastMessageProvider>
+							<NavigationContainer>
+								<TabBar />
+							</NavigationContainer>
+						</ToastMessageProvider>
 					</GlobalStateProvider>
 				</AuthProvider>
 			</SafeAreaView>

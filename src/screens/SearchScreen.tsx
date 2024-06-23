@@ -17,7 +17,7 @@ import { SearchFilterButton } from '../components/SearchFilterButton';
 import { SearchFilterModal } from '../components/SearchFilterModal';
 import { FranchiseCafeButton } from '../components/FranchiseCafeButton';
 import { LoadingView } from '../components/LoadingView';
-import { useGlobalStateValue } from '../globalState/GlobalStateProvider';
+import { useGlobalStateValue } from '../providers/GlobalStateProvider';
 
 export const SearchScreen: React.FC = () => {
 	const navigation = useMainStackNavigation<'Search'>();

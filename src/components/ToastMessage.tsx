@@ -3,14 +3,14 @@ import { Animated, View, Text, Easing } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export interface ToastMessageRef {
-	showToastMessage: (text: string) => void;
+	showToastMessage: (text: string, completion?: () => void) => void;
 }
 
 const ToastMessage = forwardRef<ToastMessageRef>((props, ref) => {
 	const translateYAnimation = useRef(new Animated.Value(-200)).current;
 	const [message, setMessage] = useState<string>('');
 
-	const showToastMessage = (text: string) => {
+	const showToastMessage = (text: string, completion?: () => void) => {
 		setMessage(text);
 		Animated.sequence([
 			Animated.timing(translateYAnimation, {
@@ -26,7 +26,9 @@ const ToastMessage = forwardRef<ToastMessageRef>((props, ref) => {
 				easing: Easing.in(Easing.circle),
 				useNativeDriver: true,
 			}),
-		]).start();
+		]).start(() => {
+			completion && completion()
+		});
 	};
 
 	useImperativeHandle(ref, () => ({

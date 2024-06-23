@@ -9,7 +9,8 @@ import { Spacer } from "../components/Spacer";
 import { Division } from "../components/Division";
 import { SubmitButton } from "../components/SubmitButton";
 import { Header } from "../components/header/Header";
-import { AuthContext } from "../auth/AuthContext";
+import { useAuth } from "../providers/AuthProvider";
+import { useToastMessage } from "../providers/ToastMessageProvider";
 
 interface ILoginForm {
 	EMAIL: string;
@@ -18,7 +19,8 @@ interface ILoginForm {
 
 export const EmailSigninScreen: React.FC = () => {
 	const navigation = useMyStackNavigation();
-	const { signin, processingSignin } = useContext(AuthContext);
+	const { signin, processingSignin } = useAuth();
+	const { showToastMessage } = useToastMessage();
 	const { formState: { errors, isValid }, handleSubmit, control, setValue, clearErrors } =
 		useForm<ILoginForm>({ mode: 'onChange' });
 	const passwordRef = useRef<TextInput>(null);
@@ -28,8 +30,12 @@ export const EmailSigninScreen: React.FC = () => {
 	};
 
 	const onValid = async ({ EMAIL, PASSWORD }: ILoginForm) => {
-		await signin(EMAIL, PASSWORD)
-		goBackHandler()
+		try {
+			await signin(EMAIL, PASSWORD)
+			showToastMessage('로그인에 성공하였습니다.', goBackHandler)
+		} catch (error) {
+			showToastMessage('로그인에 실패하였습니다.')
+		}
 	};
 
 	const onClear = useCallback((name: string) => {

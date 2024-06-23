@@ -9,17 +9,18 @@ import { Spacer } from './Spacer';
 import { Division } from './Division';
 import { CafeDTO } from '../utils/Types';
 import { RatingsAndReviews } from "./RatingsAndReviews";
+import { useToastMessage } from "../providers/ToastMessageProvider";
 
 interface BottomSheetProps {
 	cafe: CafeDTO | null;
-	toastMessageHandler: () => void;
 	webViewHandler: () => void;
 	directionsHandler: () => void;
 	isLiked: boolean;
 	likeHandler: () => void;
 }
 
-export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, toastMessageHandler, webViewHandler, directionsHandler, isLiked, likeHandler }, ref) => {
+export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, webViewHandler, directionsHandler, isLiked, likeHandler }, ref) => {
+	const { showToastMessage } = useToastMessage();
 
 	const copyToClipboard = useCallback((text?: string) => {
 		if (!text) { return };
@@ -28,7 +29,7 @@ export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, toas
 
 	const onPressCall = useCallback(() => {
 		if (!cafe?.phone) {
-			toastMessageHandler();
+			showToastMessage('전화번호가 제공되지 않습니다.');
 			return;
 		}
 		Linking.openURL(`tel:${cafe?.phone}`)

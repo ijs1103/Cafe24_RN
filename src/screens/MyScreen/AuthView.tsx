@@ -4,12 +4,12 @@ import { Typography } from '../../components/Typography';
 import { Spacer } from '../../components/Spacer';
 import auth from '@react-native-firebase/auth';
 import GoogleButton from '../../../assets/google_button.svg';
-import { AuthContext } from '../../auth/AuthContext';
 import { useMyStackNavigation } from '../../navigation/RootNavigation';
+import { useAuth } from '../../providers/AuthProvider';
 
 export const AuthView: React.FC = () => {
 	const navigation = useMyStackNavigation<'My'>();
-	const { googleSignin } = useContext(AuthContext);
+	const { googleSignin } = useAuth();
 	const onPressEmailSignin = () => {
 		navigation.navigate('EmailSignin')
 	}
