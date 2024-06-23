@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MainStackScreen, FavoriteStackScreen, SettingsStackScreen } from './RootNavigation';
+import { MainStackScreen, FavoriteStackScreen, MyStackScreen } from './RootNavigation';
 import { TabIcon } from '../components/TabIcon';
 import { FavoriteScreen } from '../screens/FavoriteScreen';
 import { MainScreen } from '../screens/MainScreen';
@@ -54,13 +54,20 @@ export const TabBar: React.FC = () => {
 			/>
 			<Tabs.Screen
 				name="MyTab"
-				component={MyScreen}
-				options={{
+				component={MyStackScreen}
+				options={({ route }) => ({
 					tabBarIcon: ({ focused, color }) => (
 						<TabIcon name="person" color={color} isFocused={focused} />
 					),
 					tabBarLabel: 'MY',
-				}}
+					tabBarStyle: ((route) => {
+						const routeName = getFocusedRouteNameFromRoute(route) ?? ""
+						if (['EmailSignin', 'EmailSignup'].includes(routeName)) {
+							return { display: "none" }
+						}
+						return
+					})(route),
+				})}
 			/>
 		</Tabs.Navigator>
 	);

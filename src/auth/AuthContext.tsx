@@ -10,6 +10,7 @@ export interface AuthContextProps {
 	processingSignin: boolean;
 	updateProfileImage: (filepath: string) => Promise<void>;
 	googleSignin: () => Promise<void>;
+	signOut: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
@@ -21,4 +22,5 @@ export const AuthContext = createContext<AuthContextProps>({
 	processingSignin: false,
 	updateProfileImage: async () => { },
 	googleSignin: async () => { },
+	signOut: async () => { },
 });

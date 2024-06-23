@@ -14,6 +14,7 @@ import { DirectionsScreen } from '../screens/DirectionsScreen';
 import { SearchScreen } from '../screens/SearchScreen';
 import { CafeDTO } from '../utils/Types';
 import { SearchFilterModal } from '../components/SearchFilterModal';
+import { EmailSigninScreen } from '../screens/EmailSigninScreen';
 
 type MainStackParams = {
 	Main: { cafe: CafeDTO } | undefined;
@@ -70,26 +71,30 @@ export const useFavoriteStackNavigation = <RouteName extends keyof FavoriteStack
 export const useFavoriteStackRoute = <RouteName extends keyof FavoriteStackParams>() =>
 	useRoute<RouteProp<FavoriteStackParams, RouteName>>();
 
-type SettingsStackParams = {
-	Settings: undefined;
+type MyStackParams = {
+	My: undefined;
+	EmailSignin: undefined;
+	EmailSignup: undefined;
 };
 
-export const SettingsStack = createNativeStackNavigator<SettingsStackParams>();
+export const MyStack = createNativeStackNavigator<MyStackParams>();
 
-export const SettingsStackScreen: React.FC = () => {
+export const MyStackScreen: React.FC = () => {
 	return (
-		<SettingsStack.Navigator
-			initialRouteName={'Settings'}
+		<MyStack.Navigator
+			initialRouteName={'My'}
 			screenOptions={{
 				headerShown: false,
 			}}>
-			<SettingsStack.Screen name="Settings" component={MyScreen} />
-		</SettingsStack.Navigator>
+			<MyStack.Screen name='My' component={MyScreen} />
+			<MyStack.Screen name='EmailSignin' component={EmailSigninScreen} />
+			{/* <MyStack.Screen name='EmailSignup' component={EmailSignupScreen} /> */}
+		</MyStack.Navigator>
 	);
 };
 
-export const useSettingsStackNavigation = <RouteName extends keyof SettingsStackParams>() =>
-	useNavigation<NativeStackNavigationProp<SettingsStackParams, RouteName>>();
+export const useMyStackNavigation = <RouteName extends keyof MyStackParams>() =>
+	useNavigation<NativeStackNavigationProp<MyStackParams, RouteName>>();
 
-export const useSettingsStackRoute = <RouteName extends keyof SettingsStackParams>() =>
-	useRoute<RouteProp<SettingsStackParams, RouteName>>();
+export const useMyStackRoute = <RouteName extends keyof MyStackParams>() =>
+	useRoute<RouteProp<MyStackParams, RouteName>>();

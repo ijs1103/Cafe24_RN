@@ -27,3 +27,10 @@ export interface User {
 }
 
 export type SIGNUP_TYPE = typeof SIGNUP[keyof typeof SIGNUP];
+
+export type RegexType = {
+  EMAIL: RegExp;
+  PASSWORD: RegExp;
+  PASSWORD_CHECK?: RegExp;
+  NAME: RegExp;
+};

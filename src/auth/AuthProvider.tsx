@@ -109,6 +109,11 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 		[user],
 	);
 
+	const signOut = useCallback(async () => {
+		await auth().signOut();
+		setUser(null);
+	}, []);
+
 	const value = useMemo(() => {
 		return {
 			initialized,
@@ -119,6 +124,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 			processingSignin,
 			updateProfileImage,
 			googleSignin,
+			signOut,
 		};
 	}, [
 		initialized,
@@ -129,6 +135,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 		processingSignin,
 		updateProfileImage,
 		googleSignin,
+		signOut,
 	]);
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
