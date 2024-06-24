@@ -15,6 +15,7 @@ import { SearchScreen } from '../screens/SearchScreen';
 import { CafeDTO } from '../utils/Types';
 import { SearchFilterModal } from '../components/SearchFilterModal';
 import { EmailSigninScreen } from '../screens/EmailSigninScreen';
+import { EmailSignupScreen } from '../screens/EmailSignupScreen';
 
 type MainStackParams = {
 	Main: { cafe: CafeDTO } | undefined;
@@ -88,7 +89,7 @@ export const MyStackScreen: React.FC = () => {
 			}}>
 			<MyStack.Screen name='My' component={MyScreen} />
 			<MyStack.Screen name='EmailSignin' component={EmailSigninScreen} />
-			{/* <MyStack.Screen name='EmailSignup' component={EmailSignupScreen} /> */}
+			<MyStack.Screen name='EmailSignup' component={EmailSignupScreen} />
 		</MyStack.Navigator>
 	);
 };
