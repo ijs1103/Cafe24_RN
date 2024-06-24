@@ -21,7 +21,7 @@ interface ISignupForm {
 
 export const EmailSignupScreen: React.FC = () => {
 	const navigation = useMyStackNavigation();
-	const { signup, processingSignup } = useAuth();
+	const { emailSignup, processingSignup } = useAuth();
 	const { showToastMessage } = useToastMessage();
 	const { formState: { errors, isValid }, handleSubmit, control, getValues, setValue, clearErrors } =
 		useForm<ISignupForm>({ mode: 'onChange' });
@@ -35,7 +35,7 @@ export const EmailSignupScreen: React.FC = () => {
 
 	const onValid = async ({ EMAIL, PASSWORD, NAME }: ISignupForm) => {
 		try {
-			await signup('EMAIL_PASSWORD', EMAIL, PASSWORD, NAME)
+			await emailSignup(EMAIL, PASSWORD, NAME)
 			showToastMessage('회원가입에 성공하였습니다.', goBackHandler)
 		} catch (error: any) {
 			console.log(error)

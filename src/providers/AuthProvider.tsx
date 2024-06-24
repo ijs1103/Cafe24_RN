@@ -11,7 +11,7 @@ import { GOOGLE_WEB_CLIENT_ID } from '@env';
 interface AuthContextProps {
 	initialized: boolean;
 	user: User | null;
-	signup: (type: SIGNUP_TYPE, email?: string, password?: string, name?: string) => Promise<void>;
+	emailSignup: (email: string, password: string, name: string) => Promise<void>;
 	processingSignup: boolean;
 	signin: (email: string, password: string) => Promise<void>;
 	processingSignin: boolean;
@@ -23,7 +23,7 @@ interface AuthContextProps {
 const AuthContext = createContext<AuthContextProps>({
 	initialized: false,
 	user: null,
-	signup: async () => { },
+	emailSignup: async () => { },
 	processingSignup: false,
 	signin: async () => { },
 	processingSignin: false,
@@ -59,28 +59,18 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 		return unSubscribe
 	}, []);
 
-	const signup = useCallback(
-		async (type: SIGNUP_TYPE, email?: string, password?: string, name?: string) => {
+	const emailSignup = useCallback(
+		async (email: string, password: string, name: string) => {
 			setProcessingSignup(true);
 			try {
-				let currentUser: FirebaseAuthTypes.User;
-				if (type === SIGNUP.EMAIL_PASSWORD && email && password) {
-					const { user } = await auth().createUserWithEmailAndPassword(email, password);
-					currentUser = user;
-				} else {
-					await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-					const { idToken } = await GoogleSignin.signIn();
-					const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-					const { user } = await auth().signInWithCredential(googleCredential);
-					currentUser = user;
-				}
-				await currentUser.updateProfile({ displayName: name });
+				const { user } = await auth().createUserWithEmailAndPassword(email, password);
+				await user.updateProfile({ displayName: name });
 				await firestore()
 					.collection(COLLECTIONS.USERS)
-					.doc(currentUser.uid)
+					.doc(user.uid)
 					.set({
-						userId: currentUser.uid,
-						email: currentUser.email,
+						userId: user.uid,
+						email,
 						name,
 					});
 			} finally {
@@ -105,7 +95,23 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 			await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
 			const { idToken } = await GoogleSignin.signIn();
 			const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-			await auth().signInWithCredential(googleCredential);
+			const userCredential = await auth().signInWithCredential(googleCredential);
+			const user = userCredential.user
+			let result = await firestore()
+				.collection(COLLECTIONS.USERS)
+				.doc(user.uid)
+				.get()
+			const isSignedUp = result.exists
+			if (!isSignedUp) {
+				await firestore()
+					.collection(COLLECTIONS.USERS)
+					.doc(user.uid)
+					.set({
+						userId: user.uid,
+						email: user.email,
+						name: user.displayName,
+					});
+			}
 		} finally {
 			setProcessingSignin(false);
 		}
@@ -141,7 +147,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 		return {
 			initialized,
 			user,
-			signup,
+			emailSignup,
 			processingSignup,
 			signin,
 			processingSignin,
@@ -152,7 +158,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 	}, [
 		initialized,
 		user,
-		signup,
+		emailSignup,
 		processingSignup,
 		signin,
 		processingSignin,

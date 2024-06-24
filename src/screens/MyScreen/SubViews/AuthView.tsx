@@ -10,6 +10,7 @@ import { useAuth } from '../../../providers/AuthProvider';
 export const AuthView: React.FC = () => {
 	const navigation = useMyStackNavigation<'My'>();
 	const { googleSignin } = useAuth();
+
 	const onPressEmailSignin = () => {
 		navigation.navigate('EmailSignin')
 	}
