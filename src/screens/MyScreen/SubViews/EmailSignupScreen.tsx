@@ -2,15 +2,15 @@ import { route } from "next/dist/server/router";
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { TextInput, Alert, View, StyleSheet } from "react-native";
-import { useMyStackNavigation } from "../navigation/RootNavigation";
-import { KeyboardAvoidingLayout } from "../components/KeyboardAvoidingLayout";
-import FormInput from "../components/FormInput";
-import { Spacer } from "../components/Spacer";
-import { Division } from "../components/Division";
-import { SubmitButton } from "../components/SubmitButton";
-import { Header } from "../components/header/Header";
-import { useAuth } from "../providers/AuthProvider";
-import { useToastMessage } from "../providers/ToastMessageProvider";
+import { useMyStackNavigation } from "../../../navigation/RootNavigation";
+import { KeyboardAvoidingLayout } from "../../../components/KeyboardAvoidingLayout";
+import FormInput from "../../../components/FormInput";
+import { Spacer } from "../../../components/Spacer";
+import { Division } from "../../../components/Division";
+import { SubmitButton } from "../../../components/SubmitButton";
+import { Header } from "../../../components/header/Header";
+import { useAuth } from "../../../providers/AuthProvider";
+import { useToastMessage } from "../../../providers/ToastMessageProvider";
 
 interface ISignupForm {
 	EMAIL: string;

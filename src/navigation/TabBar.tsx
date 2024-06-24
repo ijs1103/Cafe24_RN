@@ -1,9 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MainStackScreen, FavoriteStackScreen, MyStackScreen } from './RootNavigation';
 import { TabIcon } from '../components/TabIcon';
-import { FavoriteScreen } from '../screens/FavoriteScreen';
-import { MainScreen } from '../screens/MainScreen';
-import { MyScreen } from '../screens/MyScreen/MyScreen';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 const Tabs = createBottomTabNavigator();

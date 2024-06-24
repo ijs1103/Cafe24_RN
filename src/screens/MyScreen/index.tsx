@@ -1,5 +1,5 @@
 import { View, Button } from 'react-native';
-import { AuthView } from './AuthView';
+import { AuthView } from './SubViews/AuthView';
 import { useContext } from 'react';
 import { useAuth } from '../../providers/AuthProvider';
 

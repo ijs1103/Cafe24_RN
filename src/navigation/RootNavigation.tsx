@@ -5,7 +5,7 @@ import {
 } from '@react-navigation/native-stack';
 import React from 'react';
 import { MainScreen } from '../screens/MainScreen';
-import { MyScreen } from '../screens/MyScreen/MyScreen';
+import { MyScreen } from '../screens/MyScreen';
 import { FavoriteScreen } from '../screens/FavoriteScreen';
 import { WebViewScreen } from '../screens/WebViewScreen';
 import { WebView } from 'react-native-webview';
@@ -14,8 +14,8 @@ import { DirectionsScreen } from '../screens/DirectionsScreen';
 import { SearchScreen } from '../screens/SearchScreen';
 import { CafeDTO } from '../utils/Types';
 import { SearchFilterModal } from '../components/SearchFilterModal';
-import { EmailSigninScreen } from '../screens/EmailSigninScreen';
-import { EmailSignupScreen } from '../screens/EmailSignupScreen';
+import { EmailSigninScreen } from '../screens/MyScreen/SubViews/EmailSigninScreen';
+import { EmailSignupScreen } from '../screens/MyScreen/SubViews/EmailSignupScreen';
 
 type MainStackParams = {
 	Main: { cafe: CafeDTO } | undefined;
