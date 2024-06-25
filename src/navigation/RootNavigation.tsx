@@ -16,6 +16,7 @@ import { CafeDTO } from '../utils/Types';
 import { SearchFilterModal } from '../components/SearchFilterModal';
 import { EmailSigninScreen } from '../screens/MyScreen/SubViews/EmailSigninScreen';
 import { EmailSignupScreen } from '../screens/MyScreen/SubViews/EmailSignupScreen';
+import { WithDrawalScreen } from '../screens/MyScreen/SubViews/WithDrawalScreen';
 
 type MainStackParams = {
 	Main: { cafe: CafeDTO } | undefined;
@@ -77,6 +78,7 @@ type MyStackParams = {
 	EmailSignin: undefined;
 	EmailSignup: undefined;
 	WebView: { uri: string | undefined };
+	WithDrawal: undefined;
 };
 
 export const MyStack = createNativeStackNavigator<MyStackParams>();
@@ -92,6 +94,7 @@ export const MyStackScreen: React.FC = () => {
 			<MyStack.Screen name='EmailSignin' component={EmailSigninScreen} />
 			<MyStack.Screen name='EmailSignup' component={EmailSignupScreen} />
 			<MainStack.Screen name="WebView" component={WebViewScreen} />
+			<MainStack.Screen name="WithDrawal" component={WithDrawalScreen} />
 		</MyStack.Navigator>
 	);
 };

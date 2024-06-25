@@ -12,7 +12,7 @@ interface Props {
 	title?: string;
 	color?: string;
 	onPress: () => void;
-	isLoading: boolean;
+	isLoading?: boolean;
 	disabled: boolean;
 }
 

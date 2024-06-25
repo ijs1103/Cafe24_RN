@@ -14,7 +14,7 @@ export const MyPageView: React.FC = () => {
 
 	const DATA = useMemo(() => [
 		{ data: [{ title: '작성한 리뷰', onPress: () => { } }] },
-		{ data: [{ title: '정보 수정', onPress: () => { } }, { title: '회원탈퇴', onPress: () => { } }, { title: '개인정보 보호방침', onPress: () => navigation.navigate('WebView', { uri: URL.PRIVACY_POLICY }) }] }
+		{ data: [{ title: '정보 수정', onPress: () => { } }, { title: '회원탈퇴', onPress: () => navigation.navigate('WithDrawal') }, { title: '개인정보 보호방침', onPress: () => navigation.navigate('WebView', { uri: URL.PRIVACY_POLICY }) }] }
 	], []);
 
 	const ListFooterComponent = () => {
