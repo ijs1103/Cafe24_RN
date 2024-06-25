@@ -76,6 +76,7 @@ type MyStackParams = {
 	My: undefined;
 	EmailSignin: undefined;
 	EmailSignup: undefined;
+	WebView: { uri: string | undefined };
 };
 
 export const MyStack = createNativeStackNavigator<MyStackParams>();
@@ -90,6 +91,7 @@ export const MyStackScreen: React.FC = () => {
 			<MyStack.Screen name='My' component={MyScreen} />
 			<MyStack.Screen name='EmailSignin' component={EmailSigninScreen} />
 			<MyStack.Screen name='EmailSignup' component={EmailSignupScreen} />
+			<MainStack.Screen name="WebView" component={WebViewScreen} />
 		</MyStack.Navigator>
 	);
 };

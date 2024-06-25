@@ -3,6 +3,7 @@ import { RegexType } from "./Types";
 const URL = {
   SEARCH_KEYWORD: 'https://dapi.kakao.com/v2/local/search/keyword.json',
   SEARCH_CATEGORY: 'https://dapi.kakao.com/v2/local/search/category.json',
+  PRIVACY_POLICY: 'https://plum-puppet-fa1.notion.site/24-6cbb13ead22240bbba8a5735df2e93a6'
 } as const;
 
 const DELTA = {
