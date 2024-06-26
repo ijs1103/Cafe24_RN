@@ -1,10 +1,11 @@
 import { useState, useCallback, useEffect } from 'react';
-import firestore from '@react-native-firebase/firestore';
+import firestore, { Timestamp } from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import { COLLECTIONS } from '../utils/Constants';
 import storage from '@react-native-firebase/storage';
+import { v4 as uuid } from 'uuid';
 import { useAuth } from '../providers/AuthProvider';
-import { User } from '../utils/Types';
+import { Review, User } from '../utils/Types';
 
 export const useFirebase = () => {
 	const { user, setUser } = useAuth();
@@ -53,6 +54,44 @@ export const useFirebase = () => {
 		}
 	}, []);
 
+	const addReview = useCallback(async (review: Review) => {
+		try {
+			setProcessingFirebase(true)
+			await firestore()
+			.collection<Review>(COLLECTIONS.REVIEWS)
+			.doc(review.reviewId)
+			.set({
+				...review
+			})
+		} finally {
+			setProcessingFirebase(false)
+		}
+	}, []);
+
+	const getReviews = useCallback(async ({ cafeId }: Pick<Review, 'cafeId'>) => {
+		try {
+			setProcessingFirebase(true)
+			const snapshot = await firestore()
+			.collection<Review>(COLLECTIONS.REVIEWS)
+			.where('cafeId', '==', cafeId).get()
+			return snapshot.docs.map(doc => doc.data())
+		} finally {
+			setProcessingFirebase(false)
+		}
+	}, []);
+
+	const deleteReview = useCallback(async ({ userId, cafeId }: Pick<Review, 'userId' | 'cafeId'>) => {
+		try {
+      setProcessingFirebase(true)
+			await firestore()
+			.collection<Review>(COLLECTIONS.REVIEWS)
+			.doc(`${userId}_${cafeId}`)
+			.delete()
+    } finally {
+      setProcessingFirebase(false)
+    }
+	}, []);
+
 	useEffect(() => {
 		if (!user?.userId) return
 
@@ -71,6 +110,6 @@ export const useFirebase = () => {
 	}, []);
 
 	return {
-		processingFirebase, updateUserName, updateProfileImage, deleteUser, myProfileSubscriber
+		processingFirebase, updateUserName, updateProfileImage, deleteUser, addReview, getReviews, deleteReview
 	}
 }

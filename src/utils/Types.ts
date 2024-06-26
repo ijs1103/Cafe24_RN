@@ -27,6 +27,19 @@ export interface User {
   profileUrl?: string;
 }
 
+export interface Review {
+  reviewId: string;
+  userId: string;
+  cafeId: string;
+  rating: number;
+  comment: string;
+  createdAt: FirebaseFirestoreTypes.Timestamp;
+}
+
+export interface Cafe {
+  cafeId: string;
+}
+
 export type SIGNUP_TYPE = typeof SIGNUP[keyof typeof SIGNUP];
 
 export type RegexType = {
