@@ -7,12 +7,10 @@ import { Spacer } from "../../../components/Spacer";
 import { MyPageItem } from "../../../components/ListItem/MyPageItem";
 import { ProfileImageView } from "../../../components/ProfileImageView";
 import { URL } from "../../../utils/Constants";
-import { useFirebase } from "../../../hooks/useFirebase";
 
 export const MyPageView: React.FC = () => {
 	const navigation = useMyStackNavigation<'My'>();
 	const { user, signOut } = useAuth();
-	const { myProfileSubscriber } = useFirebase();
 
 	const DATA = useMemo(() => [
 		{ data: [{ title: '작성한 리뷰', onPress: () => { } }] },

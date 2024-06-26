@@ -53,24 +53,6 @@ export const useFirebase = () => {
 		}
 	}, []);
 
-	const myProfileSubscriber = useCallback(() => {
-		const uid = auth().currentUser?.uid
-		if (!uid) {
-			return 
-		}
-		return firestore()
-			.collection<User>(COLLECTIONS.USERS)
-			.doc(uid)
-			.onSnapshot(snapshot => {
-				const data = snapshot.data()
-				if (data) {
-					setUser(data)
-				}
-			}, error => {
-				throw new Error(error.message)
-			})
-	}, []);
-
 	useEffect(() => {
 		if (!user?.userId) return
 

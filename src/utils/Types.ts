@@ -1,3 +1,4 @@
+import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 import { FRANCHISE_CAFE_LIST, FILTER_TYPE_LIST, SIGNUP } from "./Constants";
 
 export interface CafeDTO {
