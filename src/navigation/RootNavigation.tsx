@@ -14,9 +14,10 @@ import { DirectionsScreen } from '../screens/DirectionsScreen';
 import { SearchScreen } from '../screens/SearchScreen';
 import { CafeDTO } from '../utils/Types';
 import { SearchFilterModal } from '../components/SearchFilterModal';
-import { EmailSigninScreen } from '../screens/MyScreen/SubViews/EmailSigninScreen';
-import { EmailSignupScreen } from '../screens/MyScreen/SubViews/EmailSignupScreen';
-import { WithDrawalScreen } from '../screens/MyScreen/SubViews/WithDrawalScreen';
+import { EmailSigninScreen } from '../screens/EmailSigninScreen';
+import { EmailSignupScreen } from '../screens/EmailSignupScreen';
+import { WithDrawalScreen } from '../screens/WithDrawalScreen';
+import { EditProfileScreen } from '../screens/EditProfileScreen';
 
 type MainStackParams = {
 	Main: { cafe: CafeDTO } | undefined;
@@ -79,6 +80,7 @@ type MyStackParams = {
 	EmailSignup: undefined;
 	WebView: { uri: string | undefined };
 	WithDrawal: undefined;
+	EditProfile: undefined;
 };
 
 export const MyStack = createNativeStackNavigator<MyStackParams>();
@@ -95,6 +97,7 @@ export const MyStackScreen: React.FC = () => {
 			<MyStack.Screen name='EmailSignup' component={EmailSignupScreen} />
 			<MainStack.Screen name="WebView" component={WebViewScreen} />
 			<MainStack.Screen name="WithDrawal" component={WithDrawalScreen} />
+			<MainStack.Screen name="EditProfile" component={EditProfileScreen} />
 		</MyStack.Navigator>
 	);
 };

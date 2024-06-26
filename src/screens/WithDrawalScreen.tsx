@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Typography } from '../../../components/Typography';
-import { SubmitButton } from '../../../components/SubmitButton';
-import { useMyStackNavigation } from '../../../navigation/RootNavigation';
-import { Header } from '../../../components/header/Header';
-import { useFirebase } from '../../../hooks/useFirebase';
-import { useAuth } from '../../../providers/AuthProvider';
-import { useToastMessage } from '../../../providers/ToastMessageProvider';
+import { Typography } from '../components/Typography';
+import { SubmitButton } from '../components/SubmitButton';
+import { useMyStackNavigation } from '../navigation/RootNavigation';
+import { Header } from '../components/header/Header';
+import { useFirebase } from '../hooks/useFirebase';
+import { useAuth } from '../providers/AuthProvider';
+import { useToastMessage } from '../providers/ToastMessageProvider';
 
 export const WithDrawalScreen = () => {
 	const navigation = useMyStackNavigation<'WithDrawal'>();

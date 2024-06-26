@@ -11,11 +11,11 @@ import { GOOGLE_WEB_CLIENT_ID } from '@env';
 interface AuthContextProps {
 	initialized: boolean;
 	user: User | null;
+	setUser: React.Dispatch<React.SetStateAction<User | null>>;
 	emailSignup: (email: string, password: string, name: string) => Promise<void>;
 	processingSignup: boolean;
 	signin: (email: string, password: string) => Promise<void>;
 	processingSignin: boolean;
-	updateProfileImage: (filepath: string) => Promise<void>;
 	googleSignin: () => Promise<void>;
 	signOut: () => Promise<void>;
 }
@@ -23,11 +23,11 @@ interface AuthContextProps {
 const AuthContext = createContext<AuthContextProps>({
 	initialized: false,
 	user: null,
+	setUser: () => { },
 	emailSignup: async () => { },
 	processingSignup: false,
 	signin: async () => { },
 	processingSignin: false,
-	updateProfileImage: async () => { },
 	googleSignin: async () => { },
 	signOut: async () => { },
 });
@@ -49,7 +49,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 					userId: firebaseUser.uid,
 					email: firebaseUser.email ?? '',
 					name: firebaseUser.displayName ?? '',
-					profileUrl: undefined
+					profileUrl: firebaseUser.photoURL ?? '',
 				});
 			} else {
 				setUser(null);
@@ -117,27 +117,6 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 		}
 	}, []);
 
-
-	const updateProfileImage = useCallback(
-		async (filepath: string) => {
-			if (user == null) {
-				throw new Error('User is undefined');
-			}
-			const fileName = filepath.split('/')[filepath.length - 1]
-			if (fileName == null) {
-				throw new Error('filename is undefined');
-			}
-			const storageFilepath = `users/${user.userId}/${fileName}`;
-			await storage().ref(storageFilepath).putFile(filepath);
-			const url = await storage().ref(storageFilepath).getDownloadURL();
-			await auth().currentUser?.updateProfile({ photoURL: url });
-			await firestore().collection(COLLECTIONS.USERS).doc(user.userId).update({
-				profileUrl: url,
-			});
-		},
-		[user],
-	);
-
 	const signOut = useCallback(async () => {
 		await auth().signOut();
 		setUser(null);
@@ -147,22 +126,22 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 		return {
 			initialized,
 			user,
+			setUser,
 			emailSignup,
 			processingSignup,
 			signin,
 			processingSignin,
-			updateProfileImage,
 			googleSignin,
 			signOut,
 		};
 	}, [
 		initialized,
 		user,
+		setUser,
 		emailSignup,
 		processingSignup,
 		signin,
 		processingSignin,
-		updateProfileImage,
 		googleSignin,
 		signOut,
 	]);
