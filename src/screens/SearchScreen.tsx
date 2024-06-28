@@ -115,7 +115,7 @@ export const SearchScreen: React.FC = () => {
 					</View>
 					<View style={{ flex: 1, position: 'relative', paddingVertical: 12 }}>
 						<LogoBackground selectedCafe={selectedFranchise} headerBgAnim={headerBgAnim} />
-						{isLoading ? <LoadingView /> : <FlatList data={cafeList} renderItem={({ item }) => <SearchResultItem cafeId={item.id} cafeName={item.place_name} cafeAddress={item.address_name} ratings={4.25} reviewsCount={100} distance={item.distance} onPress={() => itemPressHandler(item)} />} keyExtractor={item => item.id} ListEmptyComponent={<ListEmptyComponent />} ItemSeparatorComponent={() => <Division separatorStyle />} contentContainerStyle={{ flexGrow: 1 }} />
+						{isLoading ? <LoadingView /> : <FlatList data={cafeList} renderItem={({ item }) => <SearchResultItem cafeId={item.id} cafeName={item.place_name} cafeAddress={item.address_name} ratings={4.25} reviewsCount={100} distance={item.distance} onPress={() => itemPressHandler(item)} />} keyExtractor={item => item.id} ListEmptyComponent={<ListEmptyComponent text='검색 결과가 없습니다.' />} ItemSeparatorComponent={() => <Division separatorStyle />} contentContainerStyle={{ flexGrow: 1 }} />
 						}
 					</View>
 				</View>

@@ -12,18 +12,20 @@ import { WebView } from 'react-native-webview';
 import { LatLng } from 'react-native-maps';
 import { DirectionsScreen } from '../screens/DirectionsScreen';
 import { SearchScreen } from '../screens/SearchScreen';
-import { CafeDTO } from '../utils/Types';
+import { CafeDTO, Review, ReviewWithUser } from '../utils/Types';
 import { SearchFilterModal } from '../components/SearchFilterModal';
 import { EmailSigninScreen } from '../screens/EmailSigninScreen';
 import { EmailSignupScreen } from '../screens/EmailSignupScreen';
 import { WithDrawalScreen } from '../screens/WithDrawalScreen';
 import { EditProfileScreen } from '../screens/EditProfileScreen';
+import { CafeDetailScreen } from '../screens/CafeDetailScreen';
 
 type MainStackParams = {
 	Main: { cafe: CafeDTO } | undefined;
 	WebView: { uri: string | undefined };
 	Directions: { originLatLng: LatLng, destinationLatLng: LatLng };
 	Search: undefined;
+	CafeDetail: { cafe: CafeDTO | null, reviews: ReviewWithUser[], cafeRatings: number };
 };
 
 export const MainStack = createNativeStackNavigator<MainStackParams>();
@@ -39,6 +41,7 @@ export const MainStackScreen: React.FC = () => {
 			<MainStack.Screen name="WebView" component={WebViewScreen} />
 			<MainStack.Screen name="Directions" component={DirectionsScreen} />
 			<MainStack.Screen name="Search" component={SearchScreen} />
+			<MainStack.Screen name="CafeDetail" component={CafeDetailScreen} />
 		</MainStack.Navigator>
 	);
 };
@@ -95,9 +98,9 @@ export const MyStackScreen: React.FC = () => {
 			<MyStack.Screen name='My' component={MyScreen} />
 			<MyStack.Screen name='EmailSignin' component={EmailSigninScreen} />
 			<MyStack.Screen name='EmailSignup' component={EmailSignupScreen} />
-			<MainStack.Screen name="WebView" component={WebViewScreen} />
-			<MainStack.Screen name="WithDrawal" component={WithDrawalScreen} />
-			<MainStack.Screen name="EditProfile" component={EditProfileScreen} />
+			<MyStack.Screen name='WebView' component={WebViewScreen} />
+			<MyStack.Screen name='WithDrawal' component={WithDrawalScreen} />
+			<MyStack.Screen name='EditProfile' component={EditProfileScreen} />
 		</MyStack.Navigator>
 	);
 };

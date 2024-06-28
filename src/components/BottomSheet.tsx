@@ -2,7 +2,7 @@ import React, { useCallback, forwardRef } from "react";
 import { View, Pressable, TouchableOpacity, Alert, Linking, Share } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { TrueSheet } from "@lodev09/react-native-true-sheet";
+import { SizeInfo, TrueSheet } from "@lodev09/react-native-true-sheet";
 import Clipboard from '@react-native-clipboard/clipboard';
 import { Typography } from './Typography';
 import { Spacer } from './Spacer';
@@ -10,6 +10,8 @@ import { Division } from './Division';
 import { CafeDTO } from '../utils/Types';
 import { RatingsAndReviews } from "./RatingsAndReviews";
 import { useToastMessage } from "../providers/ToastMessageProvider";
+import { useFirebase } from "../hooks/useFirebase";
+import { LoadingView } from "./LoadingView";
 
 interface BottomSheetProps {
 	cafe: CafeDTO | null;
@@ -17,9 +19,10 @@ interface BottomSheetProps {
 	directionsHandler: () => void;
 	isLiked: boolean;
 	likeHandler: () => void;
+	sheetSizeChangeHandler: () => void;
 }
 
-export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, webViewHandler, directionsHandler, isLiked, likeHandler }, ref) => {
+export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, webViewHandler, directionsHandler, isLiked, likeHandler, sheetSizeChangeHandler }, ref) => {
 	const { showToastMessage } = useToastMessage();
 
 	const copyToClipboard = useCallback((text?: string) => {
@@ -52,6 +55,12 @@ export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, webV
 		}
 	}, [cafe]);
 
+	const onSizeChange = (sizeInfo: SizeInfo) => {
+		if (sizeInfo.index === 1) {
+			sheetSizeChangeHandler();
+		}
+	};
+
 	return (
 		<TrueSheet
 			ref={ref}
@@ -61,6 +70,7 @@ export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, webV
 			sizes={['auto', 'large']}
 			dimmed={false}
 			cornerRadius={16}
+			onSizeChange={onSizeChange}
 		>
 			<View style={{ backgroundColor: 'white' }}>
 				<View style={{ paddingHorizontal: 14, paddingVertical: 16 }}>

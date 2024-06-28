@@ -33,7 +33,14 @@ export interface Review {
   cafeId: string;
   rating: number;
   comment: string;
+  reviewPhotoUrls: string[];
   createdAt: FirebaseFirestoreTypes.Timestamp;
+}
+
+export interface ReviewWithUser extends Review {
+  userId: string;
+  userName: string;
+  userProfileUrl?: string;
 }
 
 export interface Cafe {
@@ -48,3 +55,5 @@ export type RegexType = {
   PASSWORD_CHECK?: RegExp;
   NAME: RegExp;
 };
+
+export type ImageViewResourceType = { uri: string };

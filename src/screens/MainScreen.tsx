@@ -1,23 +1,22 @@
 import Geolocation from '@react-native-community/geolocation';
-import React, { useCallback, useEffect, useState, useRef, useContext } from 'react';
-import { Button, Alert, Pressable, View, Touchable, TouchableOpacity } from 'react-native';
-import MapView, { Marker, MarkerPressEvent, Region, LatLng } from 'react-native-maps';
+import { useCallback, useEffect, useState, useRef, useContext } from 'react';
+import { View } from 'react-native';
+import MapView, { Marker, Region, LatLng } from 'react-native-maps';
+import { useFocusEffect } from '@react-navigation/native';
+import { TrueSheet } from "@lodev09/react-native-true-sheet";
+import { WebView } from 'react-native-webview';
 import { useMainStackNavigation, useMainStackRoute } from '../navigation/RootNavigation';
 import { getCafeListFromLatLng } from '../utils/KakaoUtils';
 import { CafeDTO } from '../utils/Types';
 import { SearchBarHeader } from '../components/header/SearchBarHeader';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { Typography } from '../components/Typography';
-import { Spacer } from '../components/Spacer';
 import { MyLocationButton } from '../components/MyLocationButton';
-import { Division } from '../components/Division';
 import { BottomSheet } from '../components/BottomSheet';
-import { TrueSheet } from "@lodev09/react-native-true-sheet";
-import { WebView } from 'react-native-webview';
 import { DELTA } from '../utils/Constants';
 import { deleteFromLikedCafeList, isLikedCafe, addToLikedCafeList } from '../utils/Storage';
 import { useGlobalStateValue, useGlobalStateActions } from '../providers/GlobalStateProvider';
 import { useToastMessage } from '../providers/ToastMessageProvider';
+import { useFirebase } from '../hooks/useFirebase';
+import { LoadingView } from '../components/LoadingView';
 
 export const MainScreen: React.FC = () => {
 	const navigation = useMainStackNavigation<'Main'>();
@@ -25,6 +24,7 @@ export const MainScreen: React.FC = () => {
 	const { currentRegion } = useGlobalStateValue();
 	const { setCurrentRegion } = useGlobalStateActions();
 	const { showToastMessage } = useToastMessage();
+	const { getCafeReviewsWithUser, getCafeRatingsAverage, processingFirebase, setProcessingFirebase } = useFirebase();
 	const bottomSheetRef = useRef<TrueSheet>(null);
 	const mapViewRef = useRef<MapView>(null);
 	const [isMapReady, setIsMapReady] = useState<boolean>(false);
@@ -34,7 +34,7 @@ export const MainScreen: React.FC = () => {
 	const [isLiked, setIsLiked] = useState<boolean>(false);
 
 	const onChangeLocation = useCallback<
-		(item: { latitude: number; longitude: number }) => void
+		(item: LatLng) => void
 	>(item => {
 		setCurrentRegion({
 			latitude: item.latitude,
@@ -112,6 +112,19 @@ export const MainScreen: React.FC = () => {
 		setIsLiked(prev => !prev)
 	}, [isLiked, selectedCafe]);
 
+	const sheetSizeChangeHandler = useCallback(async () => {
+		if (!selectedCafe?.id) { return }
+		try {
+			setProcessingFirebase(true)
+			const reviews = await getCafeReviewsWithUser(selectedCafe.id)
+			const cafeRatings = await getCafeRatingsAverage(selectedCafe.id)
+			setProcessingFirebase(false)
+			navigation.navigate('CafeDetail', { cafe: selectedCafe, reviews, cafeRatings });
+		} catch (error) {
+			console.log(error)
+		}
+	}, [selectedCafe]);
+
 	useEffect(() => {
 		if (locationFetched) {
 			getCafeListFromLatLng(currentRegion.latitude, currentRegion.longitude).then(
@@ -148,6 +161,18 @@ export const MainScreen: React.FC = () => {
 		};
 		checkIsLiked();
 	}, [selectedCafe]);
+
+	useFocusEffect(
+		useCallback(() => {
+			if (selectedCafe) {
+				presentTrueSheet();
+			}
+		}, [selectedCafe])
+	);
+
+	if (processingFirebase) {
+		return <LoadingView />
+	}
 
 	return (
 		<View style={{ flex: 1 }}>
@@ -195,7 +220,7 @@ export const MainScreen: React.FC = () => {
 				})}
 			</MapView>
 			<MyLocationButton onPress={onPressMyLocationButton} />
-			<BottomSheet ref={bottomSheetRef} cafe={selectedCafe} webViewHandler={webViewHandler} directionsHandler={directionsHandler} isLiked={isLiked} likeHandler={likeHandler} />
+			<BottomSheet ref={bottomSheetRef} cafe={selectedCafe} webViewHandler={webViewHandler} directionsHandler={directionsHandler} isLiked={isLiked} likeHandler={likeHandler} sheetSizeChangeHandler={sheetSizeChangeHandler} />
 		</View >
 	);
 };

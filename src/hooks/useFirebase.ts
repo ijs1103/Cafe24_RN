@@ -1,15 +1,16 @@
 import { useState, useCallback, useEffect } from 'react';
-import firestore, { Timestamp } from '@react-native-firebase/firestore';
+import firestore, { FirebaseFirestoreTypes, Timestamp } from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import { COLLECTIONS } from '../utils/Constants';
 import storage from '@react-native-firebase/storage';
 import { v4 as uuid } from 'uuid';
 import { useAuth } from '../providers/AuthProvider';
-import { Review, User } from '../utils/Types';
+import { Review, ReviewWithUser, User } from '../utils/Types';
 
 export const useFirebase = () => {
 	const { user, setUser } = useAuth();
 	const [processingFirebase, setProcessingFirebase] = useState(false);
+	const [lastVisible, setLastVisible] = useState<FirebaseFirestoreTypes.QueryDocumentSnapshot | null>(null);
 
 	const updateUserName = useCallback(async (uid: string, name: string) => {
 		try {
@@ -68,19 +69,53 @@ export const useFirebase = () => {
 		}
 	}, []);
 
-	const getReviews = useCallback(async ({ cafeId }: Pick<Review, 'cafeId'>) => {
-		try {
-			setProcessingFirebase(true)
-			const snapshot = await firestore()
-			.collection<Review>(COLLECTIONS.REVIEWS)
-			.where('cafeId', '==', cafeId).get()
-			return snapshot.docs.map(doc => doc.data())
-		} finally {
-			setProcessingFirebase(false)
-		}
+	const getCafeReviewsWithUser = useCallback(async (cafeId: string): Promise<ReviewWithUser[]> => {
+		let reviewsQuery = firestore()
+				.collection<Review>(COLLECTIONS.REVIEWS)
+				.where('cafeId', '==', cafeId)
+				.orderBy('createdAt', 'desc')
+				.limit(10);
+			if (lastVisible) {
+				reviewsQuery = reviewsQuery.startAfter(lastVisible);
+			}
+			const reviewsSnapshot = await reviewsQuery.get();
+			if (reviewsSnapshot.empty) {
+				return []
+			}
+			setLastVisible(reviewsSnapshot.docs[reviewsSnapshot.docs.length - 1]);
+			const reviews = reviewsSnapshot.docs.map(doc => doc.data());
+			const reviewsWithUser = await Promise.all(
+				reviews.map(async (review) => {
+					const userSnapshot = await firestore()
+						.collection<User>(COLLECTIONS.USERS)
+						.doc(review.userId)
+						.get();
+					const user = userSnapshot.data() as User;
+					return {
+						...review,
+						userId: user.userId,
+						userName: user.name,
+						userProfileUrl: user.profileUrl,
+					};
+				})
+			);
+			return reviewsWithUser;
 	}, []);
 
-	const deleteReview = useCallback(async ({ userId, cafeId }: Pick<Review, 'userId' | 'cafeId'>) => {
+	const getCafeRatingsAverage = useCallback(async (cafeId: string): Promise<number> => {
+		const reviewsSnapshot = await firestore()
+				.collection<Review>(COLLECTIONS.REVIEWS)
+				.where('cafeId', '==', cafeId)
+				.get();
+			if (reviewsSnapshot.empty) {
+				return 0;
+			}
+		const total = reviewsSnapshot.docs.map(doc => doc.data()).reduce((acc, review) => acc + review.rating, 0)
+		const average = parseFloat((total / reviewsSnapshot.docs.length).toFixed(1));
+		return average;
+	}, []);
+
+	const deleteReview = useCallback(async (userId: string, cafeId: string) => {
 		try {
       setProcessingFirebase(true)
 			await firestore()
@@ -110,6 +145,6 @@ export const useFirebase = () => {
 	}, []);
 
 	return {
-		processingFirebase, updateUserName, updateProfileImage, deleteUser, addReview, getReviews, deleteReview
+		processingFirebase, setProcessingFirebase, updateUserName, updateProfileImage, deleteUser, addReview, getCafeReviewsWithUser, getCafeRatingsAverage, deleteReview
 	}
 }

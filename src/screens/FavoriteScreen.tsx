@@ -49,7 +49,7 @@ export const FavoriteScreen: React.FC = () => {
 
 	return (
 		<View style={{ flex: 1, backgroundColor: '#fff' }}>
-			<FlatList style={{ padding: 16 }} data={cafeList} renderItem={({ item }) => <LikedCafeItem key='item.id' cafe={item} onPressAll={() => itemPressHandler(item)} onPressOption={() => optionPressHandler(item.id)} />} keyExtractor={item => item.id} ListEmptyComponent={<ListEmptyComponent />} ItemSeparatorComponent={() => <Division />} contentContainerStyle={{ flexGrow: 1 }} />
+			<FlatList style={{ padding: 16 }} data={cafeList} renderItem={({ item }) => <LikedCafeItem key='item.id' cafe={item} onPressAll={() => itemPressHandler(item)} onPressOption={() => optionPressHandler(item.id)} />} keyExtractor={item => item.id} ListEmptyComponent={<ListEmptyComponent text='즐겨찾기 한 카페가 없습니다.' />} ItemSeparatorComponent={() => <Division />} contentContainerStyle={{ flexGrow: 1 }} />
 		</View>
 	);
 };
