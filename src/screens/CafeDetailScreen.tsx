@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -20,6 +20,7 @@ export const CafeDetailScreen: React.FC = () => {
 	const routes = useMainStackRoute<'CafeDetail'>();
 	const [imageSliderVisible, setImageSliderVisible] = useState(false);
 	const [selectedPhotoUrls, setSelectedPhotoUrls] = useState<ImageViewResourceType[]>([]);
+	const [isFirstLoad, setIsFirstLoad] = useState(true);
 	const { getCafeReviewsWithUser, resetCafeReviewsData, processingFirebase, setProcessingFirebase } = useFirebase()
 	const goBackHandler = useCallback(() => {
 		navigation.goBack();
@@ -35,7 +36,7 @@ export const CafeDetailScreen: React.FC = () => {
 	}, []);
 
 	const onEndReached = useCallback(async () => {
-		if (routes.params.cafe?.id) {
+		if (routes.params.cafe?.id && !isFirstLoad) {
 			setProcessingFirebase(true)
 			await getCafeReviewsWithUser(routes.params.cafe.id)
 			setProcessingFirebase(false)
@@ -49,6 +50,10 @@ export const CafeDetailScreen: React.FC = () => {
 			await getCafeReviewsWithUser(routes.params.cafe.id)
 			setProcessingFirebase(false)
 		}
+	}, []);
+
+	useEffect(() => {
+		setIsFirstLoad(false)
 	}, []);
 
 	return (
