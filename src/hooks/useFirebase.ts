@@ -102,6 +102,10 @@ export const useFirebase = () => {
 			return reviewsWithUser;
 	}, []);
 
+	const resetCafeReviewsData = useCallback(() => {
+		setLastVisible(null);
+	}, []);
+
 	const getCafeRatingsAverage = useCallback(async (cafeId: string): Promise<number> => {
 		const reviewsSnapshot = await firestore()
 				.collection<Review>(COLLECTIONS.REVIEWS)
@@ -145,6 +149,6 @@ export const useFirebase = () => {
 	}, []);
 
 	return {
-		processingFirebase, setProcessingFirebase, updateUserName, updateProfileImage, deleteUser, addReview, getCafeReviewsWithUser, getCafeRatingsAverage, deleteReview
+		processingFirebase, setProcessingFirebase, updateUserName, updateProfileImage, deleteUser, addReview, getCafeReviewsWithUser, resetCafeReviewsData, getCafeRatingsAverage, deleteReview
 	}
 }

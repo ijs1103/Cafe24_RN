@@ -13,13 +13,14 @@ import { useMainStackNavigation, useMainStackRoute } from '../navigation/RootNav
 import { FullScreenImageSlider } from './FullScreenImageSlider';
 import { CafeDetailListHeader } from '../components/ListItem/CafeDetailListHeader';
 import { ListEmptyComponent } from '../components/ListEmptyComponent';
+import { useFirebase } from '../hooks/useFirebase';
 
 export const CafeDetailScreen: React.FC = () => {
 	const navigation = useMainStackNavigation<'CafeDetail'>();
 	const routes = useMainStackRoute<'CafeDetail'>();
 	const [imageSliderVisible, setImageSliderVisible] = useState(false);
 	const [selectedPhotoUrls, setSelectedPhotoUrls] = useState<ImageViewResourceType[]>([]);
-
+	const { getCafeReviewsWithUser, resetCafeReviewsData, processingFirebase, setProcessingFirebase } = useFirebase()
 	const goBackHandler = useCallback(() => {
 		navigation.goBack();
 	}, []);
@@ -31,6 +32,23 @@ export const CafeDetailScreen: React.FC = () => {
 
 	const reviewWriteHandler = useCallback(() => {
 
+	}, []);
+
+	const onEndReached = useCallback(async () => {
+		if (routes.params.cafe?.id) {
+			setProcessingFirebase(true)
+			await getCafeReviewsWithUser(routes.params.cafe.id)
+			setProcessingFirebase(false)
+		}
+	}, []);
+
+	const onRefresh = useCallback(async () => {
+		if (routes.params.cafe?.id) {
+			setProcessingFirebase(true)
+			resetCafeReviewsData()
+			await getCafeReviewsWithUser(routes.params.cafe.id)
+			setProcessingFirebase(false)
+		}
 	}, []);
 
 	return (
@@ -48,6 +66,10 @@ export const CafeDetailScreen: React.FC = () => {
 					reviewWriteHandler={reviewWriteHandler} />}
 				contentContainerStyle={{ paddingBottom: 10 }}
 				ListEmptyComponent={<ListEmptyComponent text='리뷰가 없습니다.' />}
+				onEndReached={onEndReached}
+				onEndReachedThreshold={0.1}
+				refreshing={processingFirebase}
+				onRefresh={onRefresh}
 			/>
 			<FullScreenImageSlider
 				photoUrls={selectedPhotoUrls}
