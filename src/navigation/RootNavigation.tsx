@@ -25,7 +25,7 @@ type MainStackParams = {
 	WebView: { uri: string | undefined };
 	Directions: { originLatLng: LatLng, destinationLatLng: LatLng };
 	Search: undefined;
-	CafeDetail: { cafe: CafeDTO | null, reviews: ReviewWithUser[], cafeRatings: number };
+	CafeDetail: { cafe: CafeDTO | null };
 };
 
 export const MainStack = createNativeStackNavigator<MainStackParams>();

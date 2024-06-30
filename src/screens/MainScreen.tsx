@@ -15,8 +15,6 @@ import { DELTA } from '../utils/Constants';
 import { deleteFromLikedCafeList, isLikedCafe, addToLikedCafeList } from '../utils/Storage';
 import { useGlobalStateValue, useGlobalStateActions } from '../providers/GlobalStateProvider';
 import { useToastMessage } from '../providers/ToastMessageProvider';
-import { useFirebase } from '../hooks/useFirebase';
-import { LoadingView } from '../components/LoadingView';
 
 export const MainScreen: React.FC = () => {
 	const navigation = useMainStackNavigation<'Main'>();
@@ -24,7 +22,6 @@ export const MainScreen: React.FC = () => {
 	const { currentRegion } = useGlobalStateValue();
 	const { setCurrentRegion } = useGlobalStateActions();
 	const { showToastMessage } = useToastMessage();
-	const { getCafeReviewsWithUser, getCafeRatingsAverage, processingFirebase, setProcessingFirebase } = useFirebase();
 	const bottomSheetRef = useRef<TrueSheet>(null);
 	const mapViewRef = useRef<MapView>(null);
 	const [isMapReady, setIsMapReady] = useState<boolean>(false);
@@ -114,15 +111,7 @@ export const MainScreen: React.FC = () => {
 
 	const sheetSizeChangeHandler = useCallback(async () => {
 		if (!selectedCafe?.id) { return }
-		try {
-			setProcessingFirebase(true)
-			const reviews = await getCafeReviewsWithUser(selectedCafe.id)
-			const cafeRatings = await getCafeRatingsAverage(selectedCafe.id)
-			setProcessingFirebase(false)
-			navigation.navigate('CafeDetail', { cafe: selectedCafe, reviews, cafeRatings });
-		} catch (error) {
-			console.log(error)
-		}
+		navigation.navigate('CafeDetail', { cafe: selectedCafe });
 	}, [selectedCafe]);
 
 	useEffect(() => {
@@ -169,10 +158,6 @@ export const MainScreen: React.FC = () => {
 			}
 		}, [selectedCafe])
 	);
-
-	if (processingFirebase) {
-		return <LoadingView />
-	}
 
 	return (
 		<View style={{ flex: 1 }}>

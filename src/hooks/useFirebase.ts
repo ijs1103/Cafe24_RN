@@ -11,6 +11,8 @@ export const useFirebase = () => {
 	const { user, setUser } = useAuth();
 	const [processingFirebase, setProcessingFirebase] = useState(false);
 	const [lastVisible, setLastVisible] = useState<FirebaseFirestoreTypes.QueryDocumentSnapshot | null>(null);
+	const [cafeReviews, setCafeReviews] = useState<ReviewWithUser[] | null>(null);
+	const [cafeRatings, setCafeRatings] = useState<number>(0.0);
 
 	const updateUserName = useCallback(async (uid: string, name: string) => {
 		try {
@@ -69,8 +71,8 @@ export const useFirebase = () => {
 		}
 	}, []);
 
-	const getCafeReviewsWithUser = useCallback(async (cafeId: string): Promise<ReviewWithUser[]> => {
-		let reviewsQuery = firestore()
+	const getCafeReviewsWithUser = useCallback(async (cafeId: string) => {
+			let reviewsQuery = firestore()
 				.collection<Review>(COLLECTIONS.REVIEWS)
 				.where('cafeId', '==', cafeId)
 				.orderBy('createdAt', 'desc')
@@ -80,7 +82,7 @@ export const useFirebase = () => {
 			}
 			const reviewsSnapshot = await reviewsQuery.get();
 			if (reviewsSnapshot.empty) {
-				return []
+				setCafeReviews(null);
 			}
 			setLastVisible(reviewsSnapshot.docs[reviewsSnapshot.docs.length - 1]);
 			const reviews = reviewsSnapshot.docs.map(doc => doc.data());
@@ -99,24 +101,30 @@ export const useFirebase = () => {
 					};
 				})
 			);
-			return reviewsWithUser;
+			setCafeReviews(reviewsWithUser);
 	}, []);
 
 	const resetCafeReviewsData = useCallback(() => {
 		setLastVisible(null);
 	}, []);
 
-	const getCafeRatingsAverage = useCallback(async (cafeId: string): Promise<number> => {
-		const reviewsSnapshot = await firestore()
-				.collection<Review>(COLLECTIONS.REVIEWS)
-				.where('cafeId', '==', cafeId)
-				.get();
+	const getCafeRatingsAverage = useCallback(async (cafeId: string) => {
+		try {
+			const reviewsSnapshot = await firestore()
+			.collection<Review>(COLLECTIONS.REVIEWS)
+			.where('cafeId', '==', cafeId)
+			.get();
 			if (reviewsSnapshot.empty) {
-				return 0;
+				setCafeRatings(0.0);
+				return;
 			}
-		const total = reviewsSnapshot.docs.map(doc => doc.data()).reduce((acc, review) => acc + review.rating, 0)
-		const average = parseFloat((total / reviewsSnapshot.docs.length).toFixed(1));
-		return average;
+			const total = reviewsSnapshot.docs.map(doc => doc.data()).reduce((acc, review) => acc + review.rating, 0)
+			const average = parseFloat((total / reviewsSnapshot.docs.length).toFixed(1));
+			setCafeRatings(average);
+		} catch(error) {
+			console.log(error);
+			setCafeRatings(0.0);
+		}
 	}, []);
 
 	const deleteReview = useCallback(async (userId: string, cafeId: string) => {
@@ -124,7 +132,7 @@ export const useFirebase = () => {
       setProcessingFirebase(true)
 			await firestore()
 			.collection<Review>(COLLECTIONS.REVIEWS)
-			.doc(`${userId}_${cafeId}`)
+			.doc(`${cafeId}_${userId}`)
 			.delete()
     } finally {
       setProcessingFirebase(false)
@@ -149,6 +157,6 @@ export const useFirebase = () => {
 	}, []);
 
 	return {
-		processingFirebase, setProcessingFirebase, updateUserName, updateProfileImage, deleteUser, addReview, getCafeReviewsWithUser, resetCafeReviewsData, getCafeRatingsAverage, deleteReview
+		processingFirebase, setProcessingFirebase, updateUserName, updateProfileImage, deleteUser, addReview, getCafeReviewsWithUser, resetCafeReviewsData, getCafeRatingsAverage, deleteReview, cafeReviews, cafeRatings
 	}
 }
