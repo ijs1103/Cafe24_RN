@@ -66,6 +66,15 @@ export const useFirebase = () => {
 			})
 	}, []);
 
+	const isMyReviewExisting = useCallback(async (cafeId: string, userId: string) => {
+		const review = await firestore()
+				.collection<Review>(COLLECTIONS.REVIEWS)
+				.where('cafeId', '==', cafeId)
+				.where('userId', '==', userId)
+				.get()
+		return (review != undefined)
+	}, []);
+
 	const getCafeReviewsWithUser = useCallback(async (cafeId: string) => {
 			let reviewsQuery = firestore()
 				.collection<Review>(COLLECTIONS.REVIEWS)
@@ -165,6 +174,7 @@ export const useFirebase = () => {
 		updateProfileImage, 
 		deleteUser, 
 		addReview, 
+		isMyReviewExisting,
 		getCafeReviewsWithUser, 
 		resetCafeReviewsData, 
 		getCafeRatingsAverage, 

@@ -24,7 +24,7 @@ export const CafeDetailScreen: React.FC = () => {
 	const routes = useMainStackRoute<'CafeDetail'>();
 	const { user } = useAuth()
 	const { showToastMessage } = useToastMessage()
-	const { getCafeReviewsWithUser, getCafeRatingsAverage, resetCafeReviewsData, processingFirebase, setProcessingFirebase, deleteReview, cafeReviews, cafeRatings } = useFirebase()
+	const { getCafeReviewsWithUser, getCafeRatingsAverage, resetCafeReviewsData, processingFirebase, setProcessingFirebase, deleteReview, cafeReviews, cafeRatings, isMyReviewExisting } = useFirebase()
 	const [imageSliderVisible, setImageSliderVisible] = useState(false);
 	const [selectedPhotoUrls, setSelectedPhotoUrls] = useState<ImageViewResourceType[]>([]);
 	const [isFirstLoad, setIsFirstLoad] = useState(true);
@@ -39,11 +39,19 @@ export const CafeDetailScreen: React.FC = () => {
 		setImageSliderVisible(true)
 	}, []);
 
-	const reviewWriteHandler = useCallback(() => {
-		if (user) {
-			navigation.navigate('WriteReview', { cafe: routes.params.cafe })
-		} else {
+	const reviewWriteHandler = useCallback(async () => {
+		if (!user) {
 			showToastMessage('로그인 해주세요.')
+			return
+		}
+		if (!routes.params.cafe) {
+			return
+		}
+		const myReviewExisting = await isMyReviewExisting(routes.params.cafe.id, user.userId)
+		if (myReviewExisting) {
+			showToastMessage('이미 작성한 리뷰가 존재합니다.')
+		} else {
+			navigation.navigate('WriteReview', { cafe: routes.params.cafe })
 		}
 	}, []);
 
