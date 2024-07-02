@@ -40,7 +40,11 @@ export const CafeDetailScreen: React.FC = () => {
 	}, []);
 
 	const reviewWriteHandler = useCallback(() => {
-		navigation.navigate('WriteReview', { cafe: routes.params.cafe })
+		if (user) {
+			navigation.navigate('WriteReview', { cafe: routes.params.cafe })
+		} else {
+			showToastMessage('로그인 해주세요.')
+		}
 	}, []);
 
 	const isMyReview = useCallback((reviewerId: string): boolean => {
