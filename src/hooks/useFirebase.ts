@@ -36,10 +36,10 @@ export const useFirebase = () => {
 				setProcessingFirebase(true)
 				await storage().ref(storageFilepath).putFile(filepath);
 				const url = await storage().ref(storageFilepath).getDownloadURL();
-				await auth().currentUser?.updateProfile({ photoURL: url });
 				await firestore().collection(COLLECTIONS.USERS).doc(uid).update({
 					profileUrl: url,
 				});
+				await auth().currentUser?.updateProfile({ photoURL: url });
 			} finally {
 				setProcessingFirebase(false)
 			}
@@ -58,17 +58,12 @@ export const useFirebase = () => {
 	}, []);
 
 	const addReview = useCallback(async (review: Review) => {
-		try {
-			setProcessingFirebase(true)
-			await firestore()
+		await firestore()
 			.collection<Review>(COLLECTIONS.REVIEWS)
 			.doc(review.reviewId)
 			.set({
 				...review
 			})
-		} finally {
-			setProcessingFirebase(false)
-		}
 	}, []);
 
 	const getCafeReviewsWithUser = useCallback(async (cafeId: string) => {
@@ -128,16 +123,23 @@ export const useFirebase = () => {
 	}, []);
 
 	const deleteReview = useCallback(async (userId: string, cafeId: string) => {
-		try {
-      setProcessingFirebase(true)
-			await firestore()
+		await firestore()
 			.collection<Review>(COLLECTIONS.REVIEWS)
 			.doc(`${cafeId}_${userId}`)
 			.delete()
-    } finally {
-      setProcessingFirebase(false)
-    }
 	}, []);
+
+	const uploadAndGetDownloadedUrls = async (cafeId: string, filePaths: string[]): Promise<string[]> => {
+		const urls = [];
+		for (const filePath of filePaths) {
+			const fileName = filePath.substring(filePath.lastIndexOf('/') + 1)
+			const storageFilepath = `cafes/${cafeId}/${fileName}`;
+			await storage().ref(storageFilepath).putFile(filePath);
+			const url = await storage().ref(storageFilepath).getDownloadURL();
+			urls.push(url);
+		}
+		return urls;
+	}
 
 	useEffect(() => {
 		if (!user?.userId) return
@@ -157,6 +159,18 @@ export const useFirebase = () => {
 	}, []);
 
 	return {
-		processingFirebase, setProcessingFirebase, updateUserName, updateProfileImage, deleteUser, addReview, getCafeReviewsWithUser, resetCafeReviewsData, getCafeRatingsAverage, deleteReview, cafeReviews, cafeRatings
+		processingFirebase, 
+		setProcessingFirebase, 
+		updateUserName, 
+		updateProfileImage, 
+		deleteUser, 
+		addReview, 
+		getCafeReviewsWithUser, 
+		resetCafeReviewsData, 
+		getCafeRatingsAverage, 
+		deleteReview, 
+		cafeReviews, 
+		cafeRatings,
+		uploadAndGetDownloadedUrls,
 	}
 }

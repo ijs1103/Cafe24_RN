@@ -19,6 +19,7 @@ import { EmailSignupScreen } from '../screens/EmailSignupScreen';
 import { WithDrawalScreen } from '../screens/WithDrawalScreen';
 import { EditProfileScreen } from '../screens/EditProfileScreen';
 import { CafeDetailScreen } from '../screens/CafeDetailScreen';
+import { WriteReviewScreen } from '../screens/WriteReviewScreen';
 
 type MainStackParams = {
 	Main: { cafe: CafeDTO } | undefined;
@@ -26,6 +27,7 @@ type MainStackParams = {
 	Directions: { originLatLng: LatLng, destinationLatLng: LatLng };
 	Search: undefined;
 	CafeDetail: { cafe: CafeDTO | null };
+	WriteReview: { cafe: CafeDTO | null };
 };
 
 export const MainStack = createNativeStackNavigator<MainStackParams>();
@@ -42,6 +44,7 @@ export const MainStackScreen: React.FC = () => {
 			<MainStack.Screen name="Directions" component={DirectionsScreen} />
 			<MainStack.Screen name="Search" component={SearchScreen} />
 			<MainStack.Screen name="CafeDetail" component={CafeDetailScreen} />
+			<MainStack.Screen name="WriteReview" component={WriteReviewScreen} />
 		</MainStack.Navigator>
 	);
 };

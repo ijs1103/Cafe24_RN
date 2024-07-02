@@ -32,7 +32,7 @@ export const TabBar: React.FC = () => {
 					tabBarLabel: '지도',
 					tabBarStyle: ((route) => {
 						const routeName = getFocusedRouteNameFromRoute(route) ?? ""
-						if (['WebView', 'Search', 'CafeDetail'].includes(routeName)) {
+						if (['WebView', 'Search', 'CafeDetail', 'WriteReview'].includes(routeName)) {
 							return { display: "none" }
 						}
 						return

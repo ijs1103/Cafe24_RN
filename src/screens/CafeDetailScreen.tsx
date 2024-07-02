@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
 import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
-import firestore from '@react-native-firebase/firestore';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Division } from '../components/Division';
 import { ReviewItem } from '../components/ListItem/ReviewItem';
@@ -18,6 +17,7 @@ import { useAuth } from '../providers/AuthProvider';
 import { YesOrNoModal } from '../components/YesOrNoModal';
 import { useToastMessage } from '../providers/ToastMessageProvider';
 import { LoadingView } from '../components/LoadingView';
+import { useFocusEffect } from '@react-navigation/native';
 
 export const CafeDetailScreen: React.FC = () => {
 	const navigation = useMainStackNavigation<'CafeDetail'>();
@@ -40,7 +40,7 @@ export const CafeDetailScreen: React.FC = () => {
 	}, []);
 
 	const reviewWriteHandler = useCallback(() => {
-
+		navigation.navigate('WriteReview', { cafe: routes.params.cafe })
 	}, []);
 
 	const isMyReview = useCallback((reviewerId: string): boolean => {
@@ -53,13 +53,14 @@ export const CafeDetailScreen: React.FC = () => {
 
 	const reviewDeleteHandler = useCallback(async () => {
 		try {
-			if (user?.userId && routes.params.cafe?.id) {
-				await deleteReview(user.userId, routes.params.cafe.id)
-				await getCafeReviewsWithUser(routes.params.cafe.id)
+			const cafeId = routes.params.cafe?.id
+			if (user?.userId && cafeId) {
 				setModalVisible(false)
-				showToastMessage('리뷰를 삭제하였습니다.')
+				await deleteReview(user.userId, cafeId)
+				showToastMessage('리뷰를 삭제하였습니다.', () => fetchData(cafeId))
 			}
 		} catch {
+			setModalVisible(false)
 			showToastMessage('리뷰 삭제에 실패하였습니다.')
 		}
 	}, []);
@@ -81,18 +82,24 @@ export const CafeDetailScreen: React.FC = () => {
 		}
 	}, []);
 
+	const fetchData = useCallback(async (cafeId: string) => {
+		setProcessingFirebase(true)
+		await getCafeReviewsWithUser(cafeId)
+		await getCafeRatingsAverage(cafeId)
+		setProcessingFirebase(false)
+	}, []);
+
 	useEffect(() => {
 		setIsFirstLoad(false)
-		const fetchData = async (cafeId: string) => {
-			setProcessingFirebase(true)
-			await getCafeReviewsWithUser(cafeId)
-			await getCafeRatingsAverage(cafeId)
-			setProcessingFirebase(false)
-		}
-		if (routes.params.cafe?.id) {
-			fetchData(routes.params.cafe.id)
-		}
 	}, []);
+
+	useFocusEffect(
+		useCallback(() => {
+			if (routes.params.cafe?.id) {
+				fetchData(routes.params.cafe.id)
+			}
+		}, [])
+	);
 
 	if (processingFirebase) {
 		return <LoadingView />
@@ -112,7 +119,7 @@ export const CafeDetailScreen: React.FC = () => {
 					reviewsCount={cafeReviews?.length ?? 0}
 					reviewWriteHandler={reviewWriteHandler} />}
 				contentContainerStyle={{ paddingBottom: 10 }}
-				ListEmptyComponent={<ListEmptyComponent text='리뷰가 없습니다.' />}
+				ListEmptyComponent={() => <View style={styles.emptyViewContainer}><ListEmptyComponent text='리뷰가 없습니다.' /></View>}
 				onEndReached={onEndReached}
 				onEndReachedThreshold={0.1}
 				refreshing={processingFirebase}
@@ -133,4 +140,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: '#fff',
 	},
+	emptyViewContainer: {
+		marginTop: 160
+	}
 })

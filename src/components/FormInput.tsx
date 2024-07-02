@@ -184,6 +184,7 @@ const styles = StyleSheet.create({
 	input: {
 		...commonInput,
 		borderColor: '#000',
+		color: '#111'
 	},
 	errorInput: {
 		...commonInput,
