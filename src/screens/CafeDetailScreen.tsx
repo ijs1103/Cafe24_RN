@@ -9,7 +9,7 @@ import { Spacer } from '../components/Spacer';
 import { RatingsAndReviews } from '../components/RatingsAndReviews';
 import { Header } from '../components/header/Header';
 import { useMainStackNavigation, useMainStackRoute } from '../navigation/RootNavigation';
-import { FullScreenImageSlider } from './FullScreenImageSlider';
+import { FullScreenImageSlider } from '../components/FullScreenImageSlider';
 import { CafeDetailListHeader } from '../components/ListItem/CafeDetailListHeader';
 import { ListEmptyComponent } from '../components/ListEmptyComponent';
 import { useFirebase } from '../hooks/useFirebase';

@@ -3,14 +3,15 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 interface Props {
 	count: number;
+	bigSize?: boolean;
 }
 
-export const ReviewStars: React.FC<Props> = ({ count }) => {
+export const ReviewStars: React.FC<Props> = ({ count, bigSize }) => {
 	const stars = Array.from({ length: 5 }, (_, index) => {
 		if (index < count) {
-			return <Icon key={index} name='star' color={'red'} size={16} />;
+			return <Icon key={index} name='star' color={'red'} size={bigSize ? 20 : 16} />;
 		} else {
-			return <Icon key={index} name='star' color={'gray'} size={16} />;
+			return <Icon key={index} name='star' color={'gray'} size={bigSize ? 20 : 16} />;
 		}
 	});
 

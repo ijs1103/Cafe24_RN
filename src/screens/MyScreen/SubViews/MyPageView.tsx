@@ -13,7 +13,7 @@ export const MyPageView: React.FC = () => {
 	const { user, signOut } = useAuth();
 
 	const DATA = useMemo(() => [
-		{ data: [{ title: '작성한 리뷰', onPress: () => { } }] },
+		{ data: [{ title: '작성한 리뷰', onPress: () => { navigation.navigate('MyReview') } }] },
 		{ data: [{ title: '프로필 수정', onPress: () => navigation.navigate('EditProfile') }, { title: '회원탈퇴', onPress: () => navigation.navigate('WithDrawal') }, { title: '개인정보 보호방침', onPress: () => navigation.navigate('WebView', { uri: URL.PRIVACY_POLICY }) }] }
 	], []);
 

@@ -20,6 +20,7 @@ import { WithDrawalScreen } from '../screens/WithDrawalScreen';
 import { EditProfileScreen } from '../screens/EditProfileScreen';
 import { CafeDetailScreen } from '../screens/CafeDetailScreen';
 import { WriteReviewScreen } from '../screens/WriteReviewScreen';
+import { MyReviewScreen } from '../screens/MyReviewScreen';
 
 type MainStackParams = {
 	Main: { cafe: CafeDTO } | undefined;
@@ -87,6 +88,7 @@ type MyStackParams = {
 	WebView: { uri: string | undefined };
 	WithDrawal: undefined;
 	EditProfile: undefined;
+	MyReview: undefined;
 };
 
 export const MyStack = createNativeStackNavigator<MyStackParams>();
@@ -104,6 +106,7 @@ export const MyStackScreen: React.FC = () => {
 			<MyStack.Screen name='WebView' component={WebViewScreen} />
 			<MyStack.Screen name='WithDrawal' component={WithDrawalScreen} />
 			<MyStack.Screen name='EditProfile' component={EditProfileScreen} />
+			<MyStack.Screen name='MyReview' component={MyReviewScreen} />
 		</MyStack.Navigator>
 	);
 };

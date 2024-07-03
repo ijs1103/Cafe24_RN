@@ -11,6 +11,8 @@ export const useFirebase = () => {
 	const { user, setUser } = useAuth();
 	const [processingFirebase, setProcessingFirebase] = useState(false);
 	const [lastVisible, setLastVisible] = useState<FirebaseFirestoreTypes.QueryDocumentSnapshot | null>(null);
+	const [myReviewLastVisible, setMyReviewLastVisible] = useState<FirebaseFirestoreTypes.QueryDocumentSnapshot | null>(null);
+	const [myReviews, setMyReviews] = useState<Review[] | null>(null);
 	const [cafeReviews, setCafeReviews] = useState<ReviewWithUser[] | null>(null);
 	const [cafeRatings, setCafeRatings] = useState<number>(0.0);
 
@@ -66,27 +68,62 @@ export const useFirebase = () => {
 			})
 	}, []);
 
+	const getMyReviews = useCallback(async () => {
+		if (!user?.userId) return
+		try {
+			setProcessingFirebase(true)
+			let query = firestore()
+				.collection<Review>(COLLECTIONS.REVIEWS)
+				.where('userId', '==', user.userId)
+				.orderBy('createdAt', 'desc')
+				.limit(10);
+			if (myReviewLastVisible) {
+				query = query.startAfter(myReviewLastVisible);
+			}
+			const reviewsSnapshot = await query.get();
+			if (reviewsSnapshot.empty) {
+				return;
+			}
+			setMyReviewLastVisible(reviewsSnapshot.docs[reviewsSnapshot.docs.length - 1]);
+			const reviews = reviewsSnapshot.docs.map(doc => doc.data());
+			setMyReviews((prev) => {
+				if (prev != null) {
+					return prev.concat(reviews)
+				} else {
+					return reviews
+				}
+			})
+		} finally {
+			setProcessingFirebase(false)
+		}
+	}, []);
+
+	const resetMyReviewsData = useCallback(() => {
+		setMyReviewLastVisible(null);
+		setMyReviews(null);
+	}, []);
+
 	const isMyReviewExisting = useCallback(async (cafeId: string, userId: string) => {
 		const review = await firestore()
 				.collection<Review>(COLLECTIONS.REVIEWS)
 				.where('cafeId', '==', cafeId)
 				.where('userId', '==', userId)
 				.get()
-		return (review != undefined)
+		return (!review.empty)
 	}, []);
 
 	const getCafeReviewsWithUser = useCallback(async (cafeId: string) => {
-			let reviewsQuery = firestore()
+			let query = firestore()
 				.collection<Review>(COLLECTIONS.REVIEWS)
 				.where('cafeId', '==', cafeId)
 				.orderBy('createdAt', 'desc')
 				.limit(10);
 			if (lastVisible) {
-				reviewsQuery = reviewsQuery.startAfter(lastVisible);
+				query = query.startAfter(lastVisible);
 			}
-			const reviewsSnapshot = await reviewsQuery.get();
+			const reviewsSnapshot = await query.get();
 			if (reviewsSnapshot.empty) {
-				setCafeReviews(null);
+				return;
 			}
 			setLastVisible(reviewsSnapshot.docs[reviewsSnapshot.docs.length - 1]);
 			const reviews = reviewsSnapshot.docs.map(doc => doc.data());
@@ -105,11 +142,18 @@ export const useFirebase = () => {
 					};
 				})
 			);
-			setCafeReviews(reviewsWithUser);
+			setCafeReviews((prev) => {
+				if (prev != null) {
+					return prev.concat(reviewsWithUser);
+				} else {
+					return reviewsWithUser;
+				}
+			});
 	}, []);
 
 	const resetCafeReviewsData = useCallback(() => {
 		setLastVisible(null);
+		setCafeReviews(null);
 	}, []);
 
 	const getCafeRatingsAverage = useCallback(async (cafeId: string) => {
@@ -182,5 +226,8 @@ export const useFirebase = () => {
 		cafeReviews, 
 		cafeRatings,
 		uploadAndGetDownloadedUrls,
+		getMyReviews,
+		myReviews,
+		resetMyReviewsData
 	}
 }
