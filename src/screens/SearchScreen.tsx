@@ -38,6 +38,7 @@ export const SearchScreen: React.FC = () => {
 		const data = (selectedFranchise === cafe) ? null : cafe
 		setKeyword(data)
 		setSelectedFranchise(data)
+		setSelectedFilter('거리 가까운순')
 		if (data) {
 			setIsLoading(true)
 			await getCafeListFromKeyword(data, currentRegion.latitude, currentRegion.longitude).then(setCafeList)
@@ -53,6 +54,7 @@ export const SearchScreen: React.FC = () => {
 
 	const onSubmitEditing = useCallback(async (text: string) => {
 		setIsLoading(true)
+		setSelectedFilter('거리 가까운순')
 		await getCafeListFromKeyword(text, currentRegion.latitude, currentRegion.longitude).then(setCafeList)
 		setIsLoading(false)
 	}, [currentRegion]);
@@ -64,13 +66,14 @@ export const SearchScreen: React.FC = () => {
 	const filterPressHandler = useCallback((filter: FILTER_TYPE) => {
 		setSelectedFilter(filter)
 		if (cafeList) {
-			var sortedCafeList: CafeDTO[]
+			let sortedCafeList: CafeDTO[] = [...cafeList]
 			switch (filter) {
 				case '거리 가까운순':
-					sortedCafeList = cafeList.sort((a, b) => { return parseFloat(a.distance) - parseFloat(b.distance) })
-				case '리뷰 많은순':
-				case '별점 높은순':
-					sortedCafeList = cafeList
+					sortedCafeList = sortedCafeList.sort((a, b) => { return parseFloat(a.distance) - parseFloat(b.distance) })
+					break
+				case '거리 먼순':
+					sortedCafeList = sortedCafeList.sort((a, b) => { return parseFloat(b.distance) - parseFloat(a.distance) })
+					break
 			}
 			setCafeList(sortedCafeList)
 		}
@@ -115,7 +118,7 @@ export const SearchScreen: React.FC = () => {
 					</View>
 					<View style={{ flex: 1, position: 'relative', paddingVertical: 12 }}>
 						<LogoBackground selectedCafe={selectedFranchise} headerBgAnim={headerBgAnim} />
-						{isLoading ? <LoadingView /> : <FlatList data={cafeList} renderItem={({ item }) => <SearchResultItem cafeId={item.id} cafeName={item.place_name} cafeAddress={item.address_name} ratings={4.25} reviewsCount={100} distance={item.distance} onPress={() => itemPressHandler(item)} />} keyExtractor={item => item.id} ListEmptyComponent={<ListEmptyComponent text='검색 결과가 없습니다.' />} ItemSeparatorComponent={() => <Division separatorStyle />} contentContainerStyle={{ flexGrow: 1 }} />
+						{isLoading ? <LoadingView /> : <FlatList data={cafeList} renderItem={({ item }) => <SearchResultItem cafeId={item.id} cafeName={item.place_name} cafeAddress={item.address_name} distance={item.distance} onPress={() => itemPressHandler(item)} />} keyExtractor={item => item.id} ListEmptyComponent={<ListEmptyComponent text='검색 결과가 없습니다.' />} ItemSeparatorComponent={() => <Division separatorStyle />} contentContainerStyle={{ flexGrow: 1 }} />
 						}
 					</View>
 				</View>

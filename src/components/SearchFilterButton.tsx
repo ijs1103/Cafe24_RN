@@ -14,7 +14,7 @@ export const SearchFilterButton: React.FC<SearchFilterProps> = ({ selectedFilter
 	return (
 		<TouchableOpacity onPress={SearchFilterButtonPressHandler} style={{ flexDirection: 'row', paddingVertical: 4, paddingHorizontal: 6, alignItems: 'center', gap: 4, backgroundColor: isActive ? 'floralwhite' : 'transparent', borderWidth: isActive ? 0 : 1, borderColor: isActive ? 'none' : 'gray', borderRadius: 12, elevation: isActive ? 5 : 0 }}>
 			<Typography color='#444' fontSize={12}>{selectedFilter}</Typography>
-			<Icon name={isActive ? 'chevron-up' : 'chevron-down'} size={12} />
+			<Icon color='#444' name={isActive ? 'chevron-up' : 'chevron-down'} size={12} />
 		</TouchableOpacity>
 	);
 }
