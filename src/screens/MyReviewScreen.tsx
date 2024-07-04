@@ -50,7 +50,7 @@ export const MyReviewScreen: React.FC = () => {
 					keyExtractor={(item) => item.reviewId}
 					renderItem={({ item }) => <MyReviewItem review={item} imagePressHandler={() => imagePressHandler(item.reviewPhotoUrls)} />}
 					ItemSeparatorComponent={() => <Division />}
-					contentContainerStyle={{ paddingBottom: 10 }}
+					contentContainerStyle={styles.contentContainer}
 					ListEmptyComponent={() => <View style={styles.emptyViewContainer}><ListEmptyComponent text='리뷰가 없습니다.' /></View>}
 					onEndReached={onEndReached}
 					onEndReachedThreshold={0.1}
@@ -77,5 +77,8 @@ const styles = StyleSheet.create({
 	},
 	emptyViewContainer: {
 		marginTop: 160
+	},
+	contentContainer: {
+		paddingBottom: 10
 	}
 })

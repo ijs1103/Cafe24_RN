@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useMainStackNavigation, useMainStackRoute } from '../navigation/RootNavigation';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -15,9 +15,15 @@ export const WebViewScreen: React.FC = () => {
 	};
 
 	return (
-		<View style={{ flex: 1 }}>
+		<View style={styles.container}>
 			<Header goBackHandler={goBackHandler} />
 			<WebView source={{ uri: routes.params.uri ?? 'https://reactnative.dev/' }} />
 		</View>
 	);
 }; 
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  }
+});

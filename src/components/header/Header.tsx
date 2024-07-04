@@ -1,4 +1,4 @@
-import { View, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Spacer } from "../Spacer";
 
@@ -8,22 +8,13 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ goBackHandler, noBorderLine }) => {
+	const styles = getStyles(noBorderLine);
+
 	return (
 		<View
-			style={{
-				flexDirection: 'row',
-				height: 56,
-				borderBottomColor: 'gray',
-				borderBottomWidth: noBorderLine ? 0 : 1,
-				alignItems: 'center',
-			}}>
+			style={styles.container}>
 			<Spacer horizontal={true} space={12} />
-			<View
-				style={{
-					flex: 1,
-					flexDirection: 'row',
-					justifyContent: 'space-between',
-				}}>
+			<View style={styles.subContainer}>
 				<Spacer horizontal={true} space={1} />
 				<TouchableOpacity onPress={goBackHandler}>
 					<Icon name='close' size={32} color={'saddlebrown'} />
@@ -33,3 +24,18 @@ export const Header: React.FC<HeaderProps> = ({ goBackHandler, noBorderLine }) =
 		</View>
 	)
 };
+
+const getStyles = (noBorderLine?: boolean) => StyleSheet.create({
+	container: {
+		flexDirection: 'row',
+		height: 56,
+		borderBottomColor: 'gray',
+		borderBottomWidth: noBorderLine ? 0 : 1,
+		alignItems: 'center',
+	},
+	subContainer: {
+		flex: 1,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+	}
+});

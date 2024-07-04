@@ -1,4 +1,4 @@
-import { View, Button } from 'react-native';
+import { View, Button, StyleSheet } from 'react-native';
 import { AuthView } from './SubViews/AuthView';
 import { useContext } from 'react';
 import { useAuth } from '../../providers/AuthProvider';
@@ -15,8 +15,14 @@ export const MyScreen: React.FC = () => {
 	}
 
 	return (
-		<View style={{ flex: 1 }}>
+		<View style={styles.container}>
 			{user ? <MyPageView /> : <AuthView />}
 		</View>
 	);
 };
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1
+	}
+});

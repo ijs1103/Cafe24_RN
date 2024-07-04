@@ -1,4 +1,4 @@
-import { Alert, FlatList, Text, View } from 'react-native';
+import { Alert, FlatList, StyleSheet, Text, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useMainStackNavigation } from '../navigation/RootNavigation';
 import { Division } from '../components/Division';
@@ -48,8 +48,28 @@ export const FavoriteScreen: React.FC = () => {
 	);
 
 	return (
-		<View style={{ flex: 1, backgroundColor: '#fff' }}>
-			<FlatList style={{ padding: 16 }} data={cafeList} renderItem={({ item }) => <LikedCafeItem key='item.id' cafe={item} onPressAll={() => itemPressHandler(item)} onPressOption={() => optionPressHandler(item.id)} />} keyExtractor={item => item.id} ListEmptyComponent={<ListEmptyComponent text='즐겨찾기 한 카페가 없습니다.' />} ItemSeparatorComponent={() => <Division />} contentContainerStyle={{ flexGrow: 1 }} />
+		<View style={styles.container}>
+			<FlatList
+				style={styles.flatList}
+				data={cafeList}
+				renderItem={({ item }) => <LikedCafeItem key='item.id' cafe={item} onPressAll={() => itemPressHandler(item)} onPressOption={() => optionPressHandler(item.id)} />}
+				keyExtractor={item => item.id}
+				ListEmptyComponent={() => <ListEmptyComponent text='즐겨찾기 한 카페가 없습니다.' />}
+				ItemSeparatorComponent={() => <Division />}
+				contentContainerStyle={styles.contentContainer} />
 		</View>
 	);
 };
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		backgroundColor: '#fff'
+	},
+	flatList: {
+		padding: 16
+	},
+	contentContainer: {
+		flexGrow: 1
+	}
+});

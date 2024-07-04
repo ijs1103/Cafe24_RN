@@ -1,6 +1,6 @@
 
 import { useEffect } from 'react';
-import { Alert, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import MapView from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import { Header } from '../components/header/Header';
@@ -17,12 +17,11 @@ export const DirectionsScreen: React.FC = () => {
 	};
 
 	const onError = () => {
-		console.log(routes.params)
 		Alert.alert('서버 에러', '길찾기를 표시할 수 없습니다.', [{ text: '확인', onPress: goBackHandler }])
 	};
 
 	return (
-		<View style={{ flex: 1 }}>
+		<View style={styles.container}>
 			<Header goBackHandler={goBackHandler} />
 			<MapView initialRegion={{
 				latitude: routes.params.originLatLng.latitude
@@ -38,4 +37,10 @@ export const DirectionsScreen: React.FC = () => {
 			</MapView>
 		</View >
 	);
-}; 
+};
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1
+	}
+});

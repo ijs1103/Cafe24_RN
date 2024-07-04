@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react';
-import { View, TouchableOpacity, Image, ImageBackground } from 'react-native';
+import { View, TouchableOpacity, Image, ImageBackground, StyleSheet } from 'react-native';
 import { Typography } from '../../../components/Typography';
 import { Spacer } from '../../../components/Spacer';
 import auth from '@react-native-firebase/auth';
@@ -18,14 +18,14 @@ export const AuthView: React.FC = () => {
 		navigation.navigate('EmailSignup')
 	}
 	return (
-		<ImageBackground style={{ flex: 1, justifyContent: 'space-between', alignItems: 'center', paddingVertical: 36 }} source={require('../../../../assets/login_bg.jpg')} resizeMode='cover'>
-			<Image style={{ width: 240, height: 240 }} source={require('../../../../assets/logo.png')} />
+		<ImageBackground style={styles.container} source={require('../../../../assets/login_bg.jpg')} resizeMode='cover'>
+			<Image style={styles.logo} source={require('../../../../assets/logo.png')} />
 			<View>
 				<TouchableOpacity onPress={googleSignin}>
 					<GoogleButton />
 				</TouchableOpacity>
 				<Spacer space={20} />
-				<View style={{ flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: '#fff', padding: 10, borderRadius: 10 }}>
+				<View style={styles.hStack}>
 					<TouchableOpacity onPress={onPressEmailSignin}>
 						<Typography fontSize={16} fontWeight='600' color='gray'>이메일로 로그인</Typography>
 					</TouchableOpacity>
@@ -38,3 +38,23 @@ export const AuthView: React.FC = () => {
 		</ImageBackground>
 	)
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		paddingVertical: 36
+	},
+	logo: {
+		width: 240,
+		height: 240,
+	},
+	hStack: {
+		flexDirection: 'row', 
+		justifyContent: 'space-evenly', 
+		backgroundColor: '#fff', 
+		padding: 10, 
+		borderRadius: 10
+	}
+});

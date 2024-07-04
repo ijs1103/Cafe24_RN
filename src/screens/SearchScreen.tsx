@@ -1,6 +1,6 @@
-import React, { useState, useRef, useCallback, useContext } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useMainStackNavigation } from "../navigation/RootNavigation";
-import { ScrollView, Text, TextInput, Touchable, TouchableOpacity, View, Animated, FlatList } from 'react-native';
+import { ScrollView, Text, TextInput, Touchable, TouchableOpacity, View, Animated, FlatList, StyleSheet } from 'react-native';
 import { Header } from '../components/header/Header';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Spacer } from '../components/Spacer';
@@ -22,7 +22,6 @@ import { useGlobalStateValue } from '../providers/GlobalStateProvider';
 export const SearchScreen: React.FC = () => {
 	const navigation = useMainStackNavigation<'Search'>();
 	const { currentRegion } = useGlobalStateValue();
-	const headerBgAnim = useRef(new Animated.Value(0)).current;
 	const [selectedFranchise, setSelectedFranchise] = useState<FRANCHISE_CAFE_TYPE | null>(null);
 	const [keyword, setKeyword] = useState<string | null>(null);
 	const [cafeList, setCafeList] = useState<CafeDTO[] | null>(null);
@@ -87,18 +86,10 @@ export const SearchScreen: React.FC = () => {
 
 	return (
 		<KeyboardAvoidingLayout>
-			<View style={{ flex: 1, backgroundColor: 'antiquewhite' }}>
+			<View style={styles.container}>
 				<Header goBackHandler={goBackHandler} noBorderLine />
-				<View style={{ flex: 1, padding: 16 }}>
-					<View
-						style={{
-							flexDirection: 'row',
-							alignItems: 'center',
-							backgroundColor: 'snow',
-							height: 40,
-							borderRadius: 10,
-							paddingHorizontal: 20,
-						}}>
+				<View style={styles.subContainer}>
+					<View style={styles.searchBar}>
 						<Icon name="search" size={20} color={'black'} />
 						<Spacer horizontal space={10} />
 						<TextInput value={keyword ?? ''} onSubmitEditing={({ nativeEvent: { text } }) => onSubmitEditing(text)} onChangeText={text => setKeyword(text)} placeholder='내 주변 카페를 검색해보세요.' placeholderTextColor={'darkgray'} style={{ flex: 1, color: 'black', fontSize: 16, fontWeight: '700' }} onFocus={textInputFocusHandler} autoFocus />
@@ -106,18 +97,18 @@ export const SearchScreen: React.FC = () => {
 					<Spacer space={20} />
 					<Typography color='dimgray' fontSize={16} fontWeight='bold'>인기 검색어</Typography>
 					<View>
-						<ScrollView showsHorizontalScrollIndicator={false} horizontal={true} style={{ flexDirection: 'row' }}>
+						<ScrollView showsHorizontalScrollIndicator={false} horizontal={true} style={styles.hScrollView}>
 							{FRANCHISE_CAFE_LIST.map((value, index) => {
 								return <FranchiseCafeButton key={index} onPress={() => onPressFranchise(value)} isSelected={selectedFranchise === value} cafe={value} />
 							})}
 						</ScrollView>
 					</View>
-					<View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+					<View style={styles.hStack}>
 						<Typography color='dimgray' fontSize={16} fontWeight='bold'>검색 결과</Typography>
 						{cafeList && <SearchFilterButton isActive={isSearchFilterActive} selectedFilter={selectedFilter} SearchFilterButtonPressHandler={() => setIsSearchFilterActive(prev => !prev)} />}
 					</View>
-					<View style={{ flex: 1, position: 'relative', paddingVertical: 12 }}>
-						<LogoBackground selectedCafe={selectedFranchise} headerBgAnim={headerBgAnim} />
+					<View style={styles.listContainer}>
+						<LogoBackground selectedCafe={selectedFranchise} />
 						{isLoading ? <LoadingView /> : <FlatList data={cafeList} renderItem={({ item }) => <SearchResultItem cafeId={item.id} cafeName={item.place_name} cafeAddress={item.address_name} distance={item.distance} onPress={() => itemPressHandler(item)} />} keyExtractor={item => item.id} ListEmptyComponent={<ListEmptyComponent text='검색 결과가 없습니다.' />} ItemSeparatorComponent={() => <Division separatorStyle />} contentContainerStyle={{ flexGrow: 1 }} />
 						}
 					</View>
@@ -127,3 +118,35 @@ export const SearchScreen: React.FC = () => {
 		</KeyboardAvoidingLayout>
 	);
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		backgroundColor: 'antiquewhite'
+	},
+	subContainer: {
+		flex: 1,
+		padding: 16
+	},
+	searchBar: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		backgroundColor: 'snow',
+		height: 40,
+		borderRadius: 10,
+		paddingHorizontal: 20,
+	},
+	hScrollView: {
+		flexDirection: 'row'
+	},
+	hStack: {
+		flexDirection: 'row', 
+		alignItems: 'center', 
+		justifyContent: 'space-between'
+	},
+	listContainer: {
+		flex: 1, 
+		position: 'relative', 
+		paddingVertical: 12
+	}
+});

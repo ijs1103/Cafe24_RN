@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, FlatList } from 'react-native';
+import { View, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { FILTER_TYPE_LIST } from '../utils/Constants';
@@ -19,27 +19,15 @@ export const SearchFilterModal: React.FC<SearchFilterModalProps> = ({ isModalVis
 			isVisible={isModalVisible}
 			onBackdropPress={toggleModal}
 			backdropOpacity={0.5}
-			style={{
-				justifyContent: 'flex-end',
-				margin: 0,
-			}}
+			style={styles.container}
 		>
-			<View style={{
-				backgroundColor: 'white',
-				padding: 20,
-				borderTopLeftRadius: 20,
-				borderTopRightRadius: 20,
-			}}>
+			<View style={styles.subContainer}>
 				<FlatList
 					data={FILTER_TYPE_LIST}
 					keyExtractor={(item) => item}
 					renderItem={({ item }) => (
 						<TouchableOpacity
-							style={{
-								flexDirection: 'row',
-								justifyContent: 'space-between',
-								paddingVertical: 15,
-							}}
+							style={styles.button}
 							onPress={() => filterPressHandler(item)}
 						>
 							<Typography color={(selectedFilter === item) ? 'saddlebrown' : 'gray'} fontSize={16}>{item}</Typography>
@@ -51,3 +39,21 @@ export const SearchFilterModal: React.FC<SearchFilterModalProps> = ({ isModalVis
 		</Modal >
 	);
 };
+
+const styles = StyleSheet.create({
+	container: {
+		justifyContent: 'flex-end',
+		margin: 0,
+	},
+	subContainer: {
+		backgroundColor: 'white',
+		padding: 20,
+		borderTopLeftRadius: 20,
+		borderTopRightRadius: 20,
+	},
+	button: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		paddingVertical: 15,
+	}
+});

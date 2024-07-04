@@ -1,13 +1,19 @@
-import { Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from "react-native";
+import { Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, StyleSheet } from "react-native";
 
 export const KeyboardAvoidingLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	return (
 		<KeyboardAvoidingView
 			behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-			style={{ flex: 1 }}>
+			style={styles.container}>
 			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 				{children}
 			</TouchableWithoutFeedback>
 		</KeyboardAvoidingView>
 	)
 };
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1
+	}
+});

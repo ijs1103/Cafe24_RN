@@ -1,5 +1,5 @@
 import React, { useState, useRef, forwardRef, useImperativeHandle } from 'react';
-import { Animated, View, Text, Easing } from 'react-native';
+import { Animated, View, Text, Easing, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export interface ToastMessageRef {
@@ -48,23 +48,31 @@ const ToastMessage = forwardRef<ToastMessageRef>((props, ref) => {
 				],
 			}}
 		>
-			<View
-				style={{
-					backgroundColor: '#222',
-					flexDirection: 'row',
-					paddingVertical: 14,
-					paddingHorizontal: 20,
-					margin: 14,
-					borderRadius: 4,
-					alignItems: 'center',
-				}}
-			>
+			<View style={styles.subContainer}>
 				<Icon name="checkmark-circle" color="white" size={24} />
-				<Text style={{ color: 'white', fontSize: 15, marginLeft: 10 }}>
+				<Text style={styles.message}>
 					{message}
 				</Text>
 			</View>
 		</Animated.View>
 	);
 });
+
+const styles = StyleSheet.create({
+	subContainer: {
+		backgroundColor: '#222',
+		flexDirection: 'row',
+		paddingVertical: 14,
+		paddingHorizontal: 20,
+		margin: 14,
+		borderRadius: 4,
+		alignItems: 'center',
+	},
+	message: {
+		color: 'white',
+		fontSize: 15,
+		marginLeft: 10
+	}
+});
+
 export default ToastMessage;

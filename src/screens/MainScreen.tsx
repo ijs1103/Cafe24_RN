@@ -1,6 +1,6 @@
 import Geolocation from '@react-native-community/geolocation';
 import { useCallback, useEffect, useState, useRef, useContext } from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import MapView, { Marker, Region, LatLng } from 'react-native-maps';
 import { useFocusEffect } from '@react-navigation/native';
 import { TrueSheet } from "@lodev09/react-native-true-sheet";
@@ -166,11 +166,11 @@ export const MainScreen: React.FC = () => {
 	);
 
 	return (
-		<View style={{ flex: 1 }}>
+		<View style={styles.container}>
 			<SearchBarHeader onPress={onPressSearchBarHeader} />
 			<MapView
 				ref={mapViewRef}
-				style={{ flex: 1 }}
+				style={styles.container}
 				region={{
 					latitude: currentRegion.latitude,
 					longitude: currentRegion.longitude,
@@ -225,3 +225,9 @@ export const MainScreen: React.FC = () => {
 		</View >
 	);
 };
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1
+	}
+});

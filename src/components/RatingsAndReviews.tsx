@@ -1,12 +1,18 @@
-import { View } from "react-native"
+import { StyleSheet, View } from "react-native"
 import Icon from "react-native-vector-icons/Ionicons"
 import { Spacer } from "./Spacer"
 import { Typography } from "./Typography"
 
-export const RatingsAndReviews: React.FC<{ ratings: number; reviewsCount: number; small?: boolean; }> = ({ ratings, reviewsCount, small }) => {
+interface Props {
+	ratings: number;
+	reviewsCount: number;
+	small?: boolean;
+}
+
+export const RatingsAndReviews: React.FC<Props> = ({ ratings, reviewsCount, small }) => {
 	return (
-		<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-			<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+		<View style={styles.hStack}>
+			<View style={styles.hStack}>
 				<Icon name='star-sharp' size={small ? 12 : 16} color='crimson' />
 				<Typography fontSize={small ? 12 : 16} color='dimgray' fontWeight='600'>{`${ratings}`}</Typography>
 			</View>
@@ -17,3 +23,10 @@ export const RatingsAndReviews: React.FC<{ ratings: number; reviewsCount: number
 		</View>
 	)
 }
+
+const styles = StyleSheet.create({
+	hStack: {
+		flexDirection: 'row',
+		alignItems: 'center'
+	}
+});

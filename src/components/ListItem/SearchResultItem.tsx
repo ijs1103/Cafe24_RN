@@ -1,4 +1,4 @@
-import { TouchableOpacity, View } from "react-native"
+import { TouchableOpacity, View, StyleSheet } from "react-native"
 import Icon from 'react-native-vector-icons/Ionicons'
 import { Spacer } from "../Spacer"
 import { Typography } from "../Typography"
@@ -14,8 +14,8 @@ interface SearchResultItemProps {
 
 export const SearchResultItem: React.FC<SearchResultItemProps> = ({ cafeId, cafeName, cafeAddress, onPress, distance }) => {
 	return (
-		<TouchableOpacity key={cafeId} onPress={onPress} style={{ flex: 1, paddingVertical: 12 }}>
-			<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+		<TouchableOpacity key={cafeId} onPress={onPress} style={styles.container}>
+			<View style={styles.hStack}>
 				<Typography fontWeight='800' fontSize={16} color='#111'>{cafeName}</Typography>
 				<Typography fontWeight='900' fontSize={12} color='saddlebrown'>{distance}m</Typography>
 			</View>
@@ -25,3 +25,14 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ cafeId, cafe
 		</TouchableOpacity>
 	)
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		paddingVertical: 12
+	},
+	hStack: {
+		flexDirection: 'row',
+		justifyContent: 'space-between'
+	}
+});

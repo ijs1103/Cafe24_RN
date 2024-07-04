@@ -1,5 +1,5 @@
-import React, { useCallback, forwardRef } from "react";
-import { View, Pressable, TouchableOpacity, Alert, Linking, Share } from "react-native";
+import { useCallback, forwardRef } from "react";
+import { View, Pressable, TouchableOpacity, Alert, Linking, Share, StyleSheet } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { SizeInfo, TrueSheet } from "@lodev09/react-native-true-sheet";
@@ -67,17 +67,15 @@ export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, webV
 	return (
 		<TrueSheet
 			ref={ref}
-			style={{
-				elevation: 10
-			}}
+			style={styles.container}
 			sizes={['auto', 'large']}
 			dimmed={false}
 			cornerRadius={16}
 			onSizeChange={onSizeChange}
 		>
 			{isLoading ? <LoadingView /> : <View style={{ backgroundColor: 'white' }}>
-				<View style={{ paddingHorizontal: 14, paddingVertical: 16 }}>
-					<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+				<View style={styles.headerContainer}>
+					<View style={styles.likeButton}>
 						<Typography fontSize={18} fontWeight='800' color='rebeccapurple' numberOfLines={1}>{cafe?.place_name ?? '알 수 없음'}</Typography>
 						<TouchableOpacity onPress={likeHandler}>
 							<Icon name={isLiked ? 'heart' : 'heart-outline'} size={30} color='crimson' />
@@ -86,12 +84,12 @@ export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, webV
 					<Spacer space={20} />
 					<RatingsAndReviews ratings={ratings} reviewsCount={reviewsCount} />
 					<Spacer space={10} />
-					<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+					<View style={styles.hStack}>
 						<Typography fontSize={16} fontWeight='800'>{cafe?.distance ? `${cafe.distance}m` : '알 수 없음'}</Typography>
 						<Spacer horizontal={true} space={4} />
 						<Typography fontSize={16} color='darkgray'>•</Typography>
 						<Spacer horizontal={true} space={4} />
-						<Pressable style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => copyToClipboard(cafe?.address_name)}>
+						<Pressable style={styles.hStack} onPress={() => copyToClipboard(cafe?.address_name)}>
 							<Typography fontSize={16} color='dimgray' fontWeight='600'>{cafe?.address_name ?? '알 수 없음'}</Typography>
 							<Spacer horizontal={true} space={4} />
 							<Icon name='copy-sharp' size={14} color='yellowgreen' />
@@ -99,8 +97,8 @@ export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, webV
 					</View>
 				</View>
 				<Division />
-				<View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 14, paddingVertical: 16 }}>
-					<View style={{ flexDirection: 'row', alignItems: 'center', gap: 26 }}>
+				<View style={styles.bottomContainer}>
+					<View style={styles.buttonsContainer}>
 						<TouchableOpacity onPress={onPressCall}>
 							<Icon name='call' color={'gray'} size={24} />
 						</TouchableOpacity>
@@ -111,11 +109,47 @@ export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, webV
 							<Icon name='share-social' color={'gray'} size={24} />
 						</TouchableOpacity>
 					</View>
-					<TouchableOpacity style={{ backgroundColor: 'rebeccapurple', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 18, alignItems: 'center' }} onPress={directionsHandler}>
+					<TouchableOpacity style={styles.directionButton} onPress={directionsHandler}>
 						<Typography color='mintcream' fontSize={14}>길찾기</Typography>
 					</TouchableOpacity>
 				</View>
 			</View>}
 		</TrueSheet>
 	)
+});
+
+const styles = StyleSheet.create({
+  container: {
+    elevation: 10
+  },
+	headerContainer: {
+		paddingHorizontal: 14, 
+		paddingVertical: 16
+	},
+	likeButton: {
+		flexDirection: 'row', 
+		justifyContent: 'space-between', 
+		alignItems: 'center'
+	},
+	hStack: {
+		flexDirection: 'row', alignItems: 'center'
+	},
+	bottomContainer: {
+		flexDirection: 'row', 
+		justifyContent: 'space-between', 
+		paddingHorizontal: 14, 
+		paddingVertical: 16
+	},
+	buttonsContainer: {
+		flexDirection: 'row', 
+		alignItems: 'center', 
+		gap: 26
+	},
+	directionButton: {
+		backgroundColor: 'rebeccapurple', 
+		paddingHorizontal: 14, 
+		paddingVertical: 8, 
+		borderRadius: 18, 
+		alignItems: 'center'
+	}
 });
