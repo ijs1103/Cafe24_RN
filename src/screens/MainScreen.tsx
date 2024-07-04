@@ -15,6 +15,7 @@ import { DELTA } from '../utils/Constants';
 import { deleteFromLikedCafeList, isLikedCafe, addToLikedCafeList } from '../utils/Storage';
 import { useGlobalStateValue, useGlobalStateActions } from '../providers/GlobalStateProvider';
 import { useToastMessage } from '../providers/ToastMessageProvider';
+import { useFirebase } from '../hooks/useFirebase';
 
 export const MainScreen: React.FC = () => {
 	const navigation = useMainStackNavigation<'Main'>();
@@ -22,6 +23,7 @@ export const MainScreen: React.FC = () => {
 	const { currentRegion } = useGlobalStateValue();
 	const { setCurrentRegion } = useGlobalStateActions();
 	const { showToastMessage } = useToastMessage();
+	const { getCafeRatingsAverage, cafeRatings, getReviewsCount, reviewsCount, processingFirebase, setProcessingFirebase } = useFirebase();
 	const bottomSheetRef = useRef<TrueSheet>(null);
 	const mapViewRef = useRef<MapView>(null);
 	const [isMapReady, setIsMapReady] = useState<boolean>(false);
@@ -84,9 +86,13 @@ export const MainScreen: React.FC = () => {
 		await bottomSheetRef.current?.dismiss()
 	}, [bottomSheetRef]);
 
-	const onPressMarker = useCallback<(cafe: CafeDTO) => void>(cafe => {
+	const onPressMarker = useCallback<(cafe: CafeDTO) => void>(async cafe => {
+		setProcessingFirebase(true)
 		setSelectedCafe(cafe);
+		await getCafeRatingsAverage(cafe.id);
+		await getReviewsCount(cafe.id);
 		presentTrueSheet();
+		setProcessingFirebase(false)
 	}, []);
 
 	const webViewHandler = useCallback(() => {
@@ -205,7 +211,17 @@ export const MainScreen: React.FC = () => {
 				})}
 			</MapView>
 			<MyLocationButton onPress={onPressMyLocationButton} />
-			<BottomSheet ref={bottomSheetRef} cafe={selectedCafe} webViewHandler={webViewHandler} directionsHandler={directionsHandler} isLiked={isLiked} likeHandler={likeHandler} sheetSizeChangeHandler={sheetSizeChangeHandler} />
+			<BottomSheet
+				ref={bottomSheetRef}
+				cafe={selectedCafe}
+				ratings={cafeRatings}
+				reviewsCount={reviewsCount}
+				webViewHandler={webViewHandler}
+				directionsHandler={directionsHandler}
+				isLoading={processingFirebase}
+				isLiked={isLiked}
+				likeHandler={likeHandler}
+				sheetSizeChangeHandler={sheetSizeChangeHandler} />
 		</View >
 	);
 };

@@ -69,7 +69,7 @@ export const CafeDetailScreen: React.FC = () => {
 			if (user?.userId && cafeId) {
 				setModalVisible(false)
 				await deleteReview(user.userId, cafeId)
-				showToastMessage('리뷰를 삭제하였습니다.', () => fetchData(cafeId))
+				showToastMessage('리뷰를 삭제하였습니다.', onRefresh)
 			}
 		} catch {
 			setModalVisible(false)
@@ -90,6 +90,7 @@ export const CafeDetailScreen: React.FC = () => {
 			setProcessingFirebase(true)
 			resetCafeReviewsData()
 			await getCafeReviewsWithUser(routes.params.cafe.id)
+			await getCafeRatingsAverage(routes.params.cafe.id)
 			setProcessingFirebase(false)
 		}
 	}, []);

@@ -13,6 +13,7 @@ export const useFirebase = () => {
 	const [lastVisible, setLastVisible] = useState<FirebaseFirestoreTypes.QueryDocumentSnapshot | null>(null);
 	const [myReviewLastVisible, setMyReviewLastVisible] = useState<FirebaseFirestoreTypes.QueryDocumentSnapshot | null>(null);
 	const [myReviews, setMyReviews] = useState<Review[] | null>(null);
+	const [reviewsCount, setReviewsCount] = useState(0);
 	const [cafeReviews, setCafeReviews] = useState<ReviewWithUser[] | null>(null);
 	const [cafeRatings, setCafeRatings] = useState<number>(0.0);
 
@@ -95,6 +96,18 @@ export const useFirebase = () => {
 			})
 		} finally {
 			setProcessingFirebase(false)
+		}
+	}, []);
+
+	const getReviewsCount = useCallback(async (cafeId: string) => {
+		try {
+			const reviews = await firestore()
+			.collection<Review>(COLLECTIONS.REVIEWS)
+			.where('cafeId', '==', cafeId)
+			.get()
+			setReviewsCount(reviews.size)
+		} catch {
+			setReviewsCount(0)
 		}
 	}, []);
 
@@ -228,6 +241,8 @@ export const useFirebase = () => {
 		uploadAndGetDownloadedUrls,
 		getMyReviews,
 		myReviews,
-		resetMyReviewsData
+		resetMyReviewsData,
+		getReviewsCount,
+		reviewsCount
 	}
 }

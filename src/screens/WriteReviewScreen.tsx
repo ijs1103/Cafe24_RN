@@ -61,6 +61,7 @@ export const WriteReviewScreen = () => {
 					reviewId: `${cafeId}_${userId}`,
 					userId,
 					cafeId,
+					cafeName: routes.params.cafe.place_name,
 					rating,
 					comment: text,
 					reviewPhotoUrls: downloadedUrls,

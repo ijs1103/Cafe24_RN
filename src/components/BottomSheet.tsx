@@ -17,12 +17,15 @@ interface BottomSheetProps {
 	cafe: CafeDTO | null;
 	webViewHandler: () => void;
 	directionsHandler: () => void;
+	isLoading: boolean;
 	isLiked: boolean;
 	likeHandler: () => void;
 	sheetSizeChangeHandler: () => void;
+	ratings: number;
+	reviewsCount: number;
 }
 
-export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, webViewHandler, directionsHandler, isLiked, likeHandler, sheetSizeChangeHandler }, ref) => {
+export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, webViewHandler, directionsHandler, isLoading, isLiked, likeHandler, sheetSizeChangeHandler, ratings, reviewsCount }, ref) => {
 	const { showToastMessage } = useToastMessage();
 
 	const copyToClipboard = useCallback((text?: string) => {
@@ -72,7 +75,7 @@ export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, webV
 			cornerRadius={16}
 			onSizeChange={onSizeChange}
 		>
-			<View style={{ backgroundColor: 'white' }}>
+			{isLoading ? <LoadingView /> : <View style={{ backgroundColor: 'white' }}>
 				<View style={{ paddingHorizontal: 14, paddingVertical: 16 }}>
 					<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
 						<Typography fontSize={18} fontWeight='800' color='rebeccapurple' numberOfLines={1}>{cafe?.place_name ?? '알 수 없음'}</Typography>
@@ -81,7 +84,7 @@ export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, webV
 						</TouchableOpacity>
 					</View>
 					<Spacer space={20} />
-					<RatingsAndReviews ratings={4.25} reviewsCount={100} />
+					<RatingsAndReviews ratings={ratings} reviewsCount={reviewsCount} />
 					<Spacer space={10} />
 					<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 						<Typography fontSize={16} fontWeight='800'>{cafe?.distance ? `${cafe.distance}m` : '알 수 없음'}</Typography>
@@ -112,7 +115,7 @@ export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, webV
 						<Typography color='mintcream' fontSize={14}>길찾기</Typography>
 					</TouchableOpacity>
 				</View>
-			</View>
+			</View>}
 		</TrueSheet>
 	)
 });

@@ -31,6 +31,7 @@ export interface Review {
   reviewId: string;
   userId: string;
   cafeId: string;
+  cafeName: string;
   rating: number;
   comment: string;
   reviewPhotoUrls: string[];
@@ -41,10 +42,6 @@ export interface ReviewWithUser extends Review {
   userId: string;
   userName: string;
   userProfileUrl?: string;
-}
-
-export interface Cafe {
-  cafeId: string;
 }
 
 export type SIGNUP_TYPE = typeof SIGNUP[keyof typeof SIGNUP];

@@ -13,6 +13,7 @@ interface Props {
 export const MyReviewItem: React.FC<Props> = ({ review, imagePressHandler }) => {
 	return (
 		<View style={styles.container}>
+			<Typography color='saddlebrown' fontSize={20} fontWeight='700'>{review.cafeName}</Typography>
 			<ReviewStars count={review.rating} bigSize />
 			<Spacer space={10} />
 			{review.reviewPhotoUrls.length > 0 && <><TouchableOpacity onPress={imagePressHandler}>
@@ -31,6 +32,11 @@ const styles = StyleSheet.create({
 		paddingVertical: 10,
 		flex: 1,
 		gap: 10,
+	},
+	hStack: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center'
 	},
 	cafeImage: {
 		width: '60%',
