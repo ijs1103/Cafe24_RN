@@ -9,8 +9,7 @@ import { Spacer } from "../components/Spacer";
 import { Division } from "../components/Division";
 import { SubmitButton } from "../components/SubmitButton";
 import { Header } from "../components/header/Header";
-import { useAuth } from "../providers/AuthProvider";
-import { useToastMessage } from "../providers/ToastMessageProvider";
+import { useGlobalState } from "../providers/GlobalStateProvider";
 
 interface ISignupForm {
 	EMAIL: string;
@@ -21,8 +20,7 @@ interface ISignupForm {
 
 export const EmailSignupScreen: React.FC = () => {
 	const navigation = useMyStackNavigation();
-	const { emailSignup, processingSignup } = useAuth();
-	const { showToastMessage } = useToastMessage();
+	const { emailSignup, processingSignup, showToastMessage } = useGlobalState();
 	const { formState: { errors, isValid }, handleSubmit, control, getValues, setValue, clearErrors } =
 		useForm<ISignupForm>({ mode: 'onChange' });
 	const passwordRef = useRef<TextInput>(null);

@@ -5,11 +5,10 @@ import FormInput from '../components/FormInput';
 import { KeyboardAvoidingLayout } from '../components/KeyboardAvoidingLayout';
 import { useForm } from 'react-hook-form';
 import { SubmitButton } from '../components/SubmitButton';
-import { useAuth } from '../providers/AuthProvider';
+import { useGlobalState } from '../providers/GlobalStateProvider';
 import { Header } from '../components/header/Header';
 import { useMyStackNavigation } from '../navigation/RootNavigation';
 import ImagePicker from 'react-native-image-crop-picker';
-import { useToastMessage } from '../providers/ToastMessageProvider';
 import { useFirebase } from '../hooks/useFirebase';
 
 interface IEditProfileForm {
@@ -18,8 +17,7 @@ interface IEditProfileForm {
 
 export const EditProfileScreen = () => {
 	const navigation = useMyStackNavigation();
-	const { user } = useAuth();
-	const { showToastMessage } = useToastMessage();
+	const { user, showToastMessage } = useGlobalState();
 	const { processingFirebase, updateUserName, updateProfileImage } = useFirebase();
 	const [uri, setUri] = useState(user?.profileUrl);
 	const [isUriChanged, setIsUriChanged] = useState(false);

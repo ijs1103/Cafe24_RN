@@ -17,11 +17,11 @@ import { SearchFilterButton } from '../components/SearchFilterButton';
 import { SearchFilterModal } from '../components/SearchFilterModal';
 import { FranchiseCafeButton } from '../components/FranchiseCafeButton';
 import { LoadingView } from '../components/LoadingView';
-import { useGlobalStateValue } from '../providers/GlobalStateProvider';
+import { useGlobalState } from '../providers/GlobalStateProvider';
 
 export const SearchScreen: React.FC = () => {
 	const navigation = useMainStackNavigation<'Search'>();
-	const { currentRegion } = useGlobalStateValue();
+	const { currentRegion } = useGlobalState();
 	const [selectedFranchise, setSelectedFranchise] = useState<FRANCHISE_CAFE_TYPE | null>(null);
 	const [keyword, setKeyword] = useState<string | null>(null);
 	const [cafeList, setCafeList] = useState<CafeDTO[] | null>(null);
@@ -140,13 +140,13 @@ const styles = StyleSheet.create({
 		flexDirection: 'row'
 	},
 	hStack: {
-		flexDirection: 'row', 
-		alignItems: 'center', 
+		flexDirection: 'row',
+		alignItems: 'center',
 		justifyContent: 'space-between'
 	},
 	listContainer: {
-		flex: 1, 
-		position: 'relative', 
+		flex: 1,
+		position: 'relative',
 		paddingVertical: 12
 	}
 });

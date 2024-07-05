@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { View, Image, StyleSheet, Button, SectionList, TouchableOpacity } from "react-native";
 import { useMyStackNavigation } from "../../../navigation/RootNavigation";
-import { useAuth } from "../../../providers/AuthProvider";
+import { useGlobalState } from "../../../providers/GlobalStateProvider";
 import { Typography } from "../../../components/Typography";
 import { Spacer } from "../../../components/Spacer";
 import { MyPageItem } from "../../../components/ListItem/MyPageItem";
@@ -18,7 +18,7 @@ const ListFooterComponent: React.FC<{ signOutHandler: () => void; }> = ({ signOu
 
 export const MyPageView: React.FC = () => {
 	const navigation = useMyStackNavigation<'My'>();
-	const { user, signOut } = useAuth();
+	const { user, signOut } = useGlobalState();
 
 	const DATA = useMemo(() => [
 		{ data: [{ title: '작성한 리뷰', onPress: () => { navigation.navigate('MyReview') } }] },

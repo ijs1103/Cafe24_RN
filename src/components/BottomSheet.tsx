@@ -9,7 +9,7 @@ import { Spacer } from './Spacer';
 import { Division } from './Division';
 import { CafeDTO } from '../utils/Types';
 import { RatingsAndReviews } from "./RatingsAndReviews";
-import { useToastMessage } from "../providers/ToastMessageProvider";
+import { useGlobalState } from "../providers/GlobalStateProvider";
 import { useFirebase } from "../hooks/useFirebase";
 
 interface BottomSheetProps {
@@ -24,7 +24,7 @@ interface BottomSheetProps {
 }
 
 export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, webViewHandler, directionsHandler, isLiked, likeHandler, sheetSizeChangeHandler, ratings, reviewsCount }, ref) => {
-	const { showToastMessage } = useToastMessage();
+	const { showToastMessage } = useGlobalState();
 
 	const copyToClipboard = useCallback((text?: string) => {
 		if (!text) { return };

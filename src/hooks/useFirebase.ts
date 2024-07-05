@@ -4,11 +4,11 @@ import auth from '@react-native-firebase/auth';
 import { COLLECTIONS } from '../utils/Constants';
 import storage from '@react-native-firebase/storage';
 import { v4 as uuid } from 'uuid';
-import { useAuth } from '../providers/AuthProvider';
+import { useGlobalState } from '../providers/GlobalStateProvider';
 import { Review, ReviewWithUser, User } from '../utils/Types';
 
 export const useFirebase = () => {
-	const { user, setUser } = useAuth();
+	const { user, setUser } = useGlobalState();
 	const [processingFirebase, setProcessingFirebase] = useState(false);
 	const [lastVisible, setLastVisible] = useState<FirebaseFirestoreTypes.QueryDocumentSnapshot | null>(null);
 	const [myReviewLastVisible, setMyReviewLastVisible] = useState<FirebaseFirestoreTypes.QueryDocumentSnapshot | null>(null);

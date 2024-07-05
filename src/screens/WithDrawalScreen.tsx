@@ -5,13 +5,11 @@ import { SubmitButton } from '../components/SubmitButton';
 import { useMyStackNavigation } from '../navigation/RootNavigation';
 import { Header } from '../components/header/Header';
 import { useFirebase } from '../hooks/useFirebase';
-import { useAuth } from '../providers/AuthProvider';
-import { useToastMessage } from '../providers/ToastMessageProvider';
+import { useGlobalState } from '../providers/GlobalStateProvider';
 
 export const WithDrawalScreen = () => {
 	const navigation = useMyStackNavigation<'WithDrawal'>();
-	const { user, signOut } = useAuth();
-	const { showToastMessage } = useToastMessage();
+	const { user, signOut, showToastMessage } = useGlobalState();
 	const { deleteUser, processingFirebase } = useFirebase();
 	const goBackHandler = () => {
 		navigation.goBack();

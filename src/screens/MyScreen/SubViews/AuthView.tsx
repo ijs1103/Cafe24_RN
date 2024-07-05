@@ -5,11 +5,11 @@ import { Spacer } from '../../../components/Spacer';
 import auth from '@react-native-firebase/auth';
 import GoogleButton from '../../../../assets/google_button.svg';
 import { useMyStackNavigation } from '../../../navigation/RootNavigation';
-import { useAuth } from '../../../providers/AuthProvider';
+import { useGlobalState } from '../../../providers/GlobalStateProvider';
 
 export const AuthView: React.FC = () => {
 	const navigation = useMyStackNavigation<'My'>();
-	const { googleSignin } = useAuth();
+	const { googleSignin } = useGlobalState();
 
 	const onPressEmailSignin = () => {
 		navigation.navigate('EmailSignin')
@@ -51,10 +51,10 @@ const styles = StyleSheet.create({
 		height: 240,
 	},
 	hStack: {
-		flexDirection: 'row', 
-		justifyContent: 'space-evenly', 
-		backgroundColor: '#fff', 
-		padding: 10, 
+		flexDirection: 'row',
+		justifyContent: 'space-evenly',
+		backgroundColor: '#fff',
+		padding: 10,
 		borderRadius: 10
 	}
 });

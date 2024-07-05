@@ -13,17 +13,15 @@ import { FullScreenImageSlider } from '../components/FullScreenImageSlider';
 import { CafeDetailListHeader } from '../components/ListItem/CafeDetailListHeader';
 import { ListEmptyComponent } from '../components/ListEmptyComponent';
 import { useFirebase } from '../hooks/useFirebase';
-import { useAuth } from '../providers/AuthProvider';
+import { useGlobalState } from '../providers/GlobalStateProvider';
 import { YesOrNoModal } from '../components/YesOrNoModal';
-import { useToastMessage } from '../providers/ToastMessageProvider';
 import { LoadingView } from '../components/LoadingView';
 import { useFocusEffect } from '@react-navigation/native';
 
 export const CafeDetailScreen: React.FC = () => {
 	const navigation = useMainStackNavigation<'CafeDetail'>();
 	const routes = useMainStackRoute<'CafeDetail'>();
-	const { user } = useAuth()
-	const { showToastMessage } = useToastMessage()
+	const { user, showToastMessage } = useGlobalState();
 	const { getCafeReviewsWithUser, getCafeRatingsAverage, resetCafeReviewsData, processingFirebase, setProcessingFirebase, deleteReview, cafeReviews, cafeRatings, isMyReviewExisting } = useFirebase()
 	const [imageSliderVisible, setImageSliderVisible] = useState(false);
 	const [selectedPhotoUrls, setSelectedPhotoUrls] = useState<ImageViewResourceType[]>([]);

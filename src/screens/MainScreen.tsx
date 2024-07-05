@@ -13,16 +13,13 @@ import { MyLocationButton } from '../components/MyLocationButton';
 import { BottomSheet } from '../components/BottomSheet';
 import { DELTA } from '../utils/Constants';
 import { deleteFromLikedCafeList, isLikedCafe, addToLikedCafeList } from '../utils/Storage';
-import { useGlobalStateValue, useGlobalStateActions } from '../providers/GlobalStateProvider';
-import { useToastMessage } from '../providers/ToastMessageProvider';
+import { useGlobalState } from '../providers/GlobalStateProvider';
 import { useFirebase } from '../hooks/useFirebase';
 
 export const MainScreen: React.FC = () => {
 	const navigation = useMainStackNavigation<'Main'>();
 	const routes = useMainStackRoute<'Main'>();
-	const { currentRegion } = useGlobalStateValue();
-	const { setCurrentRegion } = useGlobalStateActions();
-	const { showToastMessage } = useToastMessage();
+	const { currentRegion, setCurrentRegion, showToastMessage } = useGlobalState();
 	const { getCafeRatingsAverage, cafeRatings, getReviewsCount, reviewsCount, setProcessingFirebase } = useFirebase();
 	const bottomSheetRef = useRef<TrueSheet>(null);
 	const mapViewRef = useRef<MapView>(null);

@@ -1,12 +1,12 @@
 import { View, Button, StyleSheet } from 'react-native';
 import { AuthView } from './SubViews/AuthView';
 import { useContext } from 'react';
-import { useAuth } from '../../providers/AuthProvider';
+import { useGlobalState } from '../../providers/GlobalStateProvider';
 import { MyPageView } from './SubViews/MyPageView';
 import { LoadingView } from '../../components/LoadingView';
 
 export const MyScreen: React.FC = () => {
-	const { user, processingSignin } = useAuth();
+	const { user, processingSignin } = useGlobalState();
 
 	if (processingSignin) {
 		return (

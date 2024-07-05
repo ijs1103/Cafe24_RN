@@ -8,9 +8,8 @@ import { LongTextInput } from '../components/LongTextInput';
 import { SubmitButton } from '../components/SubmitButton';
 import { BackButtonTitleHeader } from '../components/header/BackButtonTitleHeader';
 import { ImageUploadingView } from '../components/ImageUploadingView';
-import { useToastMessage } from '../providers/ToastMessageProvider';
 import { useFirebase } from '../hooks/useFirebase';
-import { useAuth } from '../providers/AuthProvider';
+import { useGlobalState } from '../providers/GlobalStateProvider';
 import firestore from '@react-native-firebase/firestore';
 
 interface IWriteReviewForm {
@@ -20,8 +19,7 @@ interface IWriteReviewForm {
 export const WriteReviewScreen = () => {
 	const navigation = useMainStackNavigation<'WriteReview'>();
 	const routes = useMainStackRoute<'WriteReview'>();
-	const { showToastMessage } = useToastMessage();
-	const { user } = useAuth();
+	const { user, showToastMessage} = useGlobalState();
 	const { addReview, uploadAndGetDownloadedUrls, processingFirebase, setProcessingFirebase } = useFirebase();
 	const [rating, setRating] = useState(0);
 	const [text, setText] = useState('');
