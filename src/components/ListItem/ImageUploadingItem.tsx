@@ -1,5 +1,6 @@
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { CachedImage } from '../CachedImage';
 
 interface Props {
 	imageUrl: string;
@@ -10,7 +11,7 @@ export const ImageUploadingItem: React.FC<Props> = ({ imageUrl, imageCloseHandle
 	return (
 		<TouchableOpacity style={styles.container}>
 			<View style={styles.imageContainer}>
-				<Image style={styles.image} source={{ uri: imageUrl }} />
+				<CachedImage style={styles.image} uri={imageUrl}  />
 			</View>
 			<TouchableOpacity style={styles.icon} onPress={imageCloseHandler}>
 				<Icon name='close-circle' size={30} color={'#fff'} />

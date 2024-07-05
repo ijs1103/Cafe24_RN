@@ -4,6 +4,7 @@ import { formatTimestamp } from '../../utils/Utils';
 import { ReviewStars } from '../ReviewStars';
 import { Spacer } from '../Spacer';
 import { Typography } from '../Typography';
+import { CachedImage } from '../CachedImage';
 
 interface Props {
 	review: Review;
@@ -17,7 +18,7 @@ export const MyReviewItem: React.FC<Props> = ({ review, imagePressHandler }) => 
 			<ReviewStars count={review.rating} bigSize />
 			<Spacer space={10} />
 			{review.reviewPhotoUrls.length > 0 && <><TouchableOpacity onPress={imagePressHandler}>
-				<Image style={styles.cafeImage} source={{ uri: review.reviewPhotoUrls[0] }} />
+				<CachedImage style={styles.cafeImage} uri={review.reviewPhotoUrls[0]} />
 			</TouchableOpacity>
 				<Spacer space={10} /></>}
 			<Typography fontSize={16} fontWeight='600'>{review.comment}</Typography>

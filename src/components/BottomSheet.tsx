@@ -11,13 +11,11 @@ import { CafeDTO } from '../utils/Types';
 import { RatingsAndReviews } from "./RatingsAndReviews";
 import { useToastMessage } from "../providers/ToastMessageProvider";
 import { useFirebase } from "../hooks/useFirebase";
-import { LoadingView } from "./LoadingView";
 
 interface BottomSheetProps {
 	cafe: CafeDTO | null;
 	webViewHandler: () => void;
 	directionsHandler: () => void;
-	isLoading: boolean;
 	isLiked: boolean;
 	likeHandler: () => void;
 	sheetSizeChangeHandler: () => void;
@@ -25,7 +23,7 @@ interface BottomSheetProps {
 	reviewsCount: number;
 }
 
-export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, webViewHandler, directionsHandler, isLoading, isLiked, likeHandler, sheetSizeChangeHandler, ratings, reviewsCount }, ref) => {
+export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, webViewHandler, directionsHandler, isLiked, likeHandler, sheetSizeChangeHandler, ratings, reviewsCount }, ref) => {
 	const { showToastMessage } = useToastMessage();
 
 	const copyToClipboard = useCallback((text?: string) => {
@@ -73,7 +71,7 @@ export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, webV
 			cornerRadius={16}
 			onSizeChange={onSizeChange}
 		>
-			{isLoading ? <LoadingView /> : <View style={{ backgroundColor: 'white' }}>
+			<View style={{ backgroundColor: 'white' }}>
 				<View style={styles.headerContainer}>
 					<View style={styles.likeButton}>
 						<Typography fontSize={18} fontWeight='800' color='rebeccapurple' numberOfLines={1}>{cafe?.place_name ?? '알 수 없음'}</Typography>
@@ -113,43 +111,43 @@ export const BottomSheet = forwardRef<TrueSheet, BottomSheetProps>(({ cafe, webV
 						<Typography color='mintcream' fontSize={14}>길찾기</Typography>
 					</TouchableOpacity>
 				</View>
-			</View>}
+			</View>
 		</TrueSheet>
 	)
 });
 
 const styles = StyleSheet.create({
-  container: {
-    elevation: 10
-  },
+	container: {
+		elevation: 10
+	},
 	headerContainer: {
-		paddingHorizontal: 14, 
+		paddingHorizontal: 14,
 		paddingVertical: 16
 	},
 	likeButton: {
-		flexDirection: 'row', 
-		justifyContent: 'space-between', 
+		flexDirection: 'row',
+		justifyContent: 'space-between',
 		alignItems: 'center'
 	},
 	hStack: {
 		flexDirection: 'row', alignItems: 'center'
 	},
 	bottomContainer: {
-		flexDirection: 'row', 
-		justifyContent: 'space-between', 
-		paddingHorizontal: 14, 
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		paddingHorizontal: 14,
 		paddingVertical: 16
 	},
 	buttonsContainer: {
-		flexDirection: 'row', 
-		alignItems: 'center', 
+		flexDirection: 'row',
+		alignItems: 'center',
 		gap: 26
 	},
 	directionButton: {
-		backgroundColor: 'rebeccapurple', 
-		paddingHorizontal: 14, 
-		paddingVertical: 8, 
-		borderRadius: 18, 
+		backgroundColor: 'rebeccapurple',
+		paddingHorizontal: 14,
+		paddingVertical: 8,
+		borderRadius: 18,
 		alignItems: 'center'
 	}
 });

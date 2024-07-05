@@ -23,7 +23,7 @@ export const MainScreen: React.FC = () => {
 	const { currentRegion } = useGlobalStateValue();
 	const { setCurrentRegion } = useGlobalStateActions();
 	const { showToastMessage } = useToastMessage();
-	const { getCafeRatingsAverage, cafeRatings, getReviewsCount, reviewsCount, processingFirebase, setProcessingFirebase } = useFirebase();
+	const { getCafeRatingsAverage, cafeRatings, getReviewsCount, reviewsCount, setProcessingFirebase } = useFirebase();
 	const bottomSheetRef = useRef<TrueSheet>(null);
 	const mapViewRef = useRef<MapView>(null);
 	const [isMapReady, setIsMapReady] = useState<boolean>(false);
@@ -218,7 +218,6 @@ export const MainScreen: React.FC = () => {
 				reviewsCount={reviewsCount}
 				webViewHandler={webViewHandler}
 				directionsHandler={directionsHandler}
-				isLoading={processingFirebase}
 				isLiked={isLiked}
 				likeHandler={likeHandler}
 				sheetSizeChangeHandler={sheetSizeChangeHandler} />
