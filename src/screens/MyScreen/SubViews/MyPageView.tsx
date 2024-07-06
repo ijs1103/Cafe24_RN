@@ -7,6 +7,7 @@ import { Spacer } from "../../../components/Spacer";
 import { MyPageItem } from "../../../components/ListItem/MyPageItem";
 import { ProfileImageView } from "../../../components/ProfileImageView";
 import { URL } from "../../../utils/Constants";
+import { ScreenLayout } from "../../../components/ScreenLayout";
 
 const ListFooterComponent: React.FC<{ signOutHandler: () => void; }> = ({ signOutHandler }) => {
 	return (
@@ -26,7 +27,7 @@ export const MyPageView: React.FC = () => {
 	], []);
 
 	return (
-		<View style={styles.container}>
+		<ScreenLayout>
 			<SectionList
 				sections={DATA}
 				keyExtractor={(item) => item.title}
@@ -36,14 +37,11 @@ export const MyPageView: React.FC = () => {
 				contentContainerStyle={{ padding: 30 }}
 				ListHeaderComponent={() => <ProfileImageView uri={user?.profileUrl} name={user?.name} />}
 				ListFooterComponent={() => <ListFooterComponent signOutHandler={signOut} />} />
-		</View>
+		</ScreenLayout>
 	);
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1
-	},
 	signOutButton: {
 		marginTop: 16,
 		borderRadius: 10,

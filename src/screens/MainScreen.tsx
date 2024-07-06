@@ -1,10 +1,11 @@
 import Geolocation from '@react-native-community/geolocation';
 import { useCallback, useEffect, useState, useRef, useContext } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import MapView, { Marker, Region, LatLng } from 'react-native-maps';
 import { useFocusEffect } from '@react-navigation/native';
 import { TrueSheet } from "@lodev09/react-native-true-sheet";
 import { WebView } from 'react-native-webview';
+import mobileAds from 'react-native-google-mobile-ads';
 import { useMainStackNavigation, useMainStackRoute } from '../navigation/RootNavigation';
 import { getCafeListFromLatLng } from '../utils/KakaoUtils';
 import { CafeDTO } from '../utils/Types';
@@ -15,6 +16,7 @@ import { DELTA } from '../utils/Constants';
 import { deleteFromLikedCafeList, isLikedCafe, addToLikedCafeList } from '../utils/Storage';
 import { useGlobalState } from '../providers/GlobalStateProvider';
 import { useFirebase } from '../hooks/useFirebase';
+import { ScreenLayout } from '../components/ScreenLayout';
 
 export const MainScreen: React.FC = () => {
 	const navigation = useMainStackNavigation<'Main'>();
@@ -162,12 +164,20 @@ export const MainScreen: React.FC = () => {
 		}, [selectedCafe])
 	);
 
+	useEffect(() => {
+		mobileAds()
+			.initialize()
+			.then(adapterStatuses => {
+				console.log(adapterStatuses)
+			});
+	}, []);
+
 	return (
-		<View style={styles.container}>
+		<ScreenLayout>
 			<SearchBarHeader onPress={onPressSearchBarHeader} />
 			<MapView
 				ref={mapViewRef}
-				style={styles.container}
+				style={{ flex: 1 }}
 				region={{
 					latitude: currentRegion.latitude,
 					longitude: currentRegion.longitude,
@@ -218,12 +228,6 @@ export const MainScreen: React.FC = () => {
 				isLiked={isLiked}
 				likeHandler={likeHandler}
 				sheetSizeChangeHandler={sheetSizeChangeHandler} />
-		</View >
+		</ScreenLayout>
 	);
 };
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1
-	}
-});

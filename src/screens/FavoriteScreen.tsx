@@ -7,6 +7,7 @@ import { LikedCafeItem } from '../components/ListItem/LikedCafeItem';
 import { useEffect, useCallback, useState } from 'react';
 import { deleteFromLikedCafeList, getLikedCafeList } from '../utils/Storage';
 import { CafeDTO } from '../utils/Types';
+import { ScreenBannerAds } from './ScreenBannerAds';
 
 export const FavoriteScreen: React.FC = () => {
 	const navigation = useMainStackNavigation<'Main'>();

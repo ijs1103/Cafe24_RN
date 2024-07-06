@@ -1,4 +1,8 @@
 {
   "name": "cafe24",
-  "displayName": "cafe24"
+  "displayName": "cafe24",
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-8487875189772148~5822927185",
+    "ios_app_id": "ca-app-pub-8487875189772148~4353599702"
+  }
 }

@@ -59,7 +59,7 @@ export const TabBar: React.FC = () => {
 					tabBarLabel: 'MY',
 					tabBarStyle: ((route) => {
 						const routeName = getFocusedRouteNameFromRoute(route) ?? ""
-						if (['EmailSignin', 'EmailSignup', 'WebView', 'WithDrawal'].includes(routeName)) {
+						if (['EmailSignin', 'EmailSignup', 'WebView', 'WithDrawal', 'EditProfile', 'MyReview'].includes(routeName)) {
 							return { display: "none" }
 						}
 						return
