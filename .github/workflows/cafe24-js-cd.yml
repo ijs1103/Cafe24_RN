@@ -1,8 +1,7 @@
 name: cafe24-js-cd
 on:
   push:
-    branches:
-      - "main"
+    branches: [ main ]
     paths:
       - "cafe24/**"
 jobs:
