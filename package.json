@@ -7,7 +7,9 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "code-push-staging-android": "appcenter codepush release-react -a ijs1103/cafeFind24-Android -d Staging",
+    "code-push-production-android": "appcenter codepush release-react -a ijs1103/cafeFind24-Android -d Production"
   },
   "dependencies": {
     "@lodev09/react-native-true-sheet": "^0.12.0",
@@ -24,6 +26,7 @@
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.26",
     "@types/uuid": "^10.0.0",
+    "appcenter-cli": "^3.0.1",
     "lottie-react-native": "^6.7.2",
     "react": "18.2.0",
     "react-hook-form": "^7.52.0",
