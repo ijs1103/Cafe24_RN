@@ -5,10 +5,10 @@ import { StatusBar, useColorScheme } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { TabBar } from './src/navigation/TabBar';
 import { GlobalStateProvider } from './src/providers/GlobalStateProvider';
+import CodePush from 'react-native-code-push';
 
 const App = () => {
 	const isDarkMode = useColorScheme() === 'dark';
-
 	return (
 		<SafeAreaProvider>
 			<SafeAreaView style={{ flex: 1 }}>
@@ -26,4 +26,6 @@ const App = () => {
 	);
 };
 
+const codePushConfig = { checkFrequency: CodePush.CheckFrequency.MANUAL }
+// export default CodePush(codePushConfig)(App);
 export default App;

@@ -3,7 +3,7 @@ import { View, TouchableOpacity, Image, ImageBackground, StyleSheet } from 'reac
 import { Typography } from '../../../components/Typography';
 import { Spacer } from '../../../components/Spacer';
 import auth from '@react-native-firebase/auth';
-import GoogleButton from '../../../../assets/google_button.svg';
+import GoogleButton from '../../../../assets/etc/google_button.svg';
 import { useMyStackNavigation } from '../../../navigation/RootNavigation';
 import { useGlobalState } from '../../../providers/GlobalStateProvider';
 
@@ -18,8 +18,8 @@ export const AuthView: React.FC = () => {
 		navigation.navigate('EmailSignup')
 	}
 	return (
-		<ImageBackground style={styles.container} source={require('../../../../assets/login_bg.jpg')} resizeMode='cover'>
-			<Image style={styles.logo} source={require('../../../../assets/logo.png')} />
+		<ImageBackground style={styles.container} source={require('../../../../assets/etc/login_bg.jpg')} resizeMode='cover'>
+			<Image style={styles.logo} source={require('../../../../assets/etc/logo.png')} />
 			<View>
 				<TouchableOpacity onPress={googleSignin}>
 					<GoogleButton />

@@ -19,7 +19,7 @@ export const ReviewItem: React.FC<Props> = ({ review, imagePressHandler, isMyRev
 		<View style={styles.container}>
 			<View style={styles.hStack}>
 				<View style={styles.avatarView}>
-					<Image style={styles.avatar} resizeMode="cover" source={review.userProfileUrl ? { uri: review.userProfileUrl } : require('../../../assets/no_avatar.jpg')} />
+					<Image style={styles.avatar} resizeMode="cover" source={review.userProfileUrl ? { uri: review.userProfileUrl } : require('../../../assets/etc/no_avatar.jpg')} />
 					<View style={styles.vStack}>
 						<ReviewStars count={review.rating} />
 						<Typography fontSize={12} fontWeight='800'>{review.userName}</Typography>

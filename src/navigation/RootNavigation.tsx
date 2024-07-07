@@ -21,6 +21,7 @@ import { EditProfileScreen } from '../screens/EditProfileScreen';
 import { CafeDetailScreen } from '../screens/CafeDetailScreen';
 import { WriteReviewScreen } from '../screens/WriteReviewScreen';
 import { MyReviewScreen } from '../screens/MyReviewScreen';
+import { AppUpdatingScreen } from '../screens/AppUpdatingScreen';
 
 type MainStackParams = {
 	Main: { cafe: CafeDTO } | undefined;
@@ -29,11 +30,13 @@ type MainStackParams = {
 	Search: undefined;
 	CafeDetail: { cafe: CafeDTO | null };
 	WriteReview: { cafe: CafeDTO | null };
+	AppUpdating: undefined;
 };
 
 export const MainStack = createNativeStackNavigator<MainStackParams>();
 
 export const MainStackScreen: React.FC = () => {
+
 	return (
 		<MainStack.Navigator
 			initialRouteName={'Main'}
@@ -46,6 +49,7 @@ export const MainStackScreen: React.FC = () => {
 			<MainStack.Screen name="Search" component={SearchScreen} />
 			<MainStack.Screen name="CafeDetail" component={CafeDetailScreen} />
 			<MainStack.Screen name="WriteReview" component={WriteReviewScreen} />
+			<MainStack.Screen name="AppUpdating" component={AppUpdatingScreen} />
 		</MainStack.Navigator>
 	);
 };

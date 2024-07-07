@@ -17,14 +17,18 @@ import { deleteFromLikedCafeList, isLikedCafe, addToLikedCafeList } from '../uti
 import { useGlobalState } from '../providers/GlobalStateProvider';
 import { useFirebase } from '../hooks/useFirebase';
 import { ScreenLayout } from '../components/ScreenLayout';
+import { useCodePush } from '../hooks/useCodePush';
+import { YesOrNoModal } from '../components/YesOrNoModal';
 
 export const MainScreen: React.FC = () => {
 	const navigation = useMainStackNavigation<'Main'>();
 	const routes = useMainStackRoute<'Main'>();
+	const { hasAppUpdate } = useCodePush();
 	const { currentRegion, setCurrentRegion, showToastMessage } = useGlobalState();
 	const { getCafeRatingsAverage, cafeRatings, getReviewsCount, reviewsCount, setProcessingFirebase } = useFirebase();
 	const bottomSheetRef = useRef<TrueSheet>(null);
 	const mapViewRef = useRef<MapView>(null);
+	const [appUpdateModalVisible, setAppUpdateModalVisible] = useState(false);
 	const [isMapReady, setIsMapReady] = useState<boolean>(false);
 	const [cafeList, setCafeList] = useState<CafeDTO[] | null>(null);
 	const [locationFetched, setLocationFetched] = useState<boolean>(false);
@@ -119,6 +123,10 @@ export const MainScreen: React.FC = () => {
 		navigation.navigate('CafeDetail', { cafe: selectedCafe });
 	}, [selectedCafe]);
 
+	const yesHandler = useCallback(() => {
+		navigation.navigate('AppUpdating');
+	}, []);
+
 	useEffect(() => {
 		if (locationFetched) {
 			getCafeListFromLatLng(currentRegion.latitude, currentRegion.longitude).then(
@@ -163,6 +171,12 @@ export const MainScreen: React.FC = () => {
 			}
 		}, [selectedCafe])
 	);
+
+	useEffect(() => {
+		if (hasAppUpdate) {
+			setAppUpdateModalVisible(true);
+		}
+	}, [hasAppUpdate]);
 
 	useEffect(() => {
 		mobileAds()
@@ -228,6 +242,7 @@ export const MainScreen: React.FC = () => {
 				isLiked={isLiked}
 				likeHandler={likeHandler}
 				sheetSizeChangeHandler={sheetSizeChangeHandler} />
+			<YesOrNoModal title={'최신 업데이트가 있습니다.'} subTitle='업데이트 화면으로 이동합니다.' yesHandler={yesHandler} isVisible={appUpdateModalVisible} />
 		</ScreenLayout>
 	);
 };
