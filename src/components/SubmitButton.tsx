@@ -3,9 +3,7 @@ import {
 	Pressable,
 	StyleSheet,
 	Text,
-	Image,
 	View,
-	ImageStyle,
 } from 'react-native';
 
 interface Props {

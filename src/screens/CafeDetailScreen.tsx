@@ -1,13 +1,8 @@
 import { useState, useCallback, useEffect } from 'react';
-import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { Division } from '../components/Division';
 import { ReviewItem } from '../components/ListItem/ReviewItem';
-import { Typography } from '../components/Typography';
-import { CafeDTO, Review, ImageViewResourceType } from '../utils/Types';
-import { Spacer } from '../components/Spacer';
-import { RatingsAndReviews } from '../components/RatingsAndReviews';
-import { Header } from '../components/header/Header';
+import { ImageViewResourceType } from '../utils/Types';
 import { useMainStackNavigation, useMainStackRoute } from '../navigation/RootNavigation';
 import { FullScreenImageSlider } from '../components/FullScreenImageSlider';
 import { CafeDetailListHeader } from '../components/ListItem/CafeDetailListHeader';

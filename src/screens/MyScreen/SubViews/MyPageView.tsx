@@ -1,5 +1,5 @@
-import { useState, useMemo, useEffect } from "react";
-import { View, Image, StyleSheet, Button, SectionList, TouchableOpacity } from "react-native";
+import { useMemo } from "react";
+import { StyleSheet, SectionList, TouchableOpacity } from "react-native";
 import { useMyStackNavigation } from "../../../navigation/RootNavigation";
 import { useGlobalState } from "../../../providers/GlobalStateProvider";
 import { Typography } from "../../../components/Typography";

@@ -1,8 +1,6 @@
 import { TouchableOpacity, View, StyleSheet } from "react-native"
 import Icon from 'react-native-vector-icons/Ionicons'
-import { Spacer } from "../Spacer"
 import { Typography } from "../Typography"
-import { RatingsAndReviews } from "../RatingsAndReviews"
 import { CafeDTO } from '../../utils/Types';
 
 interface LikedCafeItemProps {

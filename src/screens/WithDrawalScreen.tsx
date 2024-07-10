@@ -1,4 +1,3 @@
-import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Typography } from '../components/Typography';
 import { SubmitButton } from '../components/SubmitButton';

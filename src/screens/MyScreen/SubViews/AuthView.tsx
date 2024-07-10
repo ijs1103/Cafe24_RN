@@ -1,8 +1,6 @@
-import { useContext, useEffect } from 'react';
 import { View, TouchableOpacity, Image, ImageBackground, StyleSheet } from 'react-native';
 import { Typography } from '../../../components/Typography';
 import { Spacer } from '../../../components/Spacer';
-import auth from '@react-native-firebase/auth';
 import GoogleButton from '../../../../assets/etc/google_button.svg';
 import { useMyStackNavigation } from '../../../navigation/RootNavigation';
 import { useGlobalState } from '../../../providers/GlobalStateProvider';

@@ -1,5 +1,4 @@
-import React from 'react';
-import { View, Text, Image, Animated, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Ediya from '../../assets/cafe_logo/ediya.svg';
 import Cafebene from '../../assets/cafe_logo/cafebene.svg';

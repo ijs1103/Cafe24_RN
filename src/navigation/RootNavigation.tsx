@@ -3,17 +3,14 @@ import {
 	createNativeStackNavigator,
 	NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
-import React from 'react';
 import { MainScreen } from '../screens/MainScreen';
 import { MyScreen } from '../screens/MyScreen';
 import { FavoriteScreen } from '../screens/FavoriteScreen';
 import { WebViewScreen } from '../screens/WebViewScreen';
-import { WebView } from 'react-native-webview';
 import { LatLng } from 'react-native-maps';
 import { DirectionsScreen } from '../screens/DirectionsScreen';
 import { SearchScreen } from '../screens/SearchScreen';
-import { CafeDTO, Review, ReviewWithUser } from '../utils/Types';
-import { SearchFilterModal } from '../components/SearchFilterModal';
+import { CafeDTO } from '../utils/Types';
 import { EmailSigninScreen } from '../screens/EmailSigninScreen';
 import { EmailSignupScreen } from '../screens/EmailSignupScreen';
 import { WithDrawalScreen } from '../screens/WithDrawalScreen';

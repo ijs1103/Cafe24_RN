@@ -10,7 +10,6 @@ import { Division } from './Division';
 import { CafeDTO } from '../utils/Types';
 import { RatingsAndReviews } from "./RatingsAndReviews";
 import { useGlobalState } from "../providers/GlobalStateProvider";
-import { useFirebase } from "../hooks/useFirebase";
 
 interface BottomSheetProps {
 	cafe: CafeDTO | null;

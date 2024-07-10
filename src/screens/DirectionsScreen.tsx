@@ -1,5 +1,3 @@
-
-import { useEffect } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import MapView from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';

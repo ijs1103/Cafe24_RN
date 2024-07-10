@@ -1,4 +1,4 @@
-import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
+import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { FRANCHISE_CAFE_TYPE } from "../utils/Types";
 
 interface FranchiseCafeButtonProps {

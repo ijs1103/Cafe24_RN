@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, Touchable, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import ImageView from "react-native-image-viewing";
 import Icon from 'react-native-vector-icons/Ionicons';
 import { ImageViewResourceType } from '../utils/Types';

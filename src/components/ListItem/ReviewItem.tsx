@@ -1,7 +1,6 @@
-import React from 'react';
 import { Image, StyleSheet, View, Text, Touchable, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { ReviewWithUser, User } from '../../utils/Types';
+import { ReviewWithUser } from '../../utils/Types';
 import { Typography } from '../Typography';
 import { Spacer } from '../Spacer';
 import { formatTimestamp } from '../../utils/Utils';

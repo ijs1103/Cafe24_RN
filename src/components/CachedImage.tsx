@@ -1,7 +1,5 @@
-import { useState } from 'react';
 import FastImage, { ImageStyle } from 'react-native-fast-image'
-import { Image, ImageSourcePropType, StyleProp } from 'react-native';
-import { SkeletonView } from './SkeletonView';
+import { StyleProp } from 'react-native';
 
 interface Props {
 	uri: string | undefined;

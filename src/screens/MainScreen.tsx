@@ -1,10 +1,8 @@
 import Geolocation from '@react-native-community/geolocation';
-import { useCallback, useEffect, useState, useRef, useContext } from 'react';
-import { View } from 'react-native';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import MapView, { Marker, Region, LatLng } from 'react-native-maps';
 import { useFocusEffect } from '@react-navigation/native';
 import { TrueSheet } from "@lodev09/react-native-true-sheet";
-import { WebView } from 'react-native-webview';
 import mobileAds from 'react-native-google-mobile-ads';
 import { useMainStackNavigation, useMainStackRoute } from '../navigation/RootNavigation';
 import { getCafeListFromLatLng } from '../utils/KakaoUtils';

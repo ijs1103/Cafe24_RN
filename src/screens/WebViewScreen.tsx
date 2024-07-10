@@ -1,9 +1,6 @@
-import React, { useState } from 'react';
-import { ActivityIndicator, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useMainStackNavigation, useMainStackRoute } from '../navigation/RootNavigation';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { Spacer } from '../components/Spacer';
 import { Header } from '../components/header/Header';
 
 export const WebViewScreen: React.FC = () => {

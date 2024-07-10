@@ -1,12 +1,9 @@
-import { route } from "next/dist/server/router";
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useRef } from "react";
 import { useForm } from "react-hook-form";
-import { TextInput, Alert, View, StyleSheet } from "react-native";
+import { TextInput, View, StyleSheet } from "react-native";
 import { useMyStackNavigation } from "../navigation/RootNavigation";
 import { KeyboardAvoidingLayout } from "../components/KeyboardAvoidingLayout";
 import FormInput from "../components/FormInput";
-import { Spacer } from "../components/Spacer";
-import { Division } from "../components/Division";
 import { SubmitButton } from "../components/SubmitButton";
 import { Header } from "../components/header/Header";
 import { useGlobalState } from "../providers/GlobalStateProvider";

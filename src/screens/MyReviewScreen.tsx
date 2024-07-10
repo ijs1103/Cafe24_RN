@@ -6,7 +6,7 @@ import { useFirebase } from '../hooks/useFirebase';
 import { Division } from '../components/Division';
 import { ListEmptyComponent } from '../components/ListEmptyComponent';
 import { MyReviewItem } from '../components/ListItem/MyReviewItem';
-import { CafeDTO, ImageViewResourceType } from '../utils/Types';
+import { ImageViewResourceType } from '../utils/Types';
 import { FullScreenImageSlider } from '../components/FullScreenImageSlider';
 
 export const MyReviewScreen: React.FC = () => {

@@ -4,7 +4,6 @@ import React, {
 	useCallback,
 	useEffect,
 	RefObject,
-	useMemo,
 } from 'react';
 import {
 	Animated,
@@ -15,7 +14,7 @@ import {
 	StyleSheet,
 	TouchableOpacity
 } from 'react-native';
-import { Controller, Control, UseFormSetValue } from 'react-hook-form';
+import { Controller, Control } from 'react-hook-form';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { REGEX, FORM_ERROR_MESSAGE, INPUT_LABEL, } from '../utils/Constants';
 import { RegexType } from '../utils/Types';

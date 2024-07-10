@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Text, Animated, StyleSheet } from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
 
 export const BlinkingText: React.FC<{ text: string; }> = ({ text }) => {
 	const [opacity] = useState(new Animated.Value(1));

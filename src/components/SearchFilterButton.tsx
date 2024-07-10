@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { Typography } from "./Typography";
 import Icon from 'react-native-vector-icons/Ionicons';

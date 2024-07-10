@@ -1,13 +1,12 @@
 import React, { createContext, useContext, useRef } from 'react';
-import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import storage from '@react-native-firebase/storage';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { GOOGLE_WEB_CLIENT_ID } from '@env';
 import { LatLng } from "react-native-maps/lib/sharedTypes";
-import { User, SIGNUP_TYPE } from '../utils/Types';
-import { COLLECTIONS, SIGNUP } from '../utils/Constants';
+import { User } from '../utils/Types';
+import { COLLECTIONS } from '../utils/Constants';
 
 import ToastMessage, { ToastMessageRef } from '../components/ToastMessage';
 

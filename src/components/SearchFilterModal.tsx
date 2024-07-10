@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { View, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/Ionicons';

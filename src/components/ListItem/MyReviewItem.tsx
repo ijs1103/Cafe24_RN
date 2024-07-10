@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Review } from '../../utils/Types';
 import { formatTimestamp } from '../../utils/Utils';
 import { ReviewStars } from '../ReviewStars';

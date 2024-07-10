@@ -3,7 +3,6 @@ import firestore, { FirebaseFirestoreTypes, Timestamp } from '@react-native-fire
 import auth from '@react-native-firebase/auth';
 import { COLLECTIONS } from '../utils/Constants';
 import storage from '@react-native-firebase/storage';
-import { v4 as uuid } from 'uuid';
 import { useGlobalState } from '../providers/GlobalStateProvider';
 import { Review, ReviewWithUser, User } from '../utils/Types';
 
