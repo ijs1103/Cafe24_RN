@@ -27,5 +27,5 @@ const App = () => {
 };
 
 const codePushConfig = { checkFrequency: CodePush.CheckFrequency.MANUAL }
-// export default CodePush(codePushConfig)(App);
-export default App;
+export default CodePush(codePushConfig)(App);
+// export default App;
