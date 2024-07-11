@@ -12,10 +12,6 @@ import { useFirebase } from '../hooks/useFirebase';
 import { useGlobalState } from '../providers/GlobalStateProvider';
 import firestore from '@react-native-firebase/firestore';
 
-interface IWriteReviewForm {
-	NAME: string;
-}
-
 export const WriteReviewScreen = () => {
 	const navigation = useMainStackNavigation<'WriteReview'>();
 	const routes = useMainStackRoute<'WriteReview'>();

@@ -88,22 +88,13 @@ export const CafeDetailScreen: React.FC = () => {
 		}
 	}, []);
 
-	const fetchData = useCallback(async (cafeId: string) => {
-		setProcessingFirebase(true)
-		await getCafeReviewsWithUser(cafeId)
-		await getCafeRatingsAverage(cafeId)
-		setProcessingFirebase(false)
-	}, []);
-
 	useEffect(() => {
 		setIsFirstLoad(false)
 	}, []);
 
 	useFocusEffect(
 		useCallback(() => {
-			if (routes.params.cafe?.id) {
-				fetchData(routes.params.cafe.id)
-			}
+			onRefresh();
 		}, [])
 	);
 

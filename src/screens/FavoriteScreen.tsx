@@ -7,6 +7,7 @@ import { LikedCafeItem } from '../components/ListItem/LikedCafeItem';
 import { useCallback, useState } from 'react';
 import { deleteFromLikedCafeList, getLikedCafeList } from '../utils/Storage';
 import { CafeDTO } from '../utils/Types';
+import { ScreenBannerAds } from './ScreenBannerAds';
 
 export const FavoriteScreen: React.FC = () => {
 	const navigation = useMainStackNavigation<'Main'>();
@@ -57,6 +58,7 @@ export const FavoriteScreen: React.FC = () => {
 				ListEmptyComponent={() => <ListEmptyComponent text='즐겨찾기 한 카페가 없습니다.' />}
 				ItemSeparatorComponent={() => <Division />}
 				contentContainerStyle={styles.contentContainer} />
+				<ScreenBannerAds />
 		</View>
 	);
 };
